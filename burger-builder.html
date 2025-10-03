@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Burger Builder | PizzUM&BurgUM</title>
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#FF0000', secondary: '#000000' }
+        }
+      }
+    }
+  </script>
+  <style>
+    html, body { height:100%; margin:0; padding:0; }
+    body { overflow-x:hidden; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #FF0000; border-radius: 10px; }
+    .vanta-bg { position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; opacity:0.15; pointer-events:none; }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.VANTA && VANTA.NET) {
+        VANTA.NET({ el: "#vanta-bg", color: 0xff0000, backgroundColor: 0xffffff, maxDistance: 20.00, spacing: 18.00 });
+      }
+      if (window.feather) { feather.replace(); }
+    });
+  </script>
+</head>
+<body class="bg-gray-50 font-sans custom-scrollbar">
+  <div id="vanta-bg" class="vanta-bg"></div>
+
+  <!-- Navigation -->
+  <nav class="bg-gradient-to-r from-primary to-secondary shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="text-xl font-bold text-white">PizzUM&BurgUM</span>
+          </div>
+        </div>
+        <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+          <a href="frontend.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+          <a href="builder.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Builder Choice</a>
+          <span class="text-white px-3 py-2 rounded-md text-sm font-medium">Burger Builder</span>
+        </div>
+        <div class="md:hidden flex items-center">
+          <button aria-controls="mobile-menu" class="text-white hover:text-gray-200 focus:outline-none">
+            <i data-feather="menu" class="h-6 w-6"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Placeholder builder content to match style; can be expanded later -->
+  <section class="relative overflow-hidden bg-white min-h-[50vh]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <h1 class="text-3xl font-extrabold text-gray-900">Build Your Burger</h1>
+      <p class="mt-2 text-gray-600">Coming soon. Choose bun, patty, cheese, sauces, and toppings.</p>
+
+      <div class="mt-8 flex items-center space-x-3">
+        <a href="builder.html" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
+          <i data-feather="arrow-left" class="mr-2"></i>
+          Back to Choice
+        </a>
+        <button id="add-to-favorites" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
+          <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="mr-2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#FF0000" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Add to Favorites
+        </button>
+        <button id="add-to-order" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-opacity-90">
+          <i data-feather="shopping-cart" class="mr-2"></i>
+          Add to Order
+        </button>
+        <span id="favorites-toast" class="ml-2 text-sm text-green-600 hidden">Saved to favorites!</span>
+      </div>
+    </div>
+  </section>
+
+<script>
+  // Minimal burger build favorite placeholder
+  function saveFavorite(build) {
+    try {
+      const key = 'favorites';
+      const current = JSON.parse(localStorage.getItem(key) || '[]');
+      current.push(build);
+      localStorage.setItem(key, JSON.stringify(current));
+      const toast = document.getElementById('favorites-toast');
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 1500);
+    } catch (e) {
+      console.error('Failed to save favorite', e);
+    }
+  }
+  function setHeartFilled(filled) {
+    const svg = document.getElementById('heart-icon');
+    if (!svg) return;
+    const path = svg.querySelector('path');
+    if (!path) return;
+    if (filled) {
+      path.setAttribute('fill', '#FF0000');
+      path.setAttribute('stroke', '#FF0000');
+    } else {
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke', '#FF0000');
+    }
+  }
+  document.getElementById('add-to-favorites').addEventListener('click', function () {
+    const build = { type: 'burger', createdAt: new Date().toISOString() };
+    saveFavorite(build);
+    setHeartFilled(true);
+  });
+  document.addEventListener('DOMContentLoaded', function(){ setHeartFilled(false); });
+</script>
+
+  <footer class="bg-gray-800">
+    <div class="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
+      <p class="text-center text-base text-gray-400">&copy; 2023 PizzUM&BurgUM. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
+
+
