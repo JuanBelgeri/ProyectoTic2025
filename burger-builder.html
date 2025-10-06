@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Burger Builder | PizzUM&BurgUM</title>
+  <title>Constructor de Hamburguesa | PizzUM&BurgUM</title>
   <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
@@ -47,9 +47,9 @@
           </div>
         </div>
         <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
-          <a href="frontend.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Home</a>
-          <a href="builder.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Builder Choice</a>
-          <span class="text-white px-3 py-2 rounded-md text-sm font-medium">Burger Builder</span>
+          <a href="frontend.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
+          <a href="builder.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Elegir Constructor</a>
+          <span class="text-white px-3 py-2 rounded-md text-sm font-medium">Constructor de Hamburguesa</span>
         </div>
         <div class="md:hidden flex items-center">
           <button aria-controls="mobile-menu" class="text-white hover:text-gray-200 focus:outline-none">
@@ -60,26 +60,26 @@
     </div>
   </nav>
 
-  <!-- Placeholder builder content to match style; can be expanded later -->
+  <!-- Contenido inicial del constructor; se puede ampliar luego -->
   <section class="relative overflow-hidden bg-white min-h-[50vh]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 class="text-3xl font-extrabold text-gray-900">Build Your Burger</h1>
-      <p class="mt-2 text-gray-600">Coming soon. Choose bun, patty, cheese, sauces, and toppings.</p>
+      <h1 class="text-3xl font-extrabold text-gray-900">Construye tu Hamburguesa</h1>
+      <p class="mt-2 text-gray-600">Próximamente. Elige pan, carne, queso, salsas y toppings.</p>
 
       <div class="mt-8 flex items-center space-x-3">
         <a href="builder.html" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
           <i data-feather="arrow-left" class="mr-2"></i>
-          Back to Choice
+          Volver a Elegir
         </a>
         <button id="add-to-favorites" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
           <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="mr-2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#FF0000" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Add to Favorites
+          Guardar en Favoritos
         </button>
         <button id="add-to-order" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-opacity-90">
           <i data-feather="shopping-cart" class="mr-2"></i>
-          Add to Order
+          Agregar al Pedido
         </button>
-        <span id="favorites-toast" class="ml-2 text-sm text-green-600 hidden">Saved to favorites!</span>
+        <span id="favorites-toast" class="ml-2 text-sm text-green-600 hidden">¡Guardado en favoritos!</span>
       </div>
     </div>
   </section>
@@ -122,7 +122,7 @@
 
   <footer class="bg-gray-800">
     <div class="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
-      <p class="text-center text-base text-gray-400">&copy; 2023 PizzUM&BurgUM. All rights reserved.</p>
+      <p class="text-center text-base text-gray-400">&copy; 2023 PizzUM&BurgUM. Todos los derechos reservados.</p>
     </div>
   </footer>
 
