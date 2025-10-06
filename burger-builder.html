@@ -60,29 +60,382 @@
     </div>
   </nav>
 
-  <!-- Contenido inicial del constructor; se puede ampliar luego -->
-  <section class="relative overflow-hidden bg-white min-h-[50vh]">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 class="text-3xl font-extrabold text-gray-900">Construye tu Hamburguesa</h1>
-      <p class="mt-2 text-gray-600">Próximamente. Elige pan, carne, queso, salsas y toppings.</p>
+  <!-- Builder Content: Hamburguesa -->
+<section class="relative overflow-hidden bg-white min-h-[70vh]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="lg:flex lg:space-x-10">
+      <!-- Left: Options -->
+      <div class="lg:w-2/3">
+        <h1 class="text-3xl font-extrabold text-gray-900">Construye tu Hamburguesa</h1>
+        <p class="mt-2 text-gray-600">Elige tamaño, pan, carnes, punto, queso, salsas y extras.</p>
 
-      <div class="mt-8 flex items-center space-x-3">
-        <a href="builder.html" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
-          <i data-feather="arrow-left" class="mr-2"></i>
-          Volver a Elegir
-        </a>
-        <button id="add-to-favorites" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
-          <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="mr-2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#FF0000" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Guardar en Favoritos
-        </button>
-        <button id="add-to-order" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-opacity-90">
-          <i data-feather="shopping-cart" class="mr-2"></i>
-          Agregar al Pedido
-        </button>
-        <span id="favorites-toast" class="ml-2 text-sm text-green-600 hidden">¡Guardado en favoritos!</span>
+        <!-- Tamaño -->
+        <div class="mt-8">
+          <h2 class="text-xl font-bold text-gray-800">Tamaño</h2>
+          <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Simple (1 carne)</span>
+              <input type="radio" name="b-size" value="Simple" class="form-radio text-primary" checked>
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Doble (2 carnes)</span>
+              <input type="radio" name="b-size" value="Doble" class="form-radio text-primary">
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Triple (3 carnes)</span>
+              <input type="radio" name="b-size" value="Triple" class="form-radio text-primary">
+            </label>
+          </div>
+        </div>
+
+        <!-- Pan (single choice) -->
+        <div class="mt-8">
+          <h2 class="text-xl font-bold text-gray-800">Pan</h2>
+          <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Brioche</span>
+              <input type="radio" name="bun" value="Brioche" class="form-radio text-primary" checked>
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Clásico con sésamo</span>
+              <input type="radio" name="bun" value="Clasico" class="form-radio text-primary">
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Integral</span>
+              <input type="radio" name="bun" value="Integral" class="form-radio text-primary">
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Sin Gluten</span>
+              <input type="radio" name="bun" value="SinGluten" class="form-radio text-primary">
+            </label>
+          </div>
+        </div>
+
+        <!-- Medallón / Proteína (single choice) -->
+        <div class="mt-8">
+          <h2 class="text-xl font-bold text-gray-800">Tipo de Carne</h2>
+          <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Carne vacuna</span>
+              <input type="radio" name="patty" value="Carne vacuna" class="form-radio text-primary" checked>
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Pollo</span>
+              <input type="radio" name="patty" value="Pollo" class="form-radio text-primary">
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Vegetariano (legumbres)</span>
+              <input type="radio" name="patty" value="Vegetariano" class="form-radio text-primary">
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Vegano</span>
+              <input type="radio" name="patty" value="Vegano" class="form-radio text-primary">
+            </label>
+          </div>
+        </div>
+
+        <!-- Punto de cocción (single choice) -->
+        <div class="mt-8">
+          <h2 class="text-xl font-bold text-gray-800">Punto de cocción</h2>
+          <div class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Jugosa</span>
+              <input type="radio" name="doneness" value="Jugosa" class="form-radio text-primary" checked>
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>A punto</span>
+              <input type="radio" name="doneness" value="A punto" class="form-radio text-primary">
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Bien cocida</span>
+              <input type="radio" name="doneness" value="Bien cocida" class="form-radio text-primary">
+            </label>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">*Para pollo/veg (cuando aplica) se cocina completamente por seguridad.</p>
+        </div>
+
+        <!-- Queso (multi choice con cantidad) -->
+<div class="mt-8">
+  <h2 class="text-xl font-bold text-gray-800">Queso</h2>
+  <p class="text-sm text-gray-500">Selecciona uno o varios y ajusta la cantidad.</p>
+  <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+    
+    <!-- Cheddar -->
+    <label class="border rounded-lg p-3 flex flex-col sm:flex-row sm:items-center justify-between cursor-pointer hover:border-primary">
+      <div class="flex items-center space-x-2">
+        <input type="checkbox" name="cheeses" value="Cheddar" class="form-checkbox text-primary" checked>
+        <span>Cheddar</span>
+      </div>
+      <div class="flex items-center mt-2 sm:mt-0">
+        <button type="button" class="minus-btn bg-gray-200 text-gray-700 px-2 rounded-l" data-target="cheddar-qty">−</button>
+        <input id="cheddar-qty" type="number" min="1" value="1" class="w-12 text-center border border-gray-300">
+        <button type="button" class="plus-btn bg-gray-200 text-gray-700 px-2 rounded-r" data-target="cheddar-qty">+</button>
+      </div>
+    </label>
+
+    <!-- Mozzarella -->
+    <label class="border rounded-lg p-3 flex flex-col sm:flex-row sm:items-center justify-between cursor-pointer hover:border-primary">
+      <div class="flex items-center space-x-2">
+        <input type="checkbox" name="cheeses" value="Mozzarella" class="form-checkbox text-primary">
+        <span>Mozzarella</span>
+      </div>
+      <div class="flex items-center mt-2 sm:mt-0">
+        <button type="button" class="minus-btn bg-gray-200 text-gray-700 px-2 rounded-l" data-target="mozza-qty">−</button>
+        <input id="mozza-qty" type="number" min="1" value="1" class="w-12 text-center border border-gray-300">
+        <button type="button" class="plus-btn bg-gray-200 text-gray-700 px-2 rounded-r" data-target="mozza-qty">+</button>
+      </div>
+    </label>
+
+    <!-- Suizo -->
+    <label class="border rounded-lg p-3 flex flex-col sm:flex-row sm:items-center justify-between cursor-pointer hover:border-primary">
+      <div class="flex items-center space-x-2">
+        <input type="checkbox" name="cheeses" value="Suizo" class="form-checkbox text-primary">
+        <span>Suizo</span>
+      </div>
+      <div class="flex items-center mt-2 sm:mt-0">
+        <button type="button" class="minus-btn bg-gray-200 text-gray-700 px-2 rounded-l" data-target="suizo-qty">−</button>
+        <input id="suizo-qty" type="number" min="1" value="1" class="w-12 text-center border border-gray-300">
+        <button type="button" class="plus-btn bg-gray-200 text-gray-700 px-2 rounded-r" data-target="suizo-qty">+</button>
+      </div>
+    </label>
+
+    <!-- Sin queso -->
+    <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+      <div class="flex items-center space-x-2">
+        <input type="checkbox" name="cheeses" value="Sin queso" class="form-checkbox text-primary">
+        <span>Sin queso</span>
+      </div>
+    </label>
+  </div>
+</div>
+
+<script>
+  // Botones de + y −
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('plus-btn') || e.target.classList.contains('minus-btn')) {
+      const targetId = e.target.getAttribute('data-target');
+      const input = document.getElementById(targetId);
+      if (!input) return;
+      let val = parseInt(input.value) || 1;
+      if (e.target.classList.contains('plus-btn')) val++;
+      if (e.target.classList.contains('minus-btn') && val > 1) val--;
+      input.value = val;
+    }
+  });
+
+  // Lectura de los quesos seleccionados con cantidad
+  function getCheeses() {
+    const list = [];
+    document.querySelectorAll('input[name="cheeses"]:checked').forEach(cb => {
+      const type = cb.value;
+      const qtyInput = document.getElementById(`${type.toLowerCase().replace(' ', '-')}-qty`);
+      const qty = qtyInput ? parseInt(qtyInput.value) || 1 : 1;
+      list.push({ type, qty });
+    });
+    return list;
+  }
+</script>
+
+
+        <!-- Salsas (0 o más) -->
+        <div class="mt-8">
+          <h2 class="text-xl font-bold text-gray-800">Salsas</h2>
+          <p class="text-sm text-gray-500">Elige tantas como quieras.</p>
+          <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Mayonesa</span>
+              <input type="checkbox" name="sauces" value="Mayonesa" class="form-checkbox text-primary">
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Ketchup</span>
+              <input type="checkbox" name="sauces" value="Ketchup" class="form-checkbox text-primary">
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Mostaza</span>
+              <input type="checkbox" name="sauces" value="Mostaza" class="form-checkbox text-primary">
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>BBQ</span>
+              <input type="checkbox" name="sauces" value="BBQ" class="form-checkbox text-primary">
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Alioli</span>
+              <input type="checkbox" name="sauces" value="Alioli" class="form-checkbox text-primary">
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Sriracha</span>
+              <input type="checkbox" name="sauces" value="Sriracha" class="form-checkbox text-primary">
+            </label>
+          </div>
+        </div>
+
+        <!-- Extras (0 o más) -->
+        <div class="mt-8">
+          <h2 class="text-xl font-bold text-gray-800">Extras</h2>
+          <p class="text-sm text-gray-500">Elige tantos como quieras.</p>
+          <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Tocino</span>
+              <input type="checkbox" name="extras" value="Tocino" class="form-checkbox text-primary">
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Cebolla caramelizada</span>
+              <input type="checkbox" name="extras" value="Cebolla caramelizada" class="form-checkbox text-primary">
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Cebolla crujiente</span>
+              <input type="checkbox" name="extras" value="Cebolla crujiente" class="form-checkbox text-primary">
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Lechuga</span>
+              <input type="checkbox" name="extras" value="Lechuga" class="form-checkbox text-primary">
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Tomate</span>
+              <input type="checkbox" name="extras" value="Tomate" class="form-checkbox text-primary">
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Pepinillos</span>
+              <input type="checkbox" name="extras" value="Pepinillos" class="form-checkbox text-primary">
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Jalapeños</span>
+              <input type="checkbox" name="extras" value="Jalapeños" class="form-checkbox text-primary">
+            </label>
+            <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+              <span>Huevo a la plancha</span>
+              <input type="checkbox" name="extras" value="Huevo" class="form-checkbox text-primary">
+            </label>
+          </div>
+        </div>
+
+        <div class="mt-8 flex items-center space-x-3">
+          <a href="builder.html" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
+            <i data-feather="arrow-left" class="mr-2"></i>
+            Volver a Elegir
+          </a>
+          <button id="b-add-to-favorites" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
+            <svg id="b-heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="mr-2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#FF0000" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Guardar en Favoritos
+          </button>
+          <button id="b-add-to-order" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-opacity-90">
+            <i data-feather="shopping-cart" class="mr-2"></i>
+            Agregar al Pedido
+          </button>
+          <span id="b-favorites-toast" class="ml-2 text-sm text-green-600 hidden">¡Guardado en favoritos!</span>
+        </div>
+      </div>
+
+      <!-- Right: Summary -->
+      <div class="lg:w-1/3 mt-10 lg:mt-0">
+        <div class="bg-white border-2 border-gray-100 rounded-lg shadow-lg p-6 sticky top-24">
+          <h2 class="text-xl font-bold text-gray-800">Tu Hamburguesa</h2>
+          <ul class="mt-4 space-y-2 text-gray-700" id="b-summary-list">
+            <li>Tamaño: <span id="b-summary-size">Simple (1 medallón)</span></li>
+            <li>Pan: <span id="b-summary-bun">Brioche</span></li>
+            <li>Medallón: <span id="b-summary-patty">Carne vacuna</span></li>
+            <li>Punto: <span id="b-summary-doneness">Jugosa</span></li>
+            <li>Queso: <span id="b-summary-cheese">Cheddar</span></li>
+            <li>Salsas: <span id="b-summary-sauces">Ninguna</span></li>
+            <li>Extras: <span id="b-summary-extras">Ninguno</span></li>
+          </ul>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
+<script>
+function getCheeses() {
+  // Si está marcado "Sin queso", devolvemos vacío
+  const noCheese = document.querySelector('input[name="cheeses"][value="Sin queso"]');
+  if (noCheese && noCheese.checked) return [];
+
+  const out = [];
+  const addIfChecked = (value, qtyId) => {
+    const cb = document.querySelector(`input[name="cheeses"][value="${value}"]`);
+    if (cb && cb.checked) {
+      const qtyEl = document.getElementById(qtyId);
+      const qty = Math.max(1, parseInt(qtyEl?.value || '1', 10));
+      out.push({ type: value, qty });
+    }
+  };
+  addIfChecked('Cheddar', 'cheddar-qty');
+  addIfChecked('Mozzarella', 'mozza-qty');
+  addIfChecked('Suizo', 'suizo-qty');
+  return out;
+}
+</script>
+
+
+<script>
+  // Live summary updates (Hamburguesa)
+  function updateBurgerSummary() {
+  const size = document.querySelector('input[name="b-size"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
+  const bun = document.querySelector('input[name="bun"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
+  const patty = document.querySelector('input[name="patty"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
+  const donenessSel = document.querySelector('input[name="doneness"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
+  const sauces = Array.from(document.querySelectorAll('input[name="sauces"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent);
+  const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent);
+
+  // Punto seguro para pollo/veg
+  const safeDoneness = (/Pollo|Veg/).test(patty) ? 'Bien cocida' : donenessSel;
+
+  // Quesos (multi + cantidad)
+  const cheeses = getCheeses(); // [{type, qty}, ...]
+  const cheeseText = cheeses.length
+    ? cheeses.map(c => `${c.type} x${c.qty}`).join(', ')
+    : 'Sin queso';
+
+  document.getElementById('b-summary-size').textContent = size;
+  document.getElementById('b-summary-bun').textContent = bun;
+  document.getElementById('b-summary-patty').textContent = patty;
+  document.getElementById('b-summary-doneness').textContent = safeDoneness;
+  document.getElementById('b-summary-cheese').textContent = cheeseText; // 👈 ahora muestra todos
+  document.getElementById('b-summary-sauces').textContent = sauces.length ? sauces.join(', ') : 'Ninguna';
+  document.getElementById('b-summary-extras').textContent = extras.length ? extras.join(', ') : 'Ninguno';
+
+  }
+
+  document.addEventListener('change', function (e) {
+    if (e.target.matches('input[name="b-size"], input[name="bun"], input[name="patty"], input[name="doneness"], input[name="b-cheese"], input[name="sauces"], input[name="extras"]')) {
+      updateBurgerSummary();
+    }
+  });
+  document.addEventListener('DOMContentLoaded', updateBurgerSummary);
+
+  // (Opcional) favoritos y pedido — replica tu lógica existente si ya la tienes
+  const favBtnB = document.getElementById('b-add-to-favorites');
+  const toastB = document.getElementById('b-favorites-toast');
+  if (favBtnB && toastB) {
+    favBtnB.addEventListener('click', () => {
+      toastB.classList.remove('hidden');
+      setTimeout(() => toastB.classList.add('hidden'), 1500);
+    });
+  }
+</script>
+
+<script>
+// Cualquier cambio en inputs relevantes refresca el resumen
+document.addEventListener('change', (e) => {
+  if (e.target.matches('input[name="b-size"], input[name="bun"], input[name="patty"], input[name="doneness"], input[name="sauces"], input[name="extras"], input[name="cheeses"]')) {
+    updateBurgerSummary();
+  }
+});
+
+// Botones +/− de cantidad de queso también refrescan
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('plus-btn') || e.target.classList.contains('minus-btn')) {
+    // tu lógica de +/− aquí...
+    setTimeout(updateBurgerSummary, 0);
+  }
+});
+
+// Init
+document.addEventListener('DOMContentLoaded', updateBurgerSummary);
+</script>
+
+
 
 <script>
   // Minimal burger build favorite placeholder
@@ -128,5 +481,6 @@
 
 </body>
 </html>
+
 
 
