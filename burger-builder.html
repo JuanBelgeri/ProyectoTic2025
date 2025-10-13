@@ -35,9 +35,10 @@
   </script>
 </head>
 <body class="bg-gray-50 font-sans custom-scrollbar">
+  <!-- Capa para el fondo animado -->
   <div id="vanta-bg" class="vanta-bg"></div>
 
-  <!-- Navigation -->
+  <!-- Navegación principal -->
   <nav class="bg-gradient-to-r from-primary to-secondary shadow-lg sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
@@ -60,11 +61,11 @@
     </div>
   </nav>
 
-  <!-- Builder Content: Hamburguesa -->
+  <!-- Contenido del constructor: Hamburguesa -->
 <section class="relative overflow-hidden bg-white min-h-[70vh]">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="lg:flex lg:space-x-10">
-      <!-- Left: Options -->
+      <!-- Columna izquierda: Opciones de hamburguesa -->
       <div class="lg:w-2/3">
         <h1 class="text-3xl font-extrabold text-gray-900">Construye tu Hamburguesa</h1>
         <p class="mt-2 text-gray-600">Elige tamaño, pan, carnes, punto, queso, salsas y extras.</p>
@@ -88,7 +89,7 @@
           </div>
         </div>
 
-        <!-- Pan (single choice) -->
+        <!-- Pan (elección única) -->
         <div class="mt-8">
           <h2 class="text-xl font-bold text-gray-800">Pan</h2>
           <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -111,7 +112,7 @@
           </div>
         </div>
 
-        <!-- Medallón / Proteína (single choice) -->
+        <!-- Medallón / Proteína (elección única) -->
         <div class="mt-8">
           <h2 class="text-xl font-bold text-gray-800">Tipo de Carne</h2>
           <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -134,7 +135,7 @@
           </div>
         </div>
 
-        <!-- Punto de cocción (single choice) -->
+        <!-- Punto de cocción (elección única) -->
         <div class="mt-8">
           <h2 class="text-xl font-bold text-gray-800">Punto de cocción</h2>
           <div class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -154,7 +155,7 @@
           <p class="text-xs text-gray-500 mt-2">*Para pollo/veg (cuando aplica) se cocina completamente por seguridad.</p>
         </div>
 
-        <!-- Queso (multi choice con cantidad) -->
+        <!-- Queso (múltiple con cantidad) -->
 <div class="mt-8">
   <h2 class="text-xl font-bold text-gray-800">Queso</h2>
   <p class="text-sm text-gray-500">Selecciona uno o varios y ajusta la cantidad.</p>
@@ -210,7 +211,7 @@
 </div>
 
 <script>
-  // Botones de + y −
+  // Botones de + y − para cantidad de quesos
   document.addEventListener('click', (e) => {
     if (e.target.classList.contains('plus-btn') || e.target.classList.contains('minus-btn')) {
       const targetId = e.target.getAttribute('data-target');
@@ -309,6 +310,7 @@
           </div>
         </div>
 
+        <!-- Acciones: volver, favoritos y agregar al pedido -->
         <div class="mt-8 flex items-center space-x-3">
           <a href="builder.html" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
             <i data-feather="arrow-left" class="mr-2"></i>
@@ -326,7 +328,7 @@
         </div>
       </div>
 
-      <!-- Right: Summary -->
+      <!-- Columna derecha: Resumen en vivo -->
       <div class="lg:w-1/3 mt-10 lg:mt-0">
         <div class="bg-white border-2 border-gray-100 rounded-lg shadow-lg p-6 sticky top-24">
           <h2 class="text-xl font-bold text-gray-800">Tu Hamburguesa</h2>
@@ -369,7 +371,7 @@ function getCheeses() {
 
 
 <script>
-  // Live summary updates (Hamburguesa)
+  // Actualización del resumen en vivo (Hamburguesa)
   function updateBurgerSummary() {
   const size = document.querySelector('input[name="b-size"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
   const bun = document.querySelector('input[name="bun"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
@@ -397,6 +399,7 @@ function getCheeses() {
 
   }
 
+  // Escucha cambios en opciones para refrescar el resumen
   document.addEventListener('change', function (e) {
     if (e.target.matches('input[name="b-size"], input[name="bun"], input[name="patty"], input[name="doneness"], input[name="b-cheese"], input[name="sauces"], input[name="extras"]')) {
       updateBurgerSummary();
@@ -404,15 +407,7 @@ function getCheeses() {
   });
   document.addEventListener('DOMContentLoaded', updateBurgerSummary);
 
-  // (Opcional) favoritos y pedido — replica tu lógica existente si ya la tienes
-  const favBtnB = document.getElementById('b-add-to-favorites');
-  const toastB = document.getElementById('b-favorites-toast');
-  if (favBtnB && toastB) {
-    favBtnB.addEventListener('click', () => {
-      toastB.classList.remove('hidden');
-      setTimeout(() => toastB.classList.add('hidden'), 1500);
-    });
-  }
+  // (Los favoritos se manejan en el script inferior)
 </script>
 
 <script>
@@ -426,7 +421,6 @@ document.addEventListener('change', (e) => {
 // Botones +/− de cantidad de queso también refrescan
 document.addEventListener('click', (e) => {
   if (e.target.classList.contains('plus-btn') || e.target.classList.contains('minus-btn')) {
-    // tu lógica de +/− aquí...
     setTimeout(updateBurgerSummary, 0);
   }
 });
@@ -438,14 +432,14 @@ document.addEventListener('DOMContentLoaded', updateBurgerSummary);
 
 
 <script>
-  // Minimal burger build favorite placeholder
+  // Favoritos (hamburguesa): guardar y controlar ícono/toast
   function saveFavorite(build) {
     try {
       const key = 'favorites';
       const current = JSON.parse(localStorage.getItem(key) || '[]');
       current.push(build);
       localStorage.setItem(key, JSON.stringify(current));
-      const toast = document.getElementById('favorites-toast');
+      const toast = document.getElementById('b-favorites-toast');
       toast.classList.remove('hidden');
       setTimeout(() => toast.classList.add('hidden'), 1500);
     } catch (e) {
@@ -453,7 +447,7 @@ document.addEventListener('DOMContentLoaded', updateBurgerSummary);
     }
   }
   function setHeartFilled(filled) {
-    const svg = document.getElementById('heart-icon');
+    const svg = document.getElementById('b-heart-icon');
     if (!svg) return;
     const path = svg.querySelector('path');
     if (!path) return;
@@ -465,8 +459,30 @@ document.addEventListener('DOMContentLoaded', updateBurgerSummary);
       path.setAttribute('stroke', '#FF0000');
     }
   }
-  document.getElementById('add-to-favorites').addEventListener('click', function () {
-    const build = { type: 'burger', createdAt: new Date().toISOString() };
+  document.getElementById('b-add-to-favorites').addEventListener('click', function () {
+    const size = document.querySelector('input[name="b-size"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
+    const bun = document.querySelector('input[name="bun"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
+    const patty = document.querySelector('input[name="patty"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
+    const doneness = document.querySelector('input[name="doneness"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
+    const sauces = Array.from(document.querySelectorAll('input[name="sauces"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent);
+    const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent);
+    const cheeses = (function(){
+      const list = [];
+      const noCheese = document.querySelector('input[name="cheeses"][value="Sin queso"]');
+      if (noCheese && noCheese.checked) return list;
+      const pushIf = (label, id) => {
+        const cb = document.querySelector(`input[name="cheeses"][value="${label}"]`);
+        if (cb && cb.checked) {
+          const qty = Math.max(1, parseInt(document.getElementById(id)?.value || '1', 10));
+          list.push({ type: label, qty });
+        }
+      };
+      pushIf('Cheddar', 'cheddar-qty');
+      pushIf('Mozzarella', 'mozza-qty');
+      pushIf('Suizo', 'suizo-qty');
+      return list;
+    })();
+    const build = { type: 'burger', size, bun, patty, doneness, sauces, extras, cheeses, createdAt: new Date().toISOString() };
     saveFavorite(build);
     setHeartFilled(true);
   });
