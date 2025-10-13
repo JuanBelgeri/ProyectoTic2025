@@ -318,68 +318,46 @@
       const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent || '').sort();
       return { type: 'burger', size, bun, patty, cheese, sauces, extras, createdAt: new Date().toISOString() };
     }
+  });
+  document.addEventListener('DOMContentLoaded', updateBurgerSummary);
 
-    function canonicalBuild(build) {
-      // Canonical string used to compare builds (arrays ya están ordenadas en getCurrentBuild)
-      const copy = {
-        type: build.type,
-        size: build.size || '',
-        bun: build.bun || '',
-        patty: build.patty || '',
-        cheese: build.cheese || '',
-        sauces: (build.sauces || []).slice().sort(),
-        extras: (build.extras || []).slice().sort()
-      };
-      return JSON.stringify(copy);
-    }
+  // (Los favoritos se manejan en el script inferior)
+</script>
 
-    function getFavorites() {
-      try {
-        return JSON.parse(localStorage.getItem('favorites') || '[]');
-      } catch (e) {
-        console.error('Failed to read favorites', e);
-        return [];
-      }
-    }
+<script>
+// Cualquier cambio en inputs relevantes refresca el resumen
+document.addEventListener('change', (e) => {
+  if (e.target.matches('input[name="b-size"], input[name="bun"], input[name="patty"], input[name="doneness"], input[name="sauces"], input[name="extras"], input[name="cheeses"]')) {
+    updateBurgerSummary();
+  }
+});
 
-    function setFavorites(list) {
-      try {
-        localStorage.setItem('favorites', JSON.stringify(list));
-      } catch (e) {
-        console.error('Failed to write favorites', e);
-      }
-    }
+// Botones +/− de cantidad de queso también refrescan
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('plus-btn') || e.target.classList.contains('minus-btn')) {
+    setTimeout(updateBurgerSummary, 0);
+  }
+});
 
-    function isFavorite(build) {
-      const favs = getFavorites();
-      const canon = canonicalBuild(build);
-      return favs.some(f => canonicalBuild(f) === canon);
-    }
+// Init
+document.addEventListener('DOMContentLoaded', updateBurgerSummary);
+</script>
 
-    function saveFavorite(build) {
-      try {
-        const favs = getFavorites();
-        favs.push(build);
-        setFavorites(favs);
-        showFavoritesToast('¡Guardado en favoritos!');
-      } catch (e) {
-        console.error('Failed to save favorite', e);
-      }
-    }
 
-    function removeFavorite(build) {
-      try {
-        const favs = getFavorites();
-        const canon = canonicalBuild(build);
-        const filtered = favs.filter(f => canonicalBuild(f) !== canon);
-        setFavorites(filtered);
-        showFavoritesToast('Eliminado de favoritos');
-      } catch (e) {
-        console.error('Failed to remove favorite', e);
-      }
-    }
 
-    function showFavoritesToast(message) {
+<script>
+  // Auth helpers (usar modal en lugar de redirigir)
+  function isLoggedIn(){ try { return !!JSON.parse(localStorage.getItem('authUser')); } catch { return false; } }
+  function openAuthModal(){ document.getElementById('auth-modal')?.classList.remove('hidden'); }
+  function requireLogin(){ if (isLoggedIn()) return true; openAuthModal(); return false; }
+
+  // Favoritos (hamburguesa): guardar y controlar ícono/toast
+  function saveFavorite(build) {
+    try {
+      const key = 'favorites';
+      const current = JSON.parse(localStorage.getItem(key) || '[]');
+      current.push(build);
+      localStorage.setItem(key, JSON.stringify(current));
       const toast = document.getElementById('b-favorites-toast');
       if (!toast) return;
       toast.textContent = message;
@@ -404,28 +382,101 @@
         path.setAttribute('stroke', '#FF0000');
       }
     }
+  }
+  document.getElementById('b-add-to-favorites').addEventListener('click', function () {
+    if (!requireLogin()) return;
+    const size = document.querySelector('input[name="b-size"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
+    const bun = document.querySelector('input[name="bun"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
+    const patty = document.querySelector('input[name="patty"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
+    const doneness = document.querySelector('input[name="doneness"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
+    const sauces = Array.from(document.querySelectorAll('input[name="sauces"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent);
+    const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent);
+    const cheeses = (function(){
+      const list = [];
+      const noCheese = document.querySelector('input[name="cheeses"][value="Sin queso"]');
+      if (noCheese && noCheese.checked) return list;
+      const pushIf = (label, id) => {
+        const cb = document.querySelector(`input[name="cheeses"][value="${label}"]`);
+        if (cb && cb.checked) {
+          const qty = Math.max(1, parseInt(document.getElementById(id)?.value || '1', 10));
+          list.push({ type: label, qty });
+        }
+      };
+      pushIf('Cheddar', 'cheddar-qty');
+      pushIf('Mozzarella', 'mozza-qty');
+      pushIf('Suizo', 'suizo-qty');
+      return list;
+    })();
+    const build = { type: 'burger', size, bun, patty, doneness, sauces, extras, cheeses, createdAt: new Date().toISOString() };
+    saveFavorite(build);
+    setHeartFilled(true);
+  });
+  document.addEventListener('DOMContentLoaded', function(){ setHeartFilled(false); });
 
-    document.getElementById('b-add-to-favorites').addEventListener('click', function () {
-      const build = getCurrentBuild();
-      if (isFavorite(build)) {
-        removeFavorite(build);
-        setHeartFilled(false);
-      } else {
-        saveFavorite(build);
-        setHeartFilled(true);
-      }
-    });
+  // Proteger Agregar al Pedido
+  document.getElementById('b-add-to-order')?.addEventListener('click', function(){ if(!requireLogin()) return; alert('Añadido al carrito (demo)'); });
+</script>
 
-    document.addEventListener('DOMContentLoaded', function(){
-      // Al cargar reflejar si la selección actual ya está en favoritos
-      const build = getCurrentBuild();
-      try {
-        setHeartFilled(isFavorite(build));
-      } catch (e) {
-        setHeartFilled(false);
-      }
-    });
-  </script>
+<!-- Modal Auth reutilizable -->
+<div id="auth-modal" class="hidden fixed inset-0 z-50">
+  <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+  <div class="relative max-w-md w-full mx-auto mt-24 bg-white border-2 border-gray-100 rounded-lg shadow-xl">
+    <div class="flex items-center justify-between px-4 py-3 border-b">
+      <h3 class="text-lg font-bold text-gray-900">Tu cuenta</h3>
+      <button id="auth-close" class="text-gray-400 hover:text-gray-600">✕</button>
+    </div>
+    <div class="px-6 pt-4">
+      <div class="flex space-x-4 mb-4">
+        <button id="tab-login" class="px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold">Ingresar</button>
+        <button id="tab-register" class="px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold">Crear cuenta</button>
+      </div>
+      <form id="form-login" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+          <input id="login-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+          <input id="login-password" type="password" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+        </div>
+        <button type="submit" class="w-full bg-primary text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-90">Ingresar</button>
+        <p id="login-error" class="text-sm text-red-600 hidden">Credenciales inválidas</p>
+      </form>
+      <form id="form-register" class="space-y-4 hidden">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Nombre</label>
+          <input id="reg-name" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+          <input id="reg-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+          <input id="reg-password" type="password" required minlength="6" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+        </div>
+        <button type="submit" class="w-full bg-primary text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-90">Crear cuenta</button>
+      </form>
+    </div>
+    <div class="px-6 py-4 border-t text-xs text-gray-500">Al continuar aceptas nuestros Términos y Política de Privacidad.</div>
+  </div>
+</div>
+
+<script>
+  // Modal wiring
+  (function(){
+    const tabLogin=document.getElementById('tab-login');
+    const tabRegister=document.getElementById('tab-register');
+    const formLogin=document.getElementById('form-login');
+    const formRegister=document.getElementById('form-register');
+    document.getElementById('auth-close')?.addEventListener('click', ()=> document.getElementById('auth-modal').classList.add('hidden'));
+    document.getElementById('auth-modal')?.addEventListener('click', (e)=>{ if(e.target.id==='auth-modal') document.getElementById('auth-modal').classList.add('hidden'); });
+    tabLogin?.addEventListener('click', ()=>{ tabLogin.className='px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold'; tabRegister.className='px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold'; formLogin.classList.remove('hidden'); formRegister.classList.add('hidden'); });
+    tabRegister?.addEventListener('click', ()=>{ tabRegister.className='px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold'; tabLogin.className='px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold'; formRegister.classList.remove('hidden'); formLogin.classList.add('hidden'); });
+    formLogin?.addEventListener('submit', (e)=>{ e.preventDefault(); const email=document.getElementById('login-email').value.trim(); const password=document.getElementById('login-password').value.trim(); if(!email||!password){ document.getElementById('login-error').classList.remove('hidden'); return; } const user={ email, name: email.split('@')[0], loggedAt:new Date().toISOString() }; localStorage.setItem('authUser', JSON.stringify(user)); document.getElementById('auth-modal').classList.add('hidden'); });
+    formRegister?.addEventListener('submit', (e)=>{ e.preventDefault(); const name=document.getElementById('reg-name').value.trim(); const email=document.getElementById('reg-email').value.trim(); const password=document.getElementById('reg-password').value.trim(); if(!name||!email||password.length<6) return; const user={ email, name, loggedAt:new Date().toISOString(), registered:true }; localStorage.setItem('authUser', JSON.stringify(user)); document.getElementById('auth-modal').classList.add('hidden'); });
+  })();
+</script>
 
   <footer class="bg-gray-800">
     <div class="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">

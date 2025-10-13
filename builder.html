@@ -65,8 +65,8 @@
         </div>
         <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
           <a href="frontend.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
-          <a href="#" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Seguir Pedido</a>
-            <button class="bg-white text-primary px-4 py-2 rounded-full font-bold hover:bg-gray-100 transition duration-300">
+          <a href="#" id="track-order-link" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Seguir Pedido</a>
+          <button id="login-btn" class="bg-white text-primary px-4 py-2 rounded-full font-bold hover:bg-gray-100 transition duration-300">
                 Ingresar
             </button>
         </div>
@@ -143,6 +143,80 @@
     </div>
   </footer>
 
+  <!-- Modal Auth reutilizable -->
+  <div id="auth-modal" class="hidden fixed inset-0 z-50">
+    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+    <div class="relative max-w-md w-full mx-auto mt-24 bg-white border-2 border-gray-100 rounded-lg shadow-xl">
+      <div class="flex items-center justify-between px-4 py-3 border-b">
+        <h3 class="text-lg font-bold text-gray-900">Tu cuenta</h3>
+        <button id="auth-close" class="text-gray-400 hover:text-gray-600">✕</button>
+      </div>
+      <div class="px-6 pt-4">
+        <div class="flex space-x-4 mb-4">
+          <button id="tab-login" class="px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold">Ingresar</button>
+          <button id="tab-register" class="px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold">Crear cuenta</button>
+        </div>
+        <form id="form-login" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+            <input id="login-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+            <input id="login-password" type="password" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+          </div>
+          <button type="submit" class="w-full bg-primary text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-90">Ingresar</button>
+          <p id="login-error" class="text-sm text-red-600 hidden">Credenciales inválidas</p>
+        </form>
+        <form id="form-register" class="space-y-4 hidden">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Nombre</label>
+            <input id="reg-name" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+            <input id="reg-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+            <input id="reg-password" type="password" required minlength="6" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+          </div>
+          <button type="submit" class="w-full bg-primary text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-90">Crear cuenta</button>
+        </form>
+      </div>
+      <div class="px-6 py-4 border-t text-xs text-gray-500">Al continuar aceptas nuestros Términos y Política de Privacidad.</div>
+    </div>
+  </div>
+
+  <script>
+    // Auth helpers + modal
+    function isLoggedIn(){ try { return !!JSON.parse(localStorage.getItem('authUser')); } catch { return false; } }
+    function openAuthModal(){ document.getElementById('auth-modal').classList.remove('hidden'); }
+    function closeAuthModal(){ document.getElementById('auth-modal').classList.add('hidden'); }
+    function requireLogin(){ if (isLoggedIn()) return true; openAuthModal(); return false; }
+    document.getElementById('login-btn')?.addEventListener('click', function(e){ e.preventDefault(); openAuthModal(); });
+
+    // Tabs modal
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const formLogin = document.getElementById('form-login');
+    const formRegister = document.getElementById('form-register');
+    tabLogin?.addEventListener('click', ()=>{ tabLogin.className='px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold'; tabRegister.className='px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold'; formLogin.classList.remove('hidden'); formRegister.classList.add('hidden'); });
+    tabRegister?.addEventListener('click', ()=>{ tabRegister.className='px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold'; tabLogin.className='px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold'; formRegister.classList.remove('hidden'); formLogin.classList.add('hidden'); });
+    document.getElementById('auth-close')?.addEventListener('click', closeAuthModal);
+    document.getElementById('auth-modal')?.addEventListener('click', (e)=>{ if(e.target.id==='auth-modal') closeAuthModal(); });
+
+    // Submit login/register
+    formLogin?.addEventListener('submit', (e)=>{ e.preventDefault(); const email=document.getElementById('login-email').value.trim(); const password=document.getElementById('login-password').value.trim(); if(!email||!password){ document.getElementById('login-error').classList.remove('hidden'); return; } const user={ email, name: email.split('@')[0], loggedAt:new Date().toISOString() }; localStorage.setItem('authUser', JSON.stringify(user)); closeAuthModal(); });
+    formRegister?.addEventListener('submit', (e)=>{ e.preventDefault(); const name=document.getElementById('reg-name').value.trim(); const email=document.getElementById('reg-email').value.trim(); const password=document.getElementById('reg-password').value.trim(); if(!name||!email||password.length<6) return; const user={ email, name, loggedAt:new Date().toISOString(), registered:true }; localStorage.setItem('authUser', JSON.stringify(user)); closeAuthModal(); });
+
+    document.getElementById('track-order-link')?.addEventListener('click', function(e){
+      e.preventDefault();
+      if (requireLogin()) {
+        alert('Seguimiento próximamente');
+      }
+    });
+  </script>
 </body>
 </html>
 
