@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout | PizzUM&BurgUM</title>
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: { colors: { primary: '#FF0000', secondary: '#000000' } }
+      }
+    }
+  </script>
+  <style>
+    html, body { height:100%; margin:0; padding:0; }
+    body { overflow-x:hidden; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #FF0000; border-radius: 10px; }
+    .badge { font-size: 20px; line-height: 1; }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans custom-scrollbar">
+  <!-- Nav -->
+  <nav class="bg-gradient-to-r from-primary to-secondary shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <span class="text-xl font-bold text-white">PizzUM&BurgUM</span>
+        </div>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="frontend.html" class="text-white hover:text-gray-200 text-sm font-medium">Inicio</a>
+          <a href="builder.html" class="text-white hover:text-gray-200 text-sm font-medium">Elegir Constructor</a>
+          <span class="text-white text-sm font-medium">Checkout</span>
+        </div>
+        <div class="md:hidden flex items-center">
+          <button class="text-white hover:text-gray-200" aria-controls="mobile-menu">☰</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Checkout -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <h1 class="text-3xl font-extrabold text-gray-900">Resumen y Pago</h1>
+    <p class="mt-2 text-gray-600">Revisá tu pedido, elegí envío y forma de pago. Podés volver a crear más pizzas o hamburguesas.</p>
+
+    <div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Carrito -->
+      <section class="lg:col-span-2">
+        <div class="bg-white border-2 border-gray-100 rounded-lg shadow p-6">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-bold text-gray-800">Tu Carrito</h2>
+            <button id="clear-cart" class="text-sm text-red-600 hover:underline">Vaciar carrito</button>
+          </div>
+
+          <!-- Lista de ítems -->
+          <div id="cart-list" class="mt-4 divide-y"></div>
+
+          <!-- CTA -->
+          <div class="mt-6 flex flex-wrap items-center gap-3">
+            <a href="builder.html" class="inline-flex items-center px-4 py-2 border rounded-md text-primary border-primary bg-white hover:bg-gray-50">
+              ➕ Agregar más creaciones
+            </a>
+          </div>
+
+          <!-- Estado vacío -->
+          <div id="empty-state" class="hidden mt-8 text-center text-gray-500">
+            <p>Tu carrito está vacío.</p>
+            <a href="builder.html" class="mt-3 inline-flex items-center px-4 py-2 border rounded-md text-primary border-primary bg-white hover:bg-gray-50">
+              🍕🍔 Ir a construir una pizza o burger
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Resumen / Envío / Pago -->
+      <aside class="lg:col-span-1 space-y-6">
+        <!-- Envío -->
+        <div class="bg-white border-2 border-gray-100 rounded-lg shadow p-6">
+          <h3 class="text-lg font-bold text-gray-800">Método de envío</h3>
+          <div class="mt-3 space-y-2">
+            <label class="flex items-center justify-between border rounded-lg p-3 cursor-pointer hover:border-primary">
+              <div class="flex items-center space-x-2">
+                <input type="radio" name="shipping" value="pickup" class="text-primary" checked>
+                <span>Retiro en local (Centro)</span>
+              </div>
+              <span class="text-gray-700 font-semibold">$U 0</span>
+            </label>
+            <label class="flex items-center justify-between border rounded-lg p-3 cursor-pointer hover:border-primary">
+              <div class="flex items-center space-x-2">
+                <input type="radio" name="shipping" value="standard" class="text-primary">
+                <span>Delivery estándar (45–60 min)</span>
+              </div>
+              <span class="text-gray-700 font-semibold">$U 120</span>
+            </label>
+            <label class="flex items-center justify-between border rounded-lg p-3 cursor-pointer hover:border-primary">
+              <div class="flex items-center space-x-2">
+                <input type="radio" name="shipping" value="express" class="text-primary">
+                <span>Delivery express (25–35 min)</span>
+              </div>
+              <span class="text-gray-700 font-semibold">$U 200</span>
+            </label>
+          </div>
+
+          <!-- Dirección solo si delivery -->
+          <div id="address-block" class="hidden mt-4 space-y-3">
+            <input id="addr-street" type="text" class="w-full border rounded-md p-2" placeholder="Calle y número">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input id="addr-city" type="text" class="w-full border rounded-md p-2" placeholder="Ciudad/Barrio">
+              <input id="addr-ref" type="text" class="w-full border rounded-md p-2" placeholder="Referencia (opcional)">
+            </div>
+          </div>
+        </div>
+
+        <!-- Pago -->
+        <div class="bg-white border-2 border-gray-100 rounded-lg shadow p-6">
+          <h3 class="text-lg font-bold text-gray-800">Método de pago</h3>
+          <div class="mt-3 space-y-2">
+            <label class="flex items-center border rounded-lg p-3 cursor-pointer hover:border-primary">
+              <input type="radio" name="payment" value="cash" class="text-primary mr-2" checked>
+              <span>Efectivo</span>
+            </label>
+            <label class="flex items-center border rounded-lg p-3 cursor-pointer hover:border-primary">
+              <input type="radio" name="payment" value="mp" class="text-primary mr-2">
+              <span>Mercado Pago</span>
+            </label>
+            <label class="flex items-center border rounded-lg p-3 cursor-pointer hover:border-primary">
+              <input type="radio" name="payment" value="card" class="text-primary mr-2">
+              <span>Tarjeta de crédito/débito</span>
+            </label>
+          </div>
+
+          <!-- Datos de tarjeta (condicional) -->
+          <div id="card-block" class="hidden mt-4 space-y-3">
+            <input id="card-number" type="text" inputmode="numeric" maxlength="19" class="w-full border rounded-md p-2" placeholder="Número de tarjeta">
+            <div class="grid grid-cols-3 gap-3">
+              <input id="card-exp" type="text" class="border rounded-md p-2" placeholder="MM/AA">
+              <input id="card-cvv" type="password" maxlength="4" class="border rounded-md p-2" placeholder="CVV">
+              <input id="card-name" type="text" class="border rounded-md p-2" placeholder="Nombre en la tarjeta">
+            </div>
+          </div>
+        </div>
+
+        <!-- Totales -->
+        <div class="bg-white border-2 border-gray-100 rounded-lg shadow p-6">
+          <h3 class="text-lg font-bold text-gray-800">Resumen</h3>
+          <dl class="mt-3 space-y-2 text-gray-700">
+            <div class="flex justify-between">
+              <dt>Subtotal</dt><dd id="dl-subtotal" class="font-semibold">$U 0</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt>Envío</dt><dd id="dl-shipping" class="font-semibold">$U 0</dd>
+            </div>
+            <div class="flex justify-between border-t pt-2 text-lg">
+              <dt>Total</dt><dd id="dl-total" class="font-extrabold text-primary">$U 0</dd>
+            </div>
+          </dl>
+
+          <button id="place-order" class="mt-6 w-full inline-flex justify-center items-center px-4 py-3 rounded-md text-white bg-primary hover:bg-opacity-90">
+            ✔️ Confirmar pedido
+          </button>
+          <p id="order-message" class="mt-3 text-sm text-green-600 hidden">¡Pedido confirmado! Te enviamos los detalles al finalizar.</p>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="bg-gray-800">
+    <div class="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
+      <p class="text-center text-base text-gray-400">&copy; 2023 PizzUM&BurgUM. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script>
+    // --- Utilidades ---
+    const MONEY = n => `$U ${Number(n || 0).toFixed(0)}`;
+    const SHIPPING_COST = { pickup: 0, standard: 120, express: 200 };
+
+    function readCart() {
+      try { return JSON.parse(localStorage.getItem('cart') || '[]'); } catch { return []; }
+    }
+    function writeCart(cart) { localStorage.setItem('cart', JSON.stringify(cart)); }
+
+    function badgeFor(item){
+      return item.type === 'burger' ? '🍔' : item.type === 'pizza' ? '🍕' : '🧾';
+    }
+    function formatItemTitle(item) {
+      if (item.type === 'burger') {
+        const size = item.size || 'Burger';
+        return `Hamburguesa ${size}`;
+      }
+      if (item.type === 'pizza') {
+        const size = item.size || 'Pizza';
+        return `Pizza ${size}`;
+      }
+      return item.title || 'Ítem';
+    }
+    function formatItemDetails(item) {
+      if (item.type === 'burger') {
+        const parts = [];
+        if (item.bun) parts.push(`Pan: ${item.bun}`);
+        if (item.patty) parts.push(`Carne: ${item.patty}`);
+        if (item.doneness) parts.push(`Punto: ${item.doneness}`);
+        if (item.cheese) parts.push(`Queso: ${item.cheese}`);
+        if (Array.isArray(item.sauces) && item.sauces.length) parts.push(`Salsas: ${item.sauces.join(', ')}`);
+        if (Array.isArray(item.extras) && item.extras.length) parts.push(`Extras: ${item.extras.join(', ')}`);
+        return parts.join(' • ');
+      }
+      if (item.type === 'pizza') {
+        const parts = [];
+        if (item.dough) parts.push(`Masa: ${item.dough}`);
+        if (item.sauce) parts.push(`Salsa: ${item.sauce}`);
+        if (item.cheese) parts.push(`Queso: ${item.cheese}`);
+        if (Array.isArray(item.toppings) && item.toppings.length) parts.push(`Toppings: ${item.toppings.join(', ')}`);
+        return parts.join(' • ');
+      }
+      const clone = { ...item }; delete clone.createdAt; delete clone.total;
+      return Object.entries(clone).map(([k,v]) => `${k}: ${Array.isArray(v)?v.join(', '):v}`).join(' • ');
+    }
+    const linePrice = item => Number(item.total || 0) * Number(item.qty || 1);
+
+    // Render de carrito SIN "Unit" ni contador
+    function renderCart() {
+      const cart = readCart();
+      const list = document.getElementById('cart-list');
+      const empty = document.getElementById('empty-state');
+      list.innerHTML = '';
+
+      if (!cart.length) {
+        empty.classList.remove('hidden');
+        updateTotals();
+        return;
+      }
+      empty.classList.add('hidden');
+
+      cart.forEach((item, idx) => {
+        const row = document.createElement('div');
+        row.className = "py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3";
+        row.innerHTML = `
+          <div class="flex items-start gap-3">
+            <div class="badge">${badgeFor(item)}</div>
+            <div>
+              <div class="font-semibold text-gray-800">${formatItemTitle(item)}</div>
+              <div class="text-sm text-gray-600">${formatItemDetails(item)}</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <div class="text-sm text-gray-700">
+              <span class="mr-1">Total:</span>
+              <span class="font-semibold" id="line-total-${idx}">${MONEY(linePrice(item))}</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <button class="duplicate-item text-primary hover:underline text-sm" data-index="${idx}">Duplicar</button>
+            <button class="remove-item text-red-600 hover:underline text-sm" data-index="${idx}">Eliminar</button>
+          </div>
+        `;
+        list.appendChild(row);
+      });
+
+      updateTotals();
+    }
+
+    function cartSubtotal() { return readCart().reduce((acc, it) => acc + linePrice(it), 0); }
+    function currentShippingCost() {
+      const method = document.querySelector('input[name="shipping"]:checked')?.value || 'pickup';
+      return SHIPPING_COST[method] || 0;
+    }
+    function updateTotals() {
+      const sub = cartSubtotal();
+      const ship = currentShippingCost();
+      document.getElementById('dl-subtotal').textContent = MONEY(sub);
+      document.getElementById('dl-shipping').textContent = MONEY(ship);
+      document.getElementById('dl-total').textContent = MONEY(sub + ship);
+    }
+
+    // Listeners: envío y pago + acciones del carrito
+    document.addEventListener('change', (e) => {
+      if (e.target.name === 'shipping') {
+        const val = e.target.value;
+        document.getElementById('address-block').classList.toggle('hidden', val === 'pickup');
+        updateTotals();
+      }
+      if (e.target.name === 'payment') {
+        document.getElementById('card-block').classList.toggle('hidden', e.target.value !== 'card');
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      // eliminar
+      if (e.target.classList.contains('remove-item')) {
+        const idx = Number(e.target.dataset.index);
+        const cart = readCart();
+        cart.splice(idx, 1);
+        writeCart(cart);
+        renderCart();
+      }
+      // duplicar
+      if (e.target.classList.contains('duplicate-item')) {
+        const idx = Number(e.target.dataset.index);
+        const cart = readCart();
+        const copy = JSON.parse(JSON.stringify(cart[idx] || {}));
+        if (!copy) return;
+        copy.createdAt = new Date().toISOString();
+        writeCart([...cart, copy]);
+        renderCart();
+      }
+      // vaciar carrito
+      if (e.target.id === 'clear-cart') {
+        localStorage.setItem('cart', '[]');
+        renderCart();
+      }
+    });
+
+    // Confirmar pedido
+    document.getElementById('place-order').addEventListener('click', () => {
+      const cart = readCart();
+      if (!cart.length) { alert('Tu carrito está vacío.'); return; }
+
+      const shipping = document.querySelector('input[name="shipping"]:checked')?.value || 'pickup';
+      const payment  = document.querySelector('input[name="payment"]:checked')?.value || 'cash';
+
+      // Dirección si no es retiro
+      let address = null;
+      if (shipping !== 'pickup') {
+        const street = document.getElementById('addr-street').value.trim();
+        const city   = document.getElementById('addr-city').value.trim();
+        if (!street || !city) { alert('Completá la dirección para el envío.'); return; }
+        address = { street, city, ref: document.getElementById('addr-ref').value.trim() };
+      }
+
+      // Validar tarjeta si corresponde
+      if (payment === 'card') {
+        const num = document.getElementById('card-number').value.replace(/\s+/g,'');
+        const exp = document.getElementById('card-exp').value.trim();
+        const cvv = document.getElementById('card-cvv').value.trim();
+        const name= document.getElementById('card-name').value.trim();
+        if (!num || !exp || !cvv || !name) { alert('Completá los datos de la tarjeta.'); return; }
+      }
+
+      const order = {
+        id: 'ORD-' + Math.random().toString(36).slice(2,8).toUpperCase(),
+        createdAt: new Date().toISOString(),
+        items: cart,
+        subtotal: cartSubtotal(),
+        shippingMethod: shipping,
+        shippingCost: currentShippingCost(),
+        total: cartSubtotal() + currentShippingCost(),
+        paymentMethod: payment,
+        address
+      };
+
+      const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+      orders.push(order);
+      localStorage.setItem('orders', JSON.stringify(orders));
+      localStorage.setItem('cart', '[]');
+
+      document.getElementById('order-message').classList.remove('hidden');
+      renderCart(); updateTotals();
+      alert(`¡Pedido confirmado!\nN°: ${order.id}\nTotal: ${MONEY(order.total)}`);
+      // window.location.href = 'frontend.html';
+    });
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCart();
+      updateTotals();
+      // Estado inicial de bloques condicionales
+      document.getElementById('address-block').classList.toggle(
+        'hidden',
+        (document.querySelector('input[name="shipping"]:checked')?.value || 'pickup') === 'pickup'
+      );
+      document.getElementById('card-block').classList.toggle(
+        'hidden',
+        (document.querySelector('input[name="payment"]:checked')?.value || 'cash') !== 'card'
+      );
+    });
+  </script>
+</body>
+</html>
