@@ -147,25 +147,29 @@
             </div>
           </div>
 
-          <!-- Queso (elección única) -->
+          <!-- Queso (multi-selección) -->
           <div class="mt-8">
             <h2 class="text-xl font-bold text-gray-800">Queso</h2>
             <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
               <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
                 <span>Mozzarella</span>
-                <input type="radio" name="cheese" value="Mozzarella" class="form-radio text-primary" checked>
+                <input type="checkbox" name="cheese" value="Mozzarella" class="form-checkbox text-primary" checked>
               </label>
               <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
                 <span>Cheddar</span>
-                <input type="radio" name="cheese" value="Cheddar" class="form-radio text-primary">
+                <input type="checkbox" name="cheese" value="Cheddar" class="form-checkbox text-primary">
               </label>
               <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
                 <span>Parmesano</span>
-                <input type="radio" name="cheese" value="Parmesan" class="form-radio text-primary">
+                <input type="checkbox" name="cheese" value="Parmesan" class="form-checkbox text-primary">
               </label>
               <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
                 <span>Queso Vegano</span>
-                <input type="radio" name="cheese" value="Vegan" class="form-radio text-primary">
+                <input type="checkbox" name="cheese" value="Vegan" class="form-checkbox text-primary">
+              </label>
+              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+                <span>Sin queso</span>
+                <input type="checkbox" name="cheese" value="NoCheese" class="form-checkbox text-primary">
               </label>
             </div>
           </div>
@@ -251,12 +255,12 @@
       const size = document.querySelector('input[name="size"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
       const dough = document.querySelector('input[name="dough"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
       const sauce = document.querySelector('input[name="sauce"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
-      const cheese = document.querySelector('input[name="cheese"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
+      const cheeses = Array.from(document.querySelectorAll('input[name="cheese"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent);
       const toppings = Array.from(document.querySelectorAll('input[name="toppings"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent);
       document.getElementById('summary-size').textContent = size;
       document.getElementById('summary-dough').textContent = dough;
       document.getElementById('summary-sauce').textContent = sauce;
-      document.getElementById('summary-cheese').textContent = cheese;
+      document.getElementById('summary-cheese').textContent = cheeses.length ? cheeses.join(', ') : 'Sin queso';
       document.getElementById('summary-toppings').textContent = toppings.length ? toppings.join(', ') : 'Ninguno';
     }
     document.addEventListener('change', function (e) {
@@ -265,6 +269,21 @@
       }
     });
     document.addEventListener('DOMContentLoaded', updateSummary);
+
+    // Hacer que "Sin queso" sea una opción exclusiva: si se selecciona, desmarcar los demás; si se selecciona otro queso, desmarcar "Sin queso"
+    document.addEventListener('change', function (e) {
+      if (!e.target.matches('input[name="cheese"]')) return;
+      const noCheese = document.querySelector('input[name="cheese"][value="NoCheese"]');
+      if (!noCheese) return;
+      if (e.target === noCheese && noCheese.checked) {
+        // desmarcar todos los demás
+        Array.from(document.querySelectorAll('input[name="cheese"]')).forEach(cb => { if (cb !== noCheese) cb.checked = false; });
+      } else if (e.target !== noCheese && e.target.checked) {
+        // desmarcar sin queso
+        noCheese.checked = false;
+      }
+      updateSummary();
+    });
 
     // Persistencia de favoritos en localStorage
     function getSelectedText(selector) {
@@ -276,7 +295,7 @@
         size: getSelectedText('input[name="size"]:checked'),
         dough: getSelectedText('input[name="dough"]:checked'),
         sauce: getSelectedText('input[name="sauce"]:checked'),
-        cheese: getSelectedText('input[name="cheese"]:checked'),
+        cheese: Array.from(document.querySelectorAll('input[name="cheese"]:checked')).map(cb => cb.value === 'NoCheese' ? 'Sin queso' : cb.parentElement.querySelector('span').textContent),
         toppings: Array.from(document.querySelectorAll('input[name="toppings"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent),
         createdAt: new Date().toISOString()
       };
@@ -342,7 +361,8 @@
     // Determina si dos configuraciones de pizza son iguales
     function isSamePizzaBuild(a, b) {
       return a && b && a.type === 'pizza' && b.type === 'pizza' &&
-        a.size === b.size && a.dough === b.dough && a.sauce === b.sauce && a.cheese === b.cheese &&
+        a.size === b.size && a.dough === b.dough && a.sauce === b.sauce &&
+        areArraysEqualAsSets(a.cheese || [], b.cheese || []) &&
         areArraysEqualAsSets(a.toppings || [], b.toppings || []);
     }
     // Verifica si la configuración actual ya está en favoritos
@@ -381,10 +401,45 @@
         setHeartFilled(true);
       }
     });
-    // Proteger Agregar al Pedido
-    document.getElementById('add-to-order').addEventListener('click', function(){ if(!requireLogin()) return; alert('Añadido al carrito (demo)'); });
+  // Proteger Agregar al Pedido (el handler de añadir al carrito está definido más abajo)
     // Establece estado inicial del corazón
     document.addEventListener('DOMContentLoaded', function(){ setHeartFilled(isCurrentPizzaFavorited()); });
+    // --- Agregar al carrito (compatibilidad con checkout.html) ---
+    function getCart() {
+      try {
+        return JSON.parse(localStorage.getItem('cart') || '[]');
+      } catch (e) {
+        console.error('Failed to read cart', e);
+        return [];
+      }
+    }
+
+    function setCart(list) {
+      try {
+        localStorage.setItem('cart', JSON.stringify(list));
+      } catch (e) {
+        console.error('Failed to write cart', e);
+      }
+    }
+
+    function addToCart(item) {
+      try {
+        const current = getCart();
+        // Añadir campos mínimos que espera checkout: qty y total
+        const toAdd = Object.assign({}, item, { qty: 1, total: item.total || 0 });
+        current.push(toAdd);
+        setCart(current);
+      } catch (e) {
+        console.error('Failed to add to cart', e);
+      }
+    }
+
+    document.getElementById('add-to-order').addEventListener('click', function () {
+      const build = getPizzaBuild();
+      addToCart(build);
+      // Redirigir al checkout para completar el pedido
+      window.location.href = 'checkout.html';
+    });
   </script>
 
   <!-- Modal Auth reutilizable -->
@@ -475,5 +530,7 @@
   </script>
 </body>
 </html>
+
+
 
 
