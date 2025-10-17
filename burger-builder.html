@@ -318,7 +318,6 @@
       const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent || '').sort();
       return { type: 'burger', size, bun, patty, cheese, sauces, extras, createdAt: new Date().toISOString() };
     }
-  });
   document.addEventListener('DOMContentLoaded', updateBurgerSummary);
 
   // (Los favoritos se manejan en el script inferior)
@@ -352,75 +351,129 @@ document.addEventListener('DOMContentLoaded', updateBurgerSummary);
   function requireLogin(){ if (isLoggedIn()) return true; openAuthModal(); return false; }
 
   // Favoritos (hamburguesa): guardar y controlar ícono/toast
-  function saveFavorite(build) {
+  function getFavorites() {
     try {
-      const key = 'favorites';
-      const current = JSON.parse(localStorage.getItem(key) || '[]');
-      current.push(build);
-      localStorage.setItem(key, JSON.stringify(current));
-      const toast = document.getElementById('b-favorites-toast');
-      if (!toast) return;
-      toast.textContent = message;
-      toast.classList.remove('hidden');
-      setTimeout(() => {
-        toast.classList.add('hidden');
-        // restaurar texto por defecto
-        toast.textContent = '¡Guardado en favoritos!';
-      }, 1500);
-    }
-
-    function setHeartFilled(filled) {
-      const svg = document.getElementById('b-heart-icon');
-      if (!svg) return;
-      const path = svg.querySelector('path');
-      if (!path) return;
-      if (filled) {
-        path.setAttribute('fill', '#FF0000');
-        path.setAttribute('stroke', '#FF0000');
-      } else {
-        path.setAttribute('fill', 'none');
-        path.setAttribute('stroke', '#FF0000');
-      }
+      return JSON.parse(localStorage.getItem('favorites') || '[]');
+    } catch (e) {
+      console.error('Failed to read favorites', e);
+      return [];
     }
   }
-  document.getElementById('b-add-to-favorites').addEventListener('click', function () {
-    if (!requireLogin()) return;
+
+  function setFavorites(list) {
+    try {
+      localStorage.setItem('favorites', JSON.stringify(list));
+    } catch (e) {
+      console.error('Failed to write favorites', e);
+    }
+  }
+
+  function saveFavorite(build) {
+    try {
+      const current = getFavorites();
+      current.push(build);
+      setFavorites(current);
+      showFavoritesToast('¡Guardado en favoritos!');
+    } catch (e) {
+      console.error('Failed to save favorite', e);
+    }
+  }
+
+  function removeFavorite(build) {
+    try {
+      const current = getFavorites();
+      const filtered = current.filter(f => !isSameBurgerBuild(f, build));
+      setFavorites(filtered);
+      showFavoritesToast('Eliminado de favoritos');
+    } catch (e) {
+      console.error('Failed to remove favorite', e);
+    }
+  }
+
+  function showFavoritesToast(message) {
+    const toast = document.getElementById('b-favorites-toast');
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.remove('hidden');
+    setTimeout(() => {
+      toast.classList.add('hidden');
+      toast.textContent = '¡Guardado en favoritos!';
+    }, 1500);
+  }
+
+  function setHeartFilled(filled) {
+    const svg = document.getElementById('b-heart-icon');
+    if (!svg) return;
+    const path = svg.querySelector('path');
+    if (!path) return;
+    if (filled) {
+      path.setAttribute('fill', '#FF0000');
+      path.setAttribute('stroke', '#FF0000');
+    } else {
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke', '#FF0000');
+    }
+  }
+
+  // Compara arrays sin importar el orden
+  function areArraysEqualAsSets(a, b) {
+    if (!Array.isArray(a) || !Array.isArray(b)) return false;
+    const as = new Set(a);
+    const bs = new Set(b);
+    if (as.size !== bs.size) return false;
+    for (const v of as) if (!bs.has(v)) return false;
+    return true;
+  }
+
+  // Determina si dos configuraciones de hamburguesa son iguales
+  function isSameBurgerBuild(a, b) {
+    return a && b && a.type === 'burger' && b.type === 'burger' &&
+      a.size === b.size && a.bun === b.bun && a.patty === b.patty && a.cheese === b.cheese &&
+      areArraysEqualAsSets(a.sauces || [], b.sauces || []) &&
+      areArraysEqualAsSets(a.extras || [], b.extras || []);
+  }
+
+  // Verifica si la configuración actual ya está en favoritos
+  function isCurrentBurgerFavorited() {
+    try {
+      const current = getFavorites();
+      const now = getCurrentBuild();
+      return current.some(f => isSameBurgerBuild(f, now));
+    } catch (_) { return false; }
+  }
+
+  // Obtiene la configuración actual de la hamburguesa
+  function getCurrentBuild() {
     const size = document.querySelector('input[name="b-size"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
     const bun = document.querySelector('input[name="bun"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
     const patty = document.querySelector('input[name="patty"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
-    const doneness = document.querySelector('input[name="doneness"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
-    const sauces = Array.from(document.querySelectorAll('input[name="sauces"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent);
-    const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent);
-    const cheeses = (function(){
-      const list = [];
-      const noCheese = document.querySelector('input[name="cheeses"][value="Sin queso"]');
-      if (noCheese && noCheese.checked) return list;
-      const pushIf = (label, id) => {
-        const cb = document.querySelector(`input[name="cheeses"][value="${label}"]`);
-        if (cb && cb.checked) {
-          const qty = Math.max(1, parseInt(document.getElementById(id)?.value || '1', 10));
-          list.push({ type: label, qty });
-        }
-      };
-      pushIf('Cheddar', 'cheddar-qty');
-      pushIf('Mozzarella', 'mozza-qty');
-      pushIf('Suizo', 'suizo-qty');
-      return list;
-    })();
-    const build = { type: 'burger', size, bun, patty, doneness, sauces, extras, cheeses, createdAt: new Date().toISOString() };
-    saveFavorite(build);
-    setHeartFilled(true);
+    const cheese = document.querySelector('input[name="b-cheese"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
+    const sauces = Array.from(document.querySelectorAll('input[name="sauces"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent || '').sort();
+    const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent || '').sort();
+    return { type: 'burger', size, bun, patty, cheese, sauces, extras, createdAt: new Date().toISOString() };
+  }
+  document.getElementById('b-add-to-favorites').addEventListener('click', function () {
+    if (!requireLogin()) return;
+    const build = getCurrentBuild();
+    // Si ya está en favoritos, eliminar; si no, agregar
+    if (isCurrentBurgerFavorited()) {
+      removeFavorite(build);
+      setHeartFilled(false);
+    } else {
+      saveFavorite(build);
+      setHeartFilled(true);
+    }
   });
-  document.addEventListener('DOMContentLoaded', function(){ setHeartFilled(false); });
+  document.addEventListener('DOMContentLoaded', function(){ setHeartFilled(isCurrentBurgerFavorited()); });
 
   // Proteger Agregar al Pedido
   document.getElementById('b-add-to-order')?.addEventListener('click', function(){ if(!requireLogin()) return; alert('Añadido al carrito (demo)'); });
 </script>
 
 <!-- Modal Auth reutilizable -->
-<div id="auth-modal" class="hidden fixed inset-0 z-50">
+<div id="auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
   <div class="absolute inset-0 bg-black bg-opacity-50"></div>
-  <div class="relative max-w-md w-full mx-auto mt-24 bg-white border-2 border-gray-100 rounded-lg shadow-xl">
+  <div class="relative max-w-md w-full max-h-[90vh] bg-white border-2 border-gray-100 rounded-lg shadow-xl overflow-y-auto">
     <div class="flex items-center justify-between px-4 py-3 border-b">
       <h3 class="text-lg font-bold text-gray-900">Tu cuenta</h3>
       <button id="auth-close" class="text-gray-400 hover:text-gray-600">✕</button>
@@ -443,13 +496,39 @@ document.addEventListener('DOMContentLoaded', updateBurgerSummary);
         <p id="login-error" class="text-sm text-red-600 hidden">Credenciales inválidas</p>
       </form>
       <form id="form-register" class="space-y-4 hidden">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Nombre</label>
+            <input id="reg-name" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Apellido</label>
+            <input id="reg-lastname" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+          </div>
+        </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700">Nombre</label>
-          <input id="reg-name" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+          <label class="block text-sm font-medium text-gray-700">Documento</label>
+          <input id="reg-document" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
+          <input id="reg-birthdate" type="date" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Teléfono</label>
+          <input id="reg-phone" type="tel" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
           <input id="reg-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Dirección</label>
+          <input id="reg-address" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Tarjeta de Crédito/Débito</label>
+          <input id="reg-card" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="1234 5678 9012 3456">
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700">Contraseña</label>
@@ -474,7 +553,7 @@ document.addEventListener('DOMContentLoaded', updateBurgerSummary);
     tabLogin?.addEventListener('click', ()=>{ tabLogin.className='px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold'; tabRegister.className='px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold'; formLogin.classList.remove('hidden'); formRegister.classList.add('hidden'); });
     tabRegister?.addEventListener('click', ()=>{ tabRegister.className='px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold'; tabLogin.className='px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold'; formRegister.classList.remove('hidden'); formLogin.classList.add('hidden'); });
     formLogin?.addEventListener('submit', (e)=>{ e.preventDefault(); const email=document.getElementById('login-email').value.trim(); const password=document.getElementById('login-password').value.trim(); if(!email||!password){ document.getElementById('login-error').classList.remove('hidden'); return; } const user={ email, name: email.split('@')[0], loggedAt:new Date().toISOString() }; localStorage.setItem('authUser', JSON.stringify(user)); document.getElementById('auth-modal').classList.add('hidden'); });
-    formRegister?.addEventListener('submit', (e)=>{ e.preventDefault(); const name=document.getElementById('reg-name').value.trim(); const email=document.getElementById('reg-email').value.trim(); const password=document.getElementById('reg-password').value.trim(); if(!name||!email||password.length<6) return; const user={ email, name, loggedAt:new Date().toISOString(), registered:true }; localStorage.setItem('authUser', JSON.stringify(user)); document.getElementById('auth-modal').classList.add('hidden'); });
+    formRegister?.addEventListener('submit', (e)=>{ e.preventDefault(); const name=document.getElementById('reg-name').value.trim(); const lastname=document.getElementById('reg-lastname').value.trim(); const document=document.getElementById('reg-document').value.trim(); const birthdate=document.getElementById('reg-birthdate').value.trim(); const phone=document.getElementById('reg-phone').value.trim(); const email=document.getElementById('reg-email').value.trim(); const address=document.getElementById('reg-address').value.trim(); const card=document.getElementById('reg-card').value.trim(); const password=document.getElementById('reg-password').value.trim(); if(!name||!lastname||!document||!birthdate||!phone||!email||!address||!card||password.length<6) return; const user={ email, name, lastname, document, birthdate, phone, address, card, loggedAt:new Date().toISOString(), registered:true }; localStorage.setItem('authUser', JSON.stringify(user)); document.getElementById('auth-modal').classList.add('hidden'); });
   })();
 </script>
 

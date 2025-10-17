@@ -231,7 +231,12 @@
           <i data-feather="youtube"></i>
         </a>
       </div>
-      <p class="mt-8 text-center text-base text-gray-400">
+        <div class="mt-8 text-center">
+            <p class="text-gray-400 text-base mb-2">Hecho por:</p>
+            <img src="imagenes/JFGDevWorks.png" alt="JFGDevWorks logo" class="h-12 w-auto mx-auto">
+        </div>
+
+        <p class="mt-8 text-center text-base text-gray-400">
         &copy; 2025 PizzUM&BurgUM. All rights reserved.
       </p>
     </div>
@@ -292,9 +297,9 @@
   
   
   <!-- Modal de Autenticación (Login / Registro) -->
-  <div id="auth-modal" class="hidden fixed inset-0 z-50">
+  <div id="auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
     <div class="absolute inset-0 bg-black bg-opacity-50"></div>
-    <div class="relative max-w-md w-full mx-auto mt-24 bg-white border-2 border-gray-100 rounded-lg shadow-xl">
+    <div class="relative max-w-md w-full max-h-[90vh] bg-white border-2 border-gray-100 rounded-lg shadow-xl overflow-y-auto">
       <div class="flex items-center justify-between px-4 py-3 border-b">
         <h3 class="text-lg font-bold text-gray-900">Tu cuenta</h3>
         <button id="auth-close" class="text-gray-400 hover:text-gray-600">
@@ -321,13 +326,39 @@
         </form>
         <!-- Registro -->
         <form id="form-register" class="space-y-4 hidden">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Nombre</label>
+              <input id="reg-name" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Tu nombre">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Apellido</label>
+              <input id="reg-lastname" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Tu apellido">
+            </div>
+          </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700">Nombre</label>
-            <input id="reg-name" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Tu nombre">
+            <label class="block text-sm font-medium text-gray-700">Documento</label>
+            <input id="reg-document" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="12345678">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
+            <input id="reg-birthdate" type="date" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Teléfono</label>
+            <input id="reg-phone" type="tel" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="+54 9 11 1234-5678">
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
             <input id="reg-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="tu@email.com">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Dirección</label>
+            <input id="reg-address" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Calle 123, Ciudad">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Tarjeta de Crédito/Débito</label>
+            <input id="reg-card" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="1234 5678 9012 3456">
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700">Contraseña</label>
@@ -387,11 +418,17 @@
     // Submit register
     formRegister?.addEventListener('submit', (e) => {
       e.preventDefault();
-      const email = document.getElementById('reg-email').value.trim();
       const name = document.getElementById('reg-name').value.trim();
+      const lastname = document.getElementById('reg-lastname').value.trim();
+      const document = document.getElementById('reg-document').value.trim();
+      const birthdate = document.getElementById('reg-birthdate').value.trim();
+      const phone = document.getElementById('reg-phone').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const address = document.getElementById('reg-address').value.trim();
+      const card = document.getElementById('reg-card').value.trim();
       const password = document.getElementById('reg-password').value.trim();
-      if (!email || !name || password.length < 6) return;
-      const user = { email, name, loggedAt: new Date().toISOString(), registered: true };
+      if (!name || !lastname || !document || !birthdate || !phone || !email || !address || !card || password.length < 6) return;
+      const user = { email, name, lastname, document, birthdate, phone, address, card, loggedAt: new Date().toISOString(), registered: true };
       localStorage.setItem('authUser', JSON.stringify(user));
       closeAuthModal();
     });

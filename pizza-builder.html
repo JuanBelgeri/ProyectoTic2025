@@ -388,9 +388,9 @@
   </script>
 
   <!-- Modal Auth reutilizable -->
-  <div id="auth-modal" class="hidden fixed inset-0 z-50">
+  <div id="auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
     <div class="absolute inset-0 bg-black bg-opacity-50"></div>
-    <div class="relative max-w-md w-full mx-auto mt-24 bg-white border-2 border-gray-100 rounded-lg shadow-xl">
+    <div class="relative max-w-md w-full max-h-[90vh] bg-white border-2 border-gray-100 rounded-lg shadow-xl overflow-y-auto">
       <div class="flex items-center justify-between px-4 py-3 border-b">
         <h3 class="text-lg font-bold text-gray-900">Tu cuenta</h3>
         <button id="auth-close" class="text-gray-400 hover:text-gray-600">✕</button>
@@ -413,13 +413,39 @@
           <p id="login-error" class="text-sm text-red-600 hidden">Credenciales inválidas</p>
         </form>
         <form id="form-register" class="space-y-4 hidden">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Nombre</label>
+              <input id="reg-name" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Apellido</label>
+              <input id="reg-lastname" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+            </div>
+          </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700">Nombre</label>
-            <input id="reg-name" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+            <label class="block text-sm font-medium text-gray-700">Documento</label>
+            <input id="reg-document" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
+            <input id="reg-birthdate" type="date" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Teléfono</label>
+            <input id="reg-phone" type="tel" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
             <input id="reg-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Dirección</label>
+            <input id="reg-address" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Tarjeta de Crédito/Débito</label>
+            <input id="reg-card" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="1234 5678 9012 3456">
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700">Contraseña</label>
@@ -444,7 +470,7 @@
       tabLogin?.addEventListener('click', ()=>{ tabLogin.className='px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold'; tabRegister.className='px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold'; formLogin.classList.remove('hidden'); formRegister.classList.add('hidden'); });
       tabRegister?.addEventListener('click', ()=>{ tabRegister.className='px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold'; tabLogin.className='px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold'; formRegister.classList.remove('hidden'); formLogin.classList.add('hidden'); });
       formLogin?.addEventListener('submit', (e)=>{ e.preventDefault(); const email=document.getElementById('login-email').value.trim(); const password=document.getElementById('login-password').value.trim(); if(!email||!password){ document.getElementById('login-error').classList.remove('hidden'); return; } const user={ email, name: email.split('@')[0], loggedAt:new Date().toISOString() }; localStorage.setItem('authUser', JSON.stringify(user)); document.getElementById('auth-modal').classList.add('hidden'); });
-      formRegister?.addEventListener('submit', (e)=>{ e.preventDefault(); const name=document.getElementById('reg-name').value.trim(); const email=document.getElementById('reg-email').value.trim(); const password=document.getElementById('reg-password').value.trim(); if(!name||!email||password.length<6) return; const user={ email, name, loggedAt:new Date().toISOString(), registered:true }; localStorage.setItem('authUser', JSON.stringify(user)); document.getElementById('auth-modal').classList.add('hidden'); });
+      formRegister?.addEventListener('submit', (e)=>{ e.preventDefault(); const name=document.getElementById('reg-name').value.trim(); const lastname=document.getElementById('reg-lastname').value.trim(); const document=document.getElementById('reg-document').value.trim(); const birthdate=document.getElementById('reg-birthdate').value.trim(); const phone=document.getElementById('reg-phone').value.trim(); const email=document.getElementById('reg-email').value.trim(); const address=document.getElementById('reg-address').value.trim(); const card=document.getElementById('reg-card').value.trim(); const password=document.getElementById('reg-password').value.trim(); if(!name||!lastname||!document||!birthdate||!phone||!email||!address||!card||password.length<6) return; const user={ email, name, lastname, document, birthdate, phone, address, card, loggedAt:new Date().toISOString(), registered:true }; localStorage.setItem('authUser', JSON.stringify(user)); document.getElementById('auth-modal').classList.add('hidden'); });
     })();
   </script>
 </body>
