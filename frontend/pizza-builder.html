@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Constructor de Pizza | PizzUM&BurgUM</title>
+  <title>Constructor de Pizza | PizzUM & BurgUM</title>
   <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
   <!-- Librerías de estilos y utilidades -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -57,11 +57,11 @@
       <div class="flex justify-between h-16">
         <div class="flex items-center">
           <div class="flex-shrink-0 flex items-center">
-            <span class="text-xl font-bold text-white">PizzUM&BurgUM</span>
+            <span class="text-xl font-bold text-white">PizzUM & BurgUM</span>
           </div>
         </div>
         <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
-          <a href="frontend.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
+          <a href="home.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
           <a href="builder.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Elegir Constructor</a>
         </div>
         <div class="md:hidden flex items-center">
@@ -528,6 +528,12 @@
       formRegister?.addEventListener('submit', (e)=>{ e.preventDefault(); const name=document.getElementById('reg-name').value.trim(); const lastname=document.getElementById('reg-lastname').value.trim(); const document=document.getElementById('reg-document').value.trim(); const birthdate=document.getElementById('reg-birthdate').value.trim(); const phone=document.getElementById('reg-phone').value.trim(); const email=document.getElementById('reg-email').value.trim(); const address=document.getElementById('reg-address').value.trim(); const card=document.getElementById('reg-card').value.trim(); const password=document.getElementById('reg-password').value.trim(); if(!name||!lastname||!document||!birthdate||!phone||!email||!address||!card||password.length<6) return; const user={ email, name, lastname, document, birthdate, phone, address, card, loggedAt:new Date().toISOString(), registered:true }; localStorage.setItem('authUser', JSON.stringify(user)); document.getElementById('auth-modal').classList.add('hidden'); });
     })();
   </script>
+
+  <footer class="bg-gray-800">
+      <div class="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
+          <p class="text-center text-base text-gray-400">&copy; 2025 PizzUM & BurgUM. Todos los derechos reservados.</p>
+      </div>
+  </footer>
 </body>
 </html>
 
