@@ -99,7 +99,7 @@
 
     <div class="flex flex-wrap gap-3">
       <a href="builder.html" class="inline-flex items-center px-4 py-2 border rounded-md text-primary border-primary bg-white hover:bg-gray-50">➕ Agregar más creaciones</a>
-      <a href="frontend.html" class="inline-flex items-center px-4 py-2 rounded-md text-white bg-primary hover:bg-opacity-90">Volver al inicio</a>
+      <a href="home.html" class="inline-flex items-center px-4 py-2 rounded-md text-white bg-primary hover:bg-opacity-90">Volver al inicio</a>
     </div>
   </section>
 
@@ -191,12 +191,19 @@
     });
   }
 
-  // Timeline
-  const STEPS = ['En cola','En preparación','En camino','Entregado'];
-  function renderSteps(currentIndex){
+  // Definir pasos según método de envío
+  function getSteps(order) {
+    if (order?.shippingMethod === 'pickup') {
+      return ['En cola', 'En preparación', 'Listo para retirar'];
+    }
+    return ['En cola', 'En preparación', 'En camino', 'Entregado'];
+  }
+
+  // Renderiza los pasos dinámicamente
+  function renderSteps(currentIndex, steps) {
     // Vertical
     const v = document.getElementById('steps-vertical'); v.innerHTML = '';
-    STEPS.forEach((s, i) => {
+    steps.forEach((s, i) => {
       const state = i < currentIndex ? 'step-done' : i === currentIndex ? 'step-active' : 'step-pending';
       const li = document.createElement('li');
       li.className = 'flex items-center gap-3';
@@ -205,27 +212,27 @@
     });
     // Horizontal
     const h = document.getElementById('steps-horizontal'); h.innerHTML = '';
-    STEPS.forEach((s, i) => {
+    steps.forEach((s, i) => {
       const state = i < currentIndex ? 'step-done' : i === currentIndex ? 'step-active' : 'step-pending';
       const li = document.createElement('li');
       li.className = 'flex-1 flex flex-col items-center';
       li.innerHTML = `
         <div class="step-dot ${state} mb-2"></div>
         <div class="text-sm ${i<currentIndex?'text-success':i===currentIndex?'text-primary':'text-gray-500'} font-medium">${s}</div>
-        ${i<STEPS.length-1 ? '<div class="w-full h-px bg-gray-200 mt-2"></div>' : ''}
+        ${i<steps.length-1 ? '<div class="w-full h-px bg-gray-200 mt-2"></div>' : ''}
       `;
       h.appendChild(li);
     });
   }
 
-  // Mapea estatus por tiempo (simple y local)
+  // Mapea estatus por tiempo (ajustado para pickup)
   function statusIndexFor(order, now){
     const created = new Date(order.createdAt).getTime();
     const method = order.shippingMethod || 'pickup';
 
     // Duraciones aproximadas por método (min)
     const phases = {
-      pickup:  { queue: 2, prep: 12, travel: 0 },
+      pickup:  { queue: 2, prep: 12 },
       standard:{ queue: 2, prep: 20, travel: 25 },
       express: { queue: 2, prep: 12, travel: 15 }
     }[method] || { queue:2, prep:20, travel:25 };
@@ -233,11 +240,17 @@
     const ms = t => t*60000;
     const t = now - created;
 
-    if (t < ms(phases.queue)) return 0;                           // En cola
-    if (t < ms(phases.queue + phases.prep)) return 1;             // En preparación
-    if (phases.travel === 0) return (t < ms(phases.queue + phases.prep + 5)) ? 2 : 3; // pickup: breve "en camino" simbólico
-    if (t < ms(phases.queue + phases.prep + phases.travel)) return 2;  // En camino
-    return 3; // Entregado
+    if (method === 'pickup') {
+      if (t < ms(phases.queue)) return 0;                           // En cola
+      if (t < ms(phases.queue + phases.prep)) return 1;             // En preparación
+      return 2; // Listo para retirar
+    } else {
+      if (t < ms(phases.queue)) return 0;                           // En cola
+      if (t < ms(phases.queue + phases.prep)) return 1;             // En preparación
+      if (phases.travel === 0) return (t < ms(phases.queue + phases.prep + 5)) ? 2 : 3; // pickup: breve "en camino" simbólico
+      if (t < ms(phases.queue + phases.prep + phases.travel)) return 2;  // En camino
+      return 3; // Entregado
+    }
   }
 
   // Countdown y ETA
@@ -296,9 +309,10 @@
     startCountdown(etaDate);
 
     // Estado
+    const steps = getSteps(order);
     function refreshStatus(){
       const idx = statusIndexFor(order, Date.now());
-      renderSteps(idx);
+      renderSteps(idx, steps);
     }
     refreshStatus();
     setInterval(refreshStatus, 15000); // refresco cada 15s
