@@ -401,7 +401,18 @@
 
     // Wire nav buttons
     document.getElementById('login-btn')?.addEventListener('click', function (e) { e.preventDefault(); openAuthModal(); });
-    document.getElementById('track-order-link')?.addEventListener('click', function (e) { e.preventDefault(); if (requireLogin()) { alert('Función de seguimiento próximamente.'); } });
+    document.getElementById('track-order-link')?.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (requireLogin()) {
+        const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+        const last = orders[orders.length - 1];
+        if (last && last.id) {
+          window.location.href = `orden.html?id=${last.id}`;
+        } else {
+          window.location.href = 'orden.html';
+        }
+      }
+    });
   </script>
 </body>
 </html>
