@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Checkout | PizzUM & BurgUM</title>
+  <title>Checkout | PizzUM&BurgUM</title>
   <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -28,10 +28,10 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex items-center">
-          <span class="text-xl font-bold text-white">PizzUM & BurgUM</span>
+          <span class="text-xl font-bold text-white">PizzUM&BurgUM</span>
         </div>
         <div class="hidden md:flex items-center space-x-8">
-          <a href="home.html" class="text-white hover:text-gray-200 text-sm font-medium">Inicio</a>
+          <a href="frontend.html" class="text-white hover:text-gray-200 text-sm font-medium">Inicio</a>
           <a href="builder.html" class="text-white hover:text-gray-200 text-sm font-medium">Elegir Constructor</a>
           <span class="text-white text-sm font-medium">Checkout</span>
         </div>
@@ -162,7 +162,6 @@
           <button id="place-order" class="mt-6 w-full inline-flex justify-center items-center px-4 py-3 rounded-md text-white bg-primary hover:bg-opacity-90">
             ✔️ Confirmar pedido
           </button>
-          <p id="order-message" class="mt-3 text-sm text-green-600 hidden">¡Pedido confirmado! Te enviamos los detalles al finalizar.</p>
         </div>
       </aside>
     </div>
@@ -170,12 +169,11 @@
 
   <footer class="bg-gray-800">
     <div class="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
-      <p class="text-center text-base text-gray-400">&copy; 2025 PizzUM & BurgUM. Todos los derechos reservados.</p>
+      <p class="text-center text-base text-gray-400">&copy; 2023 PizzUM&BurgUM. Todos los derechos reservados.</p>
     </div>
   </footer>
 
   <script>
-    // --- Utilidades ---
     const MONEY = n => `$U ${Number(n || 0).toFixed(0)}`;
     const SHIPPING_COST = { pickup: 0, standard: 120, express: 200 };
 
@@ -184,45 +182,25 @@
     }
     function writeCart(cart) { localStorage.setItem('cart', JSON.stringify(cart)); }
 
-    function badgeFor(item){
-      return item.type === 'burger' ? '🍔' : item.type === 'pizza' ? '🍕' : '🧾';
-    }
-    function formatItemTitle(item) {
-      if (item.type === 'burger') {
-        const size = item.size || 'Burger';
-        return `Hamburguesa ${size}`;
-      }
-      if (item.type === 'pizza') {
-        const size = item.size || 'Pizza';
-        return `Pizza ${size}`;
-      }
-      return item.title || 'Ítem';
-    }
-    function formatItemDetails(item) {
-      if (item.type === 'burger') {
-        const parts = [];
-        if (item.bun) parts.push(`Pan: ${item.bun}`);
-        if (item.patty) parts.push(`Carne: ${item.patty}`);
-        if (item.doneness) parts.push(`Punto: ${item.doneness}`);
-        if (item.cheese) parts.push(`Queso: ${item.cheese}`);
-        if (Array.isArray(item.sauces) && item.sauces.length) parts.push(`Salsas: ${item.sauces.join(', ')}`);
-        if (Array.isArray(item.extras) && item.extras.length) parts.push(`Extras: ${item.extras.join(', ')}`);
-        return parts.join(' • ');
-      }
-      if (item.type === 'pizza') {
-        const parts = [];
-        if (item.dough) parts.push(`Masa: ${item.dough}`);
-        if (item.sauce) parts.push(`Salsa: ${item.sauce}`);
-        if (item.cheese) parts.push(`Queso: ${item.cheese}`);
-        if (Array.isArray(item.toppings) && item.toppings.length) parts.push(`Toppings: ${item.toppings.join(', ')}`);
-        return parts.join(' • ');
-      }
-      const clone = { ...item }; delete clone.createdAt; delete clone.total;
-      return Object.entries(clone).map(([k,v]) => `${k}: ${Array.isArray(v)?v.join(', '):v}`).join(' • ');
-    }
+    const badgeFor = item => item.type === 'burger' ? '🍔' : item.type === 'pizza' ? '🍕' : '🧾';
     const linePrice = item => Number(item.total || 0) * Number(item.qty || 1);
 
-    // Render de carrito SIN "Unit" ni contador
+    function formatItemTitle(item) {
+      if (item.type === 'burger') return `Hamburguesa ${item.size || ''}`.trim();
+      if (item.type === 'pizza') return `Pizza ${item.size || ''}`.trim();
+      return item.title || 'Ítem';
+    }
+
+    function formatItemDetails(item) {
+      const parts = [];
+      if (item.bun) parts.push(`Pan: ${item.bun}`);
+      if (item.patty) parts.push(`Carne: ${item.patty}`);
+      if (item.cheese) parts.push(`Queso: ${item.cheese}`);
+      if (Array.isArray(item.sauces) && item.sauces.length) parts.push(`Salsas: ${item.sauces.join(', ')}`);
+      if (Array.isArray(item.extras) && item.extras.length) parts.push(`Extras: ${item.extras.join(', ')}`);
+      return parts.join(' • ');
+    }
+
     function renderCart() {
       const cart = readCart();
       const list = document.getElementById('cart-list');
@@ -255,6 +233,7 @@
           </div>
           <div class="flex items-center gap-3">
             <button class="duplicate-item text-primary hover:underline text-sm" data-index="${idx}">Duplicar</button>
+            <a href="builder.html" class="text-primary hover:underline text-sm">Editar en constructor</a>
             <button class="remove-item text-red-600 hover:underline text-sm" data-index="${idx}">Eliminar</button>
           </div>
         `;
@@ -277,7 +256,6 @@
       document.getElementById('dl-total').textContent = MONEY(sub + ship);
     }
 
-    // Listeners: envío y pago + acciones del carrito
     document.addEventListener('change', (e) => {
       if (e.target.name === 'shipping') {
         const val = e.target.value;
@@ -290,7 +268,6 @@
     });
 
     document.addEventListener('click', (e) => {
-      // eliminar
       if (e.target.classList.contains('remove-item')) {
         const idx = Number(e.target.dataset.index);
         const cart = readCart();
@@ -298,7 +275,6 @@
         writeCart(cart);
         renderCart();
       }
-      // duplicar
       if (e.target.classList.contains('duplicate-item')) {
         const idx = Number(e.target.dataset.index);
         const cart = readCart();
@@ -308,23 +284,21 @@
         writeCart([...cart, copy]);
         renderCart();
       }
-      // vaciar carrito
       if (e.target.id === 'clear-cart') {
         localStorage.setItem('cart', '[]');
         renderCart();
       }
     });
 
-    // Confirmar pedido
+    // ✅ Confirmar pedido → redirigir a orden.html
     document.getElementById('place-order').addEventListener('click', () => {
       const cart = readCart();
       if (!cart.length) { alert('Tu carrito está vacío.'); return; }
 
       const shipping = document.querySelector('input[name="shipping"]:checked')?.value || 'pickup';
       const payment  = document.querySelector('input[name="payment"]:checked')?.value || 'cash';
-
-      // Dirección si no es retiro
       let address = null;
+
       if (shipping !== 'pickup') {
         const street = document.getElementById('addr-street').value.trim();
         const city   = document.getElementById('addr-city').value.trim();
@@ -332,7 +306,6 @@
         address = { street, city, ref: document.getElementById('addr-ref').value.trim() };
       }
 
-      // Validar tarjeta si corresponde
       if (payment === 'card') {
         const num = document.getElementById('card-number').value.replace(/\s+/g,'');
         const exp = document.getElementById('card-exp').value.trim();
@@ -358,26 +331,15 @@
       localStorage.setItem('orders', JSON.stringify(orders));
       localStorage.setItem('cart', '[]');
 
-      document.getElementById('order-message').classList.remove('hidden');
-      renderCart(); updateTotals();
-      alert(`¡Pedido confirmado!\nN°: ${order.id}\nTotal: ${MONEY(order.total)}`);
-      // window.location.href = 'home.html';
+      // 🔁 Redirige al resumen del pedido
+      window.location.href = `orden.html?id=${order.id}`;
     });
 
-    // Init
     document.addEventListener('DOMContentLoaded', () => {
       renderCart();
       updateTotals();
-      // Estado inicial de bloques condicionales
-      document.getElementById('address-block').classList.toggle(
-        'hidden',
-        (document.querySelector('input[name="shipping"]:checked')?.value || 'pickup') === 'pickup'
-      );
-      document.getElementById('card-block').classList.toggle(
-        'hidden',
-        (document.querySelector('input[name="payment"]:checked')?.value || 'cash') !== 'card'
-      );
     });
   </script>
 </body>
 </html>
+

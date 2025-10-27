@@ -239,7 +239,13 @@
     document.getElementById('track-order-link')?.addEventListener('click', function(e){
       e.preventDefault();
       if (requireLogin()) {
-        alert('Seguimiento próximamente');
+        const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+        const last = orders[orders.length - 1];
+        if (last && last.id) {
+          window.location.href = `orden.html?id=${last.id}`;
+        } else {
+          window.location.href = 'orden.html';
+        }
       }
     });
   </script>
