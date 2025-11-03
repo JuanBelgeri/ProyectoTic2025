@@ -64,7 +64,17 @@
             </div>
             <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
                 <a href="builder.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Crea tu pedido</a>
-                <a href="#" id="track-order-link" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Seguir pedido</a>
+                <a href="favorites.html" id="favorites-link" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium hidden">Favoritos</a>
+                <a href="checkout.html" id="cart-link" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium hidden relative">
+                    <svg class="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    Carrito
+                    <span id="cart-badge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"></span>
+                </a>
+                <button id="register-admin-btn" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium hidden bg-blue-600 hover:bg-blue-700">
+                    Registrar Admin
+                </button>
                 <button id="nav-auth-btn" class="bg-white text-primary px-4 py-2 rounded-full font-bold hover:bg-gray-100 transition duration-300">
                     Ingresar
                 </button>
@@ -215,8 +225,12 @@
             <a href="builder.html" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
                 Crea tu pedido
             </a>
-            <a href="#" id="mobile-track-order" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
-                Seguir pedido
+
+            <a href="favorites.html" id="mobile-favorites-link" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md hidden">
+                Favoritos
+            </a>
+            <a href="checkout.html" id="mobile-cart-link" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md hidden">
+                Carrito
             </a>
             <div class="mt-3">
                 <button id="mobile-auth-btn" class="block w-full px-4 py-2 text-center text-base font-medium rounded-md text-primary bg-gray-100 hover:bg-gray-200">
@@ -345,11 +359,89 @@
     </div>
 </div>
 
+<!-- Register Admin Modal -->
+<div id="register-admin-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+    <div class="relative max-w-2xl w-full max-h-[90vh] bg-white border-2 border-gray-100 rounded-lg shadow-xl overflow-y-auto">
+        <div class="flex items-center justify-between px-4 py-3 border-b">
+            <h3 class="text-lg font-bold text-gray-900">Registrar nuevo Administrador</h3>
+            <button id="admin-modal-close" class="text-gray-400 hover:text-gray-600">✕</button>
+        </div>
+        <div class="px-6 pt-4">
+            <form id="form-register-admin" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                        <input id="admin-firstName" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Nombre">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Apellido</label>
+                        <input id="admin-lastName" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Apellido">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Documento</label>
+                    <input id="admin-document" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="12345678">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
+                    <input id="admin-birthDate" type="date" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Teléfono</label>
+                    <input id="admin-phone" type="tel" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="+54 9 11 1234-5678">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+                    <input id="admin-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="admin@email.com">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Calle</label>
+                    <input id="admin-street" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Calle principal">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Número</label>
+                        <input id="admin-number" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="123">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Apartamento</label>
+                        <input id="admin-apartment" type="text" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Opcional">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Ciudad</label>
+                        <input id="admin-city" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Ciudad">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Código postal</label>
+                        <input id="admin-postalCode" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="12345">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Información adicional (opcional)</label>
+                    <input id="admin-addressAdditionalInfo" type="text" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Ej: puerta azul">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+                    <input id="admin-password" type="password" required minlength="8" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Mínimo 8 caracteres">
+                </div>
+                <button type="submit" id="register-admin-submit-btn" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md font-bold hover:bg-blue-700">Registrar Administrador</button>
+                <p id="register-admin-error" class="text-sm text-red-600 hidden"></p>
+                <p id="register-admin-success" class="text-sm text-green-600 hidden"></p>
+            </form>
+        </div>
+        <div class="px-6 py-4 border-t text-xs text-gray-500">Solo usuarios administradores activos pueden registrar nuevos administradores.</div>
+    </div>
+</div>
+
 <script src="api.js"></script>
 <script>
     function isLoggedIn() {
         return !!localStorage.getItem('authToken');
     }
+
 
     function openAuthModal() {
         document.getElementById('auth-modal').classList.remove('hidden');
@@ -359,216 +451,411 @@
         document.getElementById('auth-modal').classList.add('hidden');
     }
 
-    function updateNavButtons() {
-        const navBtn = document.getElementById('nav-auth-btn');
-        const mobileBtn = document.getElementById('mobile-auth-btn');
+    async function updateCartBadge() {
+        const cartLink = document.getElementById('cart-link');
+        const cartBadge = document.getElementById('cart-badge');
+        
+        if (!isLoggedIn() || !cartLink) {
+            if (cartLink) cartLink.classList.add('hidden');
+            return;
+        }
 
-        if (isLoggedIn()) {
-            navBtn.textContent = 'Cerrar sesión';
-            mobileBtn.textContent = 'Cerrar sesión';
-        } else {
-            navBtn.textContent = 'Ingresar';
-            mobileBtn.textContent = 'Ingresar';
+        try {
+            const cartData = await getCart();
+            if (cartData && cartData.totalItems > 0) {
+                cartLink.classList.remove('hidden');
+                if (cartBadge) {
+                    cartBadge.textContent = cartData.totalItems > 9 ? '9+' : cartData.totalItems;
+                    cartBadge.classList.remove('hidden');
+                }
+            } else {
+                cartLink.classList.remove('hidden');
+                if (cartBadge) cartBadge.classList.add('hidden');
+            }
+        } catch (error) {
+            cartLink.classList.remove('hidden');
+            if (cartBadge) cartBadge.classList.add('hidden');
         }
     }
 
-    const tabLogin = document.getElementById('tab-login');
-    const tabRegister = document.getElementById('tab-register');
-    const formLogin = document.getElementById('form-login');
-    const formRegister = document.getElementById('form-register');
+    function updateNavButtons() {
+        const navBtn = document.getElementById('nav-auth-btn');
+        const mobileBtn = document.getElementById('mobile-auth-btn');
+        const favoritesLink = document.getElementById('favorites-link');
+        const mobileFavoritesLink = document.getElementById('mobile-favorites-link');
+        const mobileCartLink = document.getElementById('mobile-cart-link');
+        const registerAdminBtn = document.getElementById('register-admin-btn');
 
-    tabLogin.addEventListener('click', () => {
-        tabLogin.className = 'px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold';
-        tabRegister.className = 'px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold';
-        formLogin.classList.remove('hidden');
-        formRegister.classList.add('hidden');
-    });
-
-    tabRegister.addEventListener('click', () => {
-        tabRegister.className = 'px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold';
-        tabLogin.className = 'px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold';
-        formRegister.classList.remove('hidden');
-        formLogin.classList.add('hidden');
-    });
-
-    document.getElementById('auth-close').addEventListener('click', closeAuthModal);
-    document.getElementById('auth-modal').addEventListener('click', (e) => {
-        if (e.target.id === 'auth-modal') closeAuthModal();
-    });
-
-    document.getElementById('form-login').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const email = document.getElementById('login-email').value.trim();
-        const password = document.getElementById('login-password').value.trim();
-        const errorElement = document.getElementById('login-error');
-        const submitBtn = document.getElementById('login-submit-btn');
-
-        if (!email || !password) {
-            errorElement.textContent = 'Por favor completa todos los campos';
-            errorElement.classList.remove('hidden');
+        if (!navBtn || !mobileBtn) {
+            console.error('Navigation buttons not found');
             return;
         }
 
-        try {
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Ingresando...';
-            errorElement.classList.add('hidden');
-
-            const response = await loginUser(email, password);
-
-            if (response.success) {
-                formLogin.reset();
-                submitBtn.textContent = 'Ingresar';
-                submitBtn.disabled = false;
-                closeAuthModal();
-                updateNavButtons();
-            } else {
-                errorElement.textContent = response.message || 'Error al ingresar';
-                errorElement.classList.remove('hidden');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Ingresar';
-            }
-        } catch (error) {
-            errorElement.textContent = 'Credenciales inválidas o error de conexión';
-            errorElement.classList.remove('hidden');
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Ingresar';
-        }
-    });
-
-    document.getElementById('form-register').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const firstName = document.getElementById('reg-firstName').value.trim();
-        const lastName = document.getElementById('reg-lastName').value.trim();
-        const document_val = document.getElementById('reg-document').value.trim();
-        const birthDate = document.getElementById('reg-birthDate').value.trim();
-        const phone = document.getElementById('reg-phone').value.trim();
-        const email = document.getElementById('reg-email').value.trim();
-        const street = document.getElementById('reg-street').value.trim();
-        const number = document.getElementById('reg-number').value.trim();
-        const apartment = document.getElementById('reg-apartment').value.trim();
-        const city = document.getElementById('reg-city').value.trim();
-        const postalCode = document.getElementById('reg-postalCode').value.trim();
-        const addressAdditionalInfo = document.getElementById('reg-addressAdditionalInfo').value.trim();
-        const paymentType = document.getElementById('reg-paymentType').value.trim();
-        const cardHolder = document.getElementById('reg-cardHolder').value.trim();
-        const cardNumber = document.getElementById('reg-cardNumber').value.trim();
-        const expirationDate = document.getElementById('reg-expirationDate').value.trim();
-        const password = document.getElementById('reg-password').value.trim();
-
-        const errorElement = document.getElementById('register-error');
-        const submitBtn = document.getElementById('register-submit-btn');
-
-        if (!firstName || !lastName || !document_val || !birthDate || !phone || !email || !street || !number || !city || !postalCode || !paymentType || !cardHolder || !cardNumber || !expirationDate || password.length < 8) {
-            errorElement.textContent = 'Por favor completa todos los campos requeridos';
-            errorElement.classList.remove('hidden');
-            return;
-        }
-
-        const userData = {
-            firstName: firstName,
-            lastName: lastName,
-            document: document_val,
-            birthDate: birthDate,
-            phone: phone,
-            email: email,
-            street: street,
-            number: number,
-            apartment: apartment,
-            city: city,
-            postalCode: postalCode,
-            addressAdditionalInfo: addressAdditionalInfo,
-            paymentType: paymentType,
-            cardNumber: cardNumber,
-            cardHolder: cardHolder,
-            expirationDate: expirationDate,
-            password: password,
-        };
-
-        try {
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Creando cuenta...';
-            errorElement.classList.add('hidden');
-
-            const response = await registerClient(userData);
-
-            if (response.success) {
-                formRegister.reset();
-                submitBtn.textContent = 'Crear cuenta';
-                submitBtn.disabled = false;
-                closeAuthModal();
-                updateNavButtons();
-            } else {
-                errorElement.textContent = response.message || 'Error al crear cuenta';
-                errorElement.classList.remove('hidden');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Crear cuenta';
-            }
-        } catch (error) {
-            errorElement.textContent = 'Error al crear cuenta: ' + error.message;
-            errorElement.classList.remove('hidden');
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Crear cuenta';
-        }
-    });
-
-    document.getElementById('nav-auth-btn').addEventListener('click', (e) => {
-        e.preventDefault();
         if (isLoggedIn()) {
-            logoutUser();
-            updateNavButtons();
+            if (navBtn) navBtn.textContent = 'Cerrar sesión';
+            if (mobileBtn) mobileBtn.textContent = 'Cerrar sesión';
+            if (favoritesLink) favoritesLink.classList.remove('hidden');
+            if (mobileFavoritesLink) mobileFavoritesLink.classList.remove('hidden');
+            if (mobileCartLink) mobileCartLink.classList.remove('hidden');
+            
+            // Show register admin button only for admins
+            if (registerAdminBtn) {
+                try {
+                    if (typeof isAdmin === 'function' && isAdmin()) {
+                        registerAdminBtn.classList.remove('hidden');
+                    } else {
+                        registerAdminBtn.classList.add('hidden');
+                    }
+                } catch (e) {
+                    console.error('Error checking admin status:', e);
+                    registerAdminBtn.classList.add('hidden');
+                }
+            }
+            
+            updateCartBadge();
         } else {
-            openAuthModal();
+            if (navBtn) navBtn.textContent = 'Ingresar';
+            if (mobileBtn) mobileBtn.textContent = 'Ingresar';
+            if (favoritesLink) favoritesLink.classList.add('hidden');
+            if (mobileFavoritesLink) mobileFavoritesLink.classList.add('hidden');
+            if (mobileCartLink) mobileCartLink.classList.add('hidden');
+            if (registerAdminBtn) registerAdminBtn.classList.add('hidden');
+            const cartLink = document.getElementById('cart-link');
+            if (cartLink) cartLink.classList.add('hidden');
+        }
+    }
+
+    // Initialize when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            // Add critical event listeners first
+            const navAuthBtn = document.getElementById('nav-auth-btn');
+            if (navAuthBtn) {
+                navAuthBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (isLoggedIn()) {
+                        logoutUser();
+                        updateNavButtons();
+                    } else {
+                        openAuthModal();
+                    }
+                });
+            }
+
+            const mobileAuthBtn = document.getElementById('mobile-auth-btn');
+            if (mobileAuthBtn) {
+                mobileAuthBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (isLoggedIn()) {
+                        logoutUser();
+                        updateNavButtons();
+                    } else {
+                        openAuthModal();
+                    }
+                });
+            }
+
+            // Initialize VANTA background
+            if (document.getElementById('vanta-bg')) {
+                VANTA.NET({
+                    el: "#vanta-bg",
+                    mouseControls: true,
+                    touchControls: true,
+                    gyroControls: false,
+                    minHeight: 200.00,
+                    minWidth: 200.00,
+                    scale: 1.00,
+                    scaleMobile: 1.00,
+                    color: 0xff0000,
+                    backgroundColor: 0xffffff,
+                    points: 10.00,
+                    maxDistance: 20.00,
+                    spacing: 15.00
+                });
+            }
+
+            // Update navigation buttons based on login state
+            // Wait a tiny bit to ensure api.js is fully loaded
+            setTimeout(() => {
+                updateNavButtons();
+            }, 0);
+
+            // Auth Modal Setup
+            const tabLogin = document.getElementById('tab-login');
+            const tabRegister = document.getElementById('tab-register');
+            const formLogin = document.getElementById('form-login');
+            const formRegister = document.getElementById('form-register');
+
+            if (tabLogin && tabRegister && formLogin && formRegister) {
+                tabLogin.addEventListener('click', () => {
+                    tabLogin.className = 'px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold';
+                    tabRegister.className = 'px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold';
+                    formLogin.classList.remove('hidden');
+                    formRegister.classList.add('hidden');
+                });
+
+                tabRegister.addEventListener('click', () => {
+                    tabRegister.className = 'px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold';
+                    tabLogin.className = 'px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold';
+                    formRegister.classList.remove('hidden');
+                    formLogin.classList.add('hidden');
+                });
+
+                document.getElementById('auth-close')?.addEventListener('click', closeAuthModal);
+                document.getElementById('auth-modal')?.addEventListener('click', (e) => {
+                    if (e.target.id === 'auth-modal') closeAuthModal();
+                });
+
+                document.getElementById('form-login')?.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    const email = document.getElementById('login-email').value.trim();
+                    const password = document.getElementById('login-password').value.trim();
+                    const errorElement = document.getElementById('login-error');
+                    const submitBtn = document.getElementById('login-submit-btn');
+
+                    if (!email || !password) {
+                        errorElement.textContent = 'Por favor completa todos los campos';
+                        errorElement.classList.remove('hidden');
+                        return;
+                    }
+
+                    try {
+                        submitBtn.disabled = true;
+                        submitBtn.textContent = 'Ingresando...';
+                        errorElement.classList.add('hidden');
+
+                        const response = await loginUser(email, password);
+
+                        if (response.success) {
+                            formLogin.reset();
+                            submitBtn.textContent = 'Ingresar';
+                            submitBtn.disabled = false;
+                            closeAuthModal();
+                            updateNavButtons();
+                        } else {
+                            errorElement.textContent = response.message || 'Error al ingresar';
+                            errorElement.classList.remove('hidden');
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Ingresar';
+                        }
+                    } catch (error) {
+                        errorElement.textContent = 'Credenciales inválidas o error de conexión';
+                        errorElement.classList.remove('hidden');
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Ingresar';
+                    }
+                });
+            }
+
+            document.getElementById('form-register')?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const firstName = document.getElementById('reg-firstName').value.trim();
+                const lastName = document.getElementById('reg-lastName').value.trim();
+                const document_val = document.getElementById('reg-document').value.trim();
+                const birthDate = document.getElementById('reg-birthDate').value.trim();
+                const phone = document.getElementById('reg-phone').value.trim();
+                const email = document.getElementById('reg-email').value.trim();
+                const street = document.getElementById('reg-street').value.trim();
+                const number = document.getElementById('reg-number').value.trim();
+                const apartment = document.getElementById('reg-apartment').value.trim();
+                const city = document.getElementById('reg-city').value.trim();
+                const postalCode = document.getElementById('reg-postalCode').value.trim();
+                const addressAdditionalInfo = document.getElementById('reg-addressAdditionalInfo').value.trim();
+                const paymentType = document.getElementById('reg-paymentType').value.trim();
+                const cardHolder = document.getElementById('reg-cardHolder').value.trim();
+                const cardNumber = document.getElementById('reg-cardNumber').value.trim();
+                const expirationDate = document.getElementById('reg-expirationDate').value.trim();
+                const password = document.getElementById('reg-password').value.trim();
+
+                const errorElement = document.getElementById('register-error');
+                const submitBtn = document.getElementById('register-submit-btn');
+
+                if (!firstName || !lastName || !document_val || !birthDate || !phone || !email || !street || !number || !city || !postalCode || !paymentType || !cardHolder || !cardNumber || !expirationDate || password.length < 8) {
+                    errorElement.textContent = 'Por favor completa todos los campos requeridos';
+                    errorElement.classList.remove('hidden');
+                    return;
+                }
+
+                const userData = {
+                    firstName: firstName,
+                    lastName: lastName,
+                    document: document_val,
+                    birthDate: birthDate,
+                    phone: phone,
+                    email: email,
+                    street: street,
+                    number: number,
+                    apartment: apartment,
+                    city: city,
+                    postalCode: postalCode,
+                    addressAdditionalInfo: addressAdditionalInfo,
+                    paymentType: paymentType,
+                    cardNumber: cardNumber,
+                    cardHolder: cardHolder,
+                    expirationDate: expirationDate,
+                    password: password,
+                };
+
+                try {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Creando cuenta...';
+                    errorElement.classList.add('hidden');
+
+                    const response = await registerClient(userData);
+
+                    if (response.success) {
+                        formRegister.reset();
+                        submitBtn.textContent = 'Crear cuenta';
+                        submitBtn.disabled = false;
+                        closeAuthModal();
+                        updateNavButtons();
+                    } else {
+                        errorElement.textContent = response.message || 'Error al crear cuenta';
+                        errorElement.classList.remove('hidden');
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Crear cuenta';
+                    }
+                } catch (error) {
+                    errorElement.textContent = 'Error al crear cuenta: ' + error.message;
+                    errorElement.classList.remove('hidden');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Crear cuenta';
+                }
+            });
+
+            // Register Admin Modal functions
+            const openRegisterAdminModal = function() {
+                if (!isAdmin()) {
+                    alert('Solo administradores pueden registrar otros administradores');
+                    return;
+                }
+                document.getElementById('register-admin-modal').classList.remove('hidden');
+            };
+
+            const closeRegisterAdminModal = function() {
+                document.getElementById('register-admin-modal').classList.add('hidden');
+            };
+
+            document.getElementById('register-admin-btn')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                openRegisterAdminModal();
+            });
+
+            document.getElementById('admin-modal-close')?.addEventListener('click', closeRegisterAdminModal);
+            document.getElementById('register-admin-modal')?.addEventListener('click', (e) => {
+                if (e.target.id === 'register-admin-modal') closeRegisterAdminModal();
+            });
+
+            document.getElementById('form-register-admin')?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const firstName = document.getElementById('admin-firstName').value.trim();
+                const lastName = document.getElementById('admin-lastName').value.trim();
+                const document_val = document.getElementById('admin-document').value.trim();
+                const birthDate = document.getElementById('admin-birthDate').value.trim();
+                const phone = document.getElementById('admin-phone').value.trim();
+                const email = document.getElementById('admin-email').value.trim();
+                const street = document.getElementById('admin-street').value.trim();
+                const number = document.getElementById('admin-number').value.trim();
+                const apartment = document.getElementById('admin-apartment').value.trim();
+                const city = document.getElementById('admin-city').value.trim();
+                const postalCode = document.getElementById('admin-postalCode').value.trim();
+                const addressAdditionalInfo = document.getElementById('admin-addressAdditionalInfo').value.trim();
+                const password = document.getElementById('admin-password').value.trim();
+
+                const errorElement = document.getElementById('register-admin-error');
+                const successElement = document.getElementById('register-admin-success');
+                const submitBtn = document.getElementById('register-admin-submit-btn');
+
+                if (!firstName || !lastName || !document_val || !birthDate || !phone || !email || !street || !number || !city || !postalCode || password.length < 8) {
+                    errorElement.textContent = 'Por favor completa todos los campos requeridos';
+                    errorElement.classList.remove('hidden');
+                    successElement.classList.add('hidden');
+                    return;
+                }
+
+                const adminData = {
+                    firstName: firstName,
+                    lastName: lastName,
+                    document: document_val,
+                    birthDate: birthDate,
+                    phone: phone,
+                    email: email,
+                    street: street,
+                    number: number,
+                    apartment: apartment,
+                    city: city,
+                    postalCode: postalCode,
+                    addressAdditionalInfo: addressAdditionalInfo,
+                    password: password,
+                };
+
+                try {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Registrando...';
+                    errorElement.classList.add('hidden');
+                    successElement.classList.add('hidden');
+
+                    const response = await registerAdmin(adminData);
+
+                    if (response.success) {
+                        document.getElementById('form-register-admin').reset();
+                        submitBtn.textContent = 'Registrar Administrador';
+                        submitBtn.disabled = false;
+                        successElement.textContent = 'Administrador registrado exitosamente';
+                        successElement.classList.remove('hidden');
+                        setTimeout(() => {
+                            closeRegisterAdminModal();
+                        }, 2000);
+                    } else {
+                        errorElement.textContent = response.message || 'Error al registrar administrador';
+                        errorElement.classList.remove('hidden');
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Registrar Administrador';
+                    }
+                } catch (error) {
+                    errorElement.textContent = 'Error al registrar administrador: ' + error.message;
+                    errorElement.classList.remove('hidden');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Registrar Administrador';
+                }
+            });
+
+
+            document.getElementById('track-order-link')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (!isLoggedIn()) {
+                    openAuthModal();
+                    return;
+                }
+                window.location.href = 'orden.html';
+            });
+
+            document.getElementById('mobile-track-order')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (!isLoggedIn()) {
+                    openAuthModal();
+                    return;
+                }
+                window.location.href = 'orden.html';
+            });
+        } catch (error) {
+            console.error('Error initializing page:', error);
         }
     });
 
-    document.getElementById('mobile-auth-btn').addEventListener('click', (e) => {
-        e.preventDefault();
-        if (isLoggedIn()) {
-            logoutUser();
+    // Also update when page loads (in case DOMContentLoaded already fired)
+    if (document.readyState === 'loading') {
+        // DOM hasn't finished loading yet - wait for DOMContentLoaded
+        // (already handled above)
+    } else {
+        // DOM is already loaded - run immediately
+        if (typeof updateNavButtons === 'function') {
             updateNavButtons();
-        } else {
-            openAuthModal();
         }
-    });
-
-    document.getElementById('track-order-link').addEventListener('click', (e) => {
-        e.preventDefault();
-        if (!isLoggedIn()) {
-            openAuthModal();
-            return;
-        }
-        window.location.href = 'order.html';
-    });
-
-    document.getElementById('mobile-track-order').addEventListener('click', (e) => {
-        e.preventDefault();
-        if (!isLoggedIn()) {
-            openAuthModal();
-            return;
-        }
-        window.location.href = 'order.html';
-    });
-
-    VANTA.NET({
-        el: "#vanta-bg",
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: 200.00,
-        minWidth: 200.00,
-        scale: 1.00,
-        scaleMobile: 1.00,
-        color: 0xff0000,
-        backgroundColor: 0xffffff,
-        points: 10.00,
-        maxDistance: 20.00,
-        spacing: 15.00
-    });
-
-    updateNavButtons();
+    }
 </script>
 </body>
 </html>

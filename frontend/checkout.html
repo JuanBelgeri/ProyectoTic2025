@@ -156,16 +156,15 @@
         try {
             console.log('Loading cart data...');
 
-            const cartRes = await getCart();
-            console.log('Cart response:', cartRes);
+            const cartData = await getCart();
+            console.log('Cart data:', cartData);
 
-            if (cartRes.success) {
-                cartItems = cartRes.data?.items || [];
+            if (cartData && cartData.items) {
+                cartItems = cartData.items || [];
                 console.log('Cart items loaded:', cartItems);
             } else {
-                console.error('Cart error:', cartRes.message);
-                showError('Error al cargar carrito: ' + (cartRes.message || 'Unknown error'));
-                return;
+                cartItems = [];
+                console.log('Cart is empty');
             }
 
             renderCart();
@@ -176,6 +175,8 @@
         } catch (error) {
             console.error('Error loading checkout data:', error);
             showError('Error al cargar datos del checkout: ' + error.message);
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('content').classList.remove('hidden');
         }
     }
 
@@ -276,7 +277,7 @@
                 const cartId = btn.dataset.cartId;
 
                 if (confirm('¿Estás seguro de que quieres eliminar este item del carrito?')) {
-                    await removeFromCart(cartId);
+                    await deleteCartItem(cartId);
                 }
             });
         });
@@ -284,28 +285,13 @@
 
     async function updateQuantity(cartId, newQuantity) {
         try {
-            const response = await fetch(`http://localhost:8081/api/cart/item/${cartId}?quantity=${newQuantity}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('authToken')
-                }
-            });
+            const response = await updateCartQuantity(parseInt(cartId), newQuantity);
 
-            const data = await response.json();
-
-            if (response.ok && data.success) {
-                // Update local cart item
-                const item = cartItems.find(i => i.id === parseInt(cartId));
-                if (item) {
-                    item.quantity = newQuantity;
-                    item.subtotal = item.unitPrice * newQuantity;
-                }
-
-                renderCart();
-                updateTotals();
+            if (response.success) {
+                // Reload cart to get updated data
+                await loadCartData();
             } else {
-                showError('Error al actualizar cantidad: ' + (data.message || 'Error desconocido'));
+                showError('Error al actualizar cantidad: ' + (response.message || 'Error desconocido'));
             }
         } catch (error) {
             showError('Error al actualizar cantidad: ' + error.message);
@@ -313,25 +299,15 @@
         }
     }
 
-    async function removeFromCart(cartId) {
+    async function deleteCartItem(cartId) {
         try {
-            const response = await fetch(`http://localhost:8081/api/cart/item/${cartId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('authToken')
-                }
-            });
+            const response = await removeFromCart(parseInt(cartId));
 
-            const data = await response.json();
-
-            if (response.ok && data.success) {
-                // Remove from local cart
-                cartItems = cartItems.filter(i => i.id !== parseInt(cartId));
-                renderCart();
-                updateTotals();
-                showError('Item eliminado del carrito');
+            if (response.success) {
+                // Reload cart to get updated data
+                await loadCartData();
             } else {
-                showError('Error al eliminar item: ' + (data.message || 'Error desconocido'));
+                showError('Error al eliminar item: ' + (response.message || 'Error desconocido'));
             }
         } catch (error) {
             showError('Error al eliminar item: ' + error.message);
@@ -357,22 +333,14 @@
     document.getElementById('clear-cart').addEventListener('click', async () => {
         if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
             try {
-                const response = await fetch('http://localhost:8081/api/cart/clear?userEmail=' + encodeURIComponent(localStorage.getItem('userEmail')), {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('authToken')
-                    }
-                });
+                const response = await clearCart();
 
-                const data = await response.json();
-
-                if (response.ok && data.success) {
+                if (response.success) {
                     cartItems = [];
                     renderCart();
                     updateTotals();
-                    showError('Carrito vaciado');
                 } else {
-                    showError('Error al vaciar carrito: ' + (data.message || 'Error desconocido'));
+                    showError('Error al vaciar carrito: ' + (response.message || 'Error desconocido'));
                 }
             } catch (error) {
                 showError('Error al vaciar carrito: ' + error.message);
@@ -387,47 +355,58 @@
             return;
         }
 
-        const street = document.getElementById('addr-street').value.trim();
-        const city = document.getElementById('addr-city').value.trim();
-        const payment = document.querySelector('input[name="payment"]:checked')?.value;
-
-        if (!street || !city) {
-            showError('Por favor completa la dirección de envío');
-            return;
-        }
-
-        if (!payment) {
-            showError('Por favor selecciona un método de pago');
-            return;
-        }
-
-        if (payment === 'card') {
-            const cardNumber = document.getElementById('card-number').value.trim();
-            const cardExp = document.getElementById('card-exp').value.trim();
-            const cardCvv = document.getElementById('card-cvv').value.trim();
-            const cardName = document.getElementById('card-name').value.trim();
-
-            if (!cardNumber || !cardExp || !cardCvv || !cardName) {
-                showError('Por favor completa los datos de la tarjeta');
-                return;
-            }
-        }
-
         const btn = document.getElementById('place-order');
         btn.disabled = true;
         btn.textContent = 'Creando pedido...';
 
         try {
+            // NOTE: Backend doesn't have GET endpoints for addresses/payment methods
+            // Since registration creates them, we'll try to get them
+            // If they don't exist, the order creation will fail with a clear error
+            let addressId = null;
+            let paymentMethodId = null;
+
+            try {
+                const addressesRes = await getUserAddresses();
+                if (addressesRes.success && addressesRes.data && addressesRes.data.length > 0) {
+                    const mainAddress = addressesRes.data.find(addr => addr.isMain) || addressesRes.data[0];
+                    addressId = mainAddress.id;
+                }
+            } catch (e) {
+                console.warn('Could not get addresses:', e);
+            }
+
+            try {
+                const paymentMethodsRes = await getUserPaymentMethods();
+                if (paymentMethodsRes.success && paymentMethodsRes.data && paymentMethodsRes.data.length > 0) {
+                    const mainPayment = paymentMethodsRes.data.find(pm => pm.isMain) || paymentMethodsRes.data[0];
+                    paymentMethodId = mainPayment.id;
+                }
+            } catch (e) {
+                console.warn('Could not get payment methods:', e);
+            }
+
+            // If we couldn't get IDs, the backend will return an error
+            // Registration should have created them, so we'll proceed and let backend validate
+            if (!addressId || !paymentMethodId) {
+                showError('Error: No se encontraron dirección o método de pago. Por favor completa tu registro primero.');
+                btn.disabled = false;
+                btn.textContent = '✔️ Confirmar pedido';
+                return;
+            }
+
+            const notes = document.getElementById('addr-ref')?.value.trim() || '';
+
             const response = await createOrder({
-                addressId: 1,
-                paymentMethodId: 1,
-                notes: `Dirección: ${street}, ${city}. Referencia: ${document.getElementById('addr-ref').value.trim()}`
+                addressId: addressId,
+                paymentMethodId: paymentMethodId,
+                notes: notes
             });
 
             console.log('Order response:', response);
 
             if (response.success) {
-                window.location.href = `order.html?id=${response.data.id}`;
+                window.location.href = `orden.html?id=${response.data.id}`;
             } else {
                 showError(response.message || 'Error al crear pedido');
                 btn.disabled = false;

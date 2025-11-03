@@ -65,7 +65,14 @@
             </div>
             <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
                 <a href="home.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
-                <a href="#" id="track-order-link" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Seguir Pedido</a>
+                <a href="favorites.html" id="favorites-link" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium hidden">Favoritos</a>
+                <a href="checkout.html" id="cart-link" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium hidden relative">
+                    <svg class="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    Carrito
+                    <span id="cart-badge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"></span>
+                </a>
                 <button id="login-btn" class="bg-white text-primary px-4 py-2 rounded-full font-bold hover:bg-gray-100 transition duration-300">
                     Ingresar
                 </button>
@@ -229,14 +236,48 @@
         document.getElementById('auth-modal').classList.add('hidden');
     }
 
+    async function updateCartBadge() {
+        const cartLink = document.getElementById('cart-link');
+        const cartBadge = document.getElementById('cart-badge');
+        
+        if (!isLoggedIn() || !cartLink) {
+            if (cartLink) cartLink.classList.add('hidden');
+            return;
+        }
+
+        try {
+            const cartData = await getCart();
+            if (cartData && cartData.totalItems > 0) {
+                cartLink.classList.remove('hidden');
+                if (cartBadge) {
+                    cartBadge.textContent = cartData.totalItems > 9 ? '9+' : cartData.totalItems;
+                    cartBadge.classList.remove('hidden');
+                }
+            } else {
+                cartLink.classList.remove('hidden');
+                if (cartBadge) cartBadge.classList.add('hidden');
+            }
+        } catch (error) {
+            cartLink.classList.remove('hidden');
+            if (cartBadge) cartBadge.classList.add('hidden');
+        }
+    }
+
     function updateLoginButton() {
         const btn = document.getElementById('login-btn');
+        const favoritesLink = document.getElementById('favorites-link');
+        
         if (!btn) return;
 
         if (isLoggedIn()) {
             btn.textContent = 'Cerrar sesión';
+            if (favoritesLink) favoritesLink.classList.remove('hidden');
+            updateCartBadge();
         } else {
             btn.textContent = 'Ingresar';
+            if (favoritesLink) favoritesLink.classList.add('hidden');
+            const cartLink = document.getElementById('cart-link');
+            if (cartLink) cartLink.classList.add('hidden');
         }
     }
 
@@ -327,9 +368,17 @@
 
         try {
             // Parse address - format "street, city"
-            const [street, city] = addressStr.split(',').map(s => s.trim());
+            const addressParts = addressStr.split(',').map(s => s.trim());
+            const streetAndNumber = addressParts[0] || '';
+            const streetParts = streetAndNumber.split(/\s+/);
+            const number = streetParts.pop() || '0';
+            const street = streetParts.join(' ') || streetAndNumber;
+            const city = addressParts[1] || '';
+
+            // Parse card - format "number MM/YY" or similar
             const cardParts = cardData.split(/\s+/);
-            const [cardNumber, expirationDate, cvv] = cardParts;
+            const cardNumber = cardParts[0] || cardData.replace(/\s+/g, '');
+            const expirationDate = cardParts[1] || '12/26';
 
             const userData = {
                 firstName,
@@ -339,10 +388,9 @@
                 phone,
                 email,
                 street: street || '',
-                number: '0',
+                number: number || '0',
                 apartment: '',
                 city: city || '',
-                department: city || '',
                 postalCode: '00000',
                 addressAdditionalInfo: '',
                 paymentType: 'CREDIT',
@@ -357,6 +405,7 @@
                 closeAuthModal();
                 updateLoginButton();
                 formRegister.reset();
+                alert('¡Cuenta creada exitosamente!');
             } else {
                 alert(response.message || 'Error al registrarse');
             }
@@ -371,7 +420,7 @@
             openAuthModal();
             return;
         }
-        window.location.href = 'order.html';
+        window.location.href = 'orden.html';
     });
 
     // Update button on page load and when storage changes

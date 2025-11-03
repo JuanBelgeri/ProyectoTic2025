@@ -34,31 +34,49 @@ async function apiCall(endpoint, method = 'GET', data = null) {
 }
 
 function getCurrentUserEmail() {
-    return localStorage.getItem('userEmail') || '';
+    const email = localStorage.getItem('userEmail');
+    if (email) return email;
+    
+    // Fallback: try to get from authUser object
+    try {
+        const authUser = JSON.parse(localStorage.getItem('authUser') || '{}');
+        return authUser.email || '';
+    } catch {
+        return '';
+    }
 }
 
 async function registerClient(userData) {
     const response = await apiCall('/auth/register/client', 'POST', userData);
 
     if (response.success && response.data) {
-        localStorage.setItem('authToken', response.data.token);
-        localStorage.setItem('userEmail', response.data.email || userData.email);
-        localStorage.setItem('userRole', response.data.role || 'CLIENT');
+        const { user, token } = response.data;
+        localStorage.setItem('authToken', token);
+        localStorage.setItem('userEmail', user.email || userData.email);
+        localStorage.setItem('userRole', user.role || 'CLIENT');
+        localStorage.setItem('authUser', JSON.stringify({
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            role: user.role
+        }));
     }
 
     return response;
 }
 
 async function registerAdmin(userData) {
-    const response = await apiCall('/auth/register/admin', 'POST', userData);
-
-    if (response.success && response.data) {
-        localStorage.setItem('authToken', response.data.token);
-        localStorage.setItem('userEmail', response.data.email || userData.email);
-        localStorage.setItem('userRole', response.data.role || 'ADMIN');
-    }
-
+    const adminEmail = getCurrentUserEmail();
+    const response = await apiCall(`/auth/register/admin?adminEmail=${encodeURIComponent(adminEmail)}`, 'POST', userData);
     return response;
+}
+
+function getCurrentUserRole() {
+    return localStorage.getItem('userRole') || '';
+}
+
+function isAdmin() {
+    return getCurrentUserRole() === 'ADMIN';
 }
 
 async function loginUser(email, password) {
@@ -68,9 +86,16 @@ async function loginUser(email, password) {
     });
 
     if (response.success && response.data) {
-        localStorage.setItem('authToken', response.data.token);
-        localStorage.setItem('userEmail', response.data.email || email);
-        localStorage.setItem('userRole', response.data.role);
+        const { user, token } = response.data;
+        localStorage.setItem('authToken', token);
+        localStorage.setItem('userEmail', user.email || email);
+        localStorage.setItem('userRole', user.role);
+        localStorage.setItem('authUser', JSON.stringify({
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            role: user.role
+        }));
     }
 
     return response;
@@ -80,6 +105,7 @@ function logoutUser() {
     localStorage.removeItem('authToken');
     localStorage.removeItem('userEmail');
     localStorage.removeItem('userRole');
+    localStorage.removeItem('authUser');
 }
 
 async function createPizza(pizzaData) {
@@ -120,7 +146,8 @@ async function deleteHamburger(burgerId) {
 
 async function getCart() {
     const userEmail = getCurrentUserEmail();
-    return apiCall(`/cart?userEmail=${encodeURIComponent(userEmail)}`, 'GET');
+    const response = await apiCall(`/cart?userEmail=${encodeURIComponent(userEmail)}`, 'GET');
+    return response.success ? response.data : null;
 }
 
 async function addToCart(cartItem) {
@@ -133,7 +160,7 @@ async function removeFromCart(itemId) {
 }
 
 async function updateCartQuantity(itemId, quantity) {
-    return apiCall(`/cart/item/${itemId}`, 'PUT', { quantity: quantity });
+    return apiCall(`/cart/item/${itemId}?quantity=${quantity}`, 'PUT');
 }
 
 async function clearCart() {
@@ -143,7 +170,8 @@ async function clearCart() {
 
 async function getFavorites() {
     const userEmail = getCurrentUserEmail();
-    return apiCall(`/favorites?userEmail=${encodeURIComponent(userEmail)}`, 'GET');
+    const response = await apiCall(`/favorites?userEmail=${encodeURIComponent(userEmail)}`, 'GET');
+    return response.success ? response.data : [];
 }
 
 async function addToFavorites(favoriteData) {
@@ -155,9 +183,30 @@ async function removeFromFavorites(favoriteId) {
     return apiCall(`/favorites/${favoriteId}`, 'DELETE');
 }
 
+async function checkFavorite(itemType, itemId) {
+    const userEmail = getCurrentUserEmail();
+    const response = await apiCall(`/favorites/check?userEmail=${encodeURIComponent(userEmail)}&itemType=${itemType}&itemId=${itemId}`, 'GET');
+    return response.success ? response.data : false;
+}
+
+async function removeFavoriteByItem(itemType, itemId) {
+    // First get all favorites to find the one with matching itemType and itemId
+    const favorites = await getFavorites();
+    const favorite = favorites.find(f => f.itemType === itemType && f.itemId === itemId);
+    if (favorite) {
+        return await removeFromFavorites(favorite.id);
+    }
+    return { success: false, message: 'Favorite not found' };
+}
+
 async function createOrder(orderData) {
     const userEmail = getCurrentUserEmail();
     return apiCall(`/orders?userEmail=${encodeURIComponent(userEmail)}`, 'POST', orderData);
+}
+
+async function cancelOrder(orderId) {
+    const userEmail = getCurrentUserEmail();
+    return apiCall(`/orders/${orderId}/cancel?userEmail=${encodeURIComponent(userEmail)}`, 'POST');
 }
 
 async function getUserOrders() {
@@ -166,8 +215,7 @@ async function getUserOrders() {
 }
 
 async function getOrderById(orderId) {
-    const userEmail = getCurrentUserEmail();
-    return apiCall(`/orders/${orderId}?userEmail=${encodeURIComponent(userEmail)}`, 'GET');
+    return apiCall(`/orders/${orderId}`, 'GET');
 }
 
 async function cancelOrder(orderId) {
@@ -216,7 +264,8 @@ async function getCondiments() {
 }
 
 async function getAllComponents() {
-    return apiCall('/components/all', 'GET');
+    const response = await apiCall('/components/all', 'GET');
+    return response.success ? response.data : {};
 }
 
 async function getAllOrders() {
