@@ -2,254 +2,381 @@
 <!-- Documento principal para elegir entre constructor de Pizza o Hamburguesa -->
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Título y metadatos -->
-  <title>Elige tu Constructor | PizzaBurger Fusion</title>
-  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
-  <!-- TailwindCSS y librerías de iconos/efecto de fondo -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
-  <script>
-    // Configuración de Tailwind: colores de marca
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#FF0000',
-            secondary: '#000000',
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título y metadatos -->
+    <title>Elige tu Constructor | PizzaBurger Fusion</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <!-- TailwindCSS y librerías de iconos/efecto de fondo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+    <script>
+        // Configuración de Tailwind: colores de marca
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF0000',
+                        secondary: '#000000',
+                    }
+                }
+            }
         }
-      }
-    }
-  </script>
-  <style>
-    /* Estilos base y scroll personalizado */
-    html, body { height:100%; margin:0; padding:0; }
-    body { overflow-x:hidden; }
-    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #FF0000; border-radius: 10px; }
-    .vanta-bg { position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; opacity:0.15; pointer-events:none; }
-  </style>
-  <script>
-    // Inicializa efecto VANTA y reemplaza iconos Feather cuando el DOM esté listo
-    document.addEventListener('DOMContentLoaded', function () {
-      if (window.VANTA && VANTA.NET) {
-        VANTA.NET({
-          el: "#vanta-bg",
-          color: 0xff0000,
-          backgroundColor: 0xffffff,
-          maxDistance: 20.00,
-          spacing: 18.00
+    </script>
+    <style>
+        /* Estilos base y scroll personalizado */
+        html, body { height:100%; margin:0; padding:0; }
+        body { overflow-x:hidden; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #FF0000; border-radius: 10px; }
+        .vanta-bg { position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; opacity:0.15; pointer-events:none; }
+    </style>
+    <script>
+        // Inicializa efecto VANTA y reemplaza iconos Feather cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', function () {
+            if (window.VANTA && VANTA.NET) {
+                VANTA.NET({
+                    el: "#vanta-bg",
+                    color: 0xff0000,
+                    backgroundColor: 0xffffff,
+                    maxDistance: 20.00,
+                    spacing: 18.00
+                });
+            }
+            if (window.feather) { feather.replace(); }
         });
-      }
-      if (window.feather) { feather.replace(); }
-    });
-  </script>
-  <meta name="description" content="Elige construir una pizza o hamburguesa personalizada con el mismo estilo.">
+    </script>
+    <meta name="description" content="Elige construir una pizza o hamburguesa personalizada con el mismo estilo.">
 </head>
 <body class="bg-gray-50 font-sans custom-scrollbar">
-  <!-- Capa para el fondo animado -->
-  <div id="vanta-bg" class="vanta-bg"></div>
+<!-- Capa para el fondo animado -->
+<div id="vanta-bg" class="vanta-bg"></div>
 
-  <!-- Navegación principal -->
-  <nav class="bg-gradient-to-r from-primary to-secondary shadow-lg sticky top-0 z-50">
+<!-- Navegación principal -->
+<nav class="bg-gradient-to-r from-primary to-secondary shadow-lg sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex items-center">
-          <div class="flex-shrink-0 flex items-center">
-            <span class="text-xl font-bold text-white">PizzUM & BurgUM</span>
-          </div>
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="text-xl font-bold text-white">PizzUM & BurgUM</span>
+                </div>
+            </div>
+            <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+                <a href="home.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
+                <a href="#" id="track-order-link" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Seguir Pedido</a>
+                <button id="login-btn" class="bg-white text-primary px-4 py-2 rounded-full font-bold hover:bg-gray-100 transition duration-300">
+                    Ingresar
+                </button>
+            </div>
+            <div class="md:hidden flex items-center">
+                <button aria-controls="mobile-menu" class="text-white hover:text-gray-200 focus:outline-none">
+                    <i data-feather="menu" class="h-6 w-6"></i>
+                </button>
+            </div>
         </div>
-        <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
-          <a href="home.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
-          <a href="#" id="track-order-link" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Seguir Pedido</a>
-          <button id="login-btn" class="bg-white text-primary px-4 py-2 rounded-full font-bold hover:bg-gray-100 transition duration-300">
-                Ingresar
-            </button>
-        </div>
-        <div class="md:hidden flex items-center">
-          <button aria-controls="mobile-menu" class="text-white hover:text-gray-200 focus:outline-none">
-            <i data-feather="menu" class="h-6 w-6"></i>
-          </button>
-        </div>
-      </div>
     </div>
-  </nav>
+</nav>
 
-  <!-- Sección de elección de constructor -->
-  <section class="relative overflow-hidden bg-white min-h-[70vh]">
+<!-- Sección de elección de constructor -->
+<section class="relative overflow-hidden bg-white min-h-[70vh]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="text-center">
-        <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-          <span class="block text-primary">Elige tu Constructor</span>
-          <span class="block text-secondary">Pizza o Hamburguesa</span>
-        </h1>
-        <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
-          Comienza seleccionando lo que quieres crear hoy.
-        </p>
-      </div>
+        <div class="text-center">
+            <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+                <span class="block text-primary">Elige tu Constructor</span>
+                <span class="block text-secondary">Pizza o Hamburguesa</span>
+            </h1>
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+                Comienza seleccionando lo que quieres crear hoy.
+            </p>
+        </div>
 
-      <div class="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2">
-        <!-- Tarjeta: Constructor de Pizza -->
-        <a href="pizza-builder.html" class="group relative bg-white border-2 border-gray-100 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-xl">
-          <div class="relative h-64 w-full overflow-hidden">
-            <img class="w-full h-full object-cover" src=imagenes/pizza-card.png alt="Construir Pizza">
-            <div class="absolute inset-0 bg-gradient-to-t from-black opacity-60"></div>
-            <div class="absolute bottom-0 left-0 p-6">
-              <h3 class="text-2xl font-bold text-white">Construir Pizza</h3>
-              <p class="text-white font-medium">Crea tu porción ideal</p>
-            </div>
-          </div>
-          <div class="p-6 flex items-center justify-between">
-            <span class="text-primary font-semibold">Empezar Pizza</span>
-            <i data-feather="arrow-right" class="text-primary"></i>
-          </div>
-        </a>
+        <div class="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2">
+            <!-- Tarjeta: Constructor de Pizza -->
+            <a href="pizza-builder.html" class="group relative bg-white border-2 border-gray-100 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                <div class="relative h-64 w-full overflow-hidden">
+                    <img class="w-full h-full object-cover" src="imagenes/pizza-card.png" alt="Construir Pizza">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black opacity-60"></div>
+                    <div class="absolute bottom-0 left-0 p-6">
+                        <h3 class="text-2xl font-bold text-white">Construir Pizza</h3>
+                        <p class="text-white font-medium">Crea tu porción ideal</p>
+                    </div>
+                </div>
+                <div class="p-6 flex items-center justify-between">
+                    <span class="text-primary font-semibold">Empezar Pizza</span>
+                    <i data-feather="arrow-right" class="text-primary"></i>
+                </div>
+            </a>
 
-        <!-- Tarjeta: Constructor de Hamburguesa -->
-        <a href="burger-builder.html" class="group relative bg-white border-2 border-gray-100 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-xl">
-          <div class="relative h-64 w-full overflow-hidden">
-            <img class="w-full h-full object-cover" src=imagenes/burger-card.png alt="Construir Hamburguesa">
-            <div class="absolute inset-0 bg-gradient-to-t from-black opacity-60"></div>
-            <div class="absolute bottom-0 left-0 p-6">
-              <h3 class="text-2xl font-bold text-white">Construir Hamburguesa</h3>
-              <p class="text-white font-medium">Ármala a tu manera</p>
-            </div>
-          </div>
-          <div class="p-6 flex items-center justify-between">
-            <span class="text-primary font-semibold">Empezar Hamburguesa</span>
-            <i data-feather="arrow-right" class="text-primary"></i>
-          </div>
-        </a>
-      </div>
+            <!-- Tarjeta: Constructor de Hamburguesa -->
+            <a href="burger-builder.html" class="group relative bg-white border-2 border-gray-100 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                <div class="relative h-64 w-full overflow-hidden">
+                    <img class="w-full h-full object-cover" src="imagenes/burger-card.png" alt="Construir Hamburguesa">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black opacity-60"></div>
+                    <div class="absolute bottom-0 left-0 p-6">
+                        <h3 class="text-2xl font-bold text-white">Construir Hamburguesa</h3>
+                        <p class="text-white font-medium">Ármala a tu manera</p>
+                    </div>
+                </div>
+                <div class="p-6 flex items-center justify-between">
+                    <span class="text-primary font-semibold">Empezar Hamburguesa</span>
+                    <i data-feather="arrow-right" class="text-primary"></i>
+                </div>
+            </a>
+        </div>
 
-      <!-- Botón para volver a la página principal -->
-      <div class="mt-10 text-center">
-        <a href="home.html" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
-          <i data-feather="arrow-left" class="mr-2"></i>
-          Volver al Inicio
-        </a>
-      </div>
+        <!-- Botón para volver a la página principal -->
+        <div class="mt-10 text-center">
+            <a href="home.html" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
+                <i data-feather="arrow-left" class="mr-2"></i>
+                Volver al Inicio
+            </a>
+        </div>
     </div>
-  </section>
+</section>
 
-  <!-- Pie de página -->
-  <footer class="bg-gray-800">
+<!-- Pie de página -->
+<footer class="bg-gray-800">
     <div class="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
-      <p class="text-center text-base text-gray-400">&copy; 2025 PizzUM & BurgUM. Todos los derechos reservados.</p>
+        <p class="text-center text-base text-gray-400">&copy; 2025 PizzUM & BurgUM. Todos los derechos reservados.</p>
     </div>
-  </footer>
+</footer>
 
-  <!-- Modal Auth reutilizable -->
-  <div id="auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+<!-- Modal Auth reutilizable -->
+<div id="auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
     <div class="absolute inset-0 bg-black bg-opacity-50"></div>
     <div class="relative max-w-md w-full max-h-[90vh] bg-white border-2 border-gray-100 rounded-lg shadow-xl overflow-y-auto">
-      <div class="flex items-center justify-between px-4 py-3 border-b">
-        <h3 class="text-lg font-bold text-gray-900">Tu cuenta</h3>
-        <button id="auth-close" class="text-gray-400 hover:text-gray-600">✕</button>
-      </div>
-      <div class="px-6 pt-4">
-        <div class="flex space-x-4 mb-4">
-          <button id="tab-login" class="px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold">Ingresar</button>
-          <button id="tab-register" class="px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold">Crear cuenta</button>
+        <div class="flex items-center justify-between px-4 py-3 border-b">
+            <h3 class="text-lg font-bold text-gray-900">Tu cuenta</h3>
+            <button id="auth-close" class="text-gray-400 hover:text-gray-600">✕</button>
         </div>
-        <form id="form-login" class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
-            <input id="login-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Contraseña</label>
-            <input id="login-password" type="password" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-          </div>
-          <button type="submit" class="w-full bg-primary text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-90">Ingresar</button>
-          <p id="login-error" class="text-sm text-red-600 hidden">Credenciales inválidas</p>
-        </form>
-        <form id="form-register" class="space-y-4 hidden">
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700">Nombre</label>
-              <input id="reg-name" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Tu nombre">
+        <div class="px-6 pt-4">
+            <div class="flex space-x-4 mb-4">
+                <button id="tab-login" class="px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold">Ingresar</button>
+                <button id="tab-register" class="px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold">Crear cuenta</button>
             </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700">Apellido</label>
-              <input id="reg-lastname" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Tu apellido">
-            </div>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Documento</label>
-            <input id="reg-document" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="12345678">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
-            <input id="reg-birthdate" type="date" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Teléfono</label>
-            <input id="reg-phone" type="tel" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="+54 9 11 1234-5678">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
-            <input id="reg-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="tu@email.com">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Dirección</label>
-            <input id="reg-address" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Calle 123, Ciudad">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Tarjeta de Crédito/Débito</label>
-            <input id="reg-card" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="1234 5678 9012 3456">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Contraseña</label>
-            <input id="reg-password" type="password" required minlength="6" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Mínimo 6 caracteres">
-          </div>
-          <button type="submit" class="w-full bg-primary text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-90">Crear cuenta</button>
-        </form>
-      </div>
-      <div class="px-6 py-4 border-t text-xs text-gray-500">Al continuar aceptas nuestros Términos y Política de Privacidad.</div>
+            <form id="form-login" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+                    <input id="login-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+                    <input id="login-password" type="password" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+                </div>
+                <button type="submit" class="w-full bg-primary text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-90">Ingresar</button>
+                <p id="login-error" class="text-sm text-red-600 hidden"></p>
+            </form>
+            <form id="form-register" class="space-y-4 hidden">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                        <input id="reg-name" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Tu nombre">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Apellido</label>
+                        <input id="reg-lastname" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Tu apellido">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Documento</label>
+                    <input id="reg-document" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="12345678">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
+                    <input id="reg-birthdate" type="date" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Teléfono</label>
+                    <input id="reg-phone" type="tel" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="+54 9 11 1234-5678">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+                    <input id="reg-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="tu@email.com">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Dirección (calle, ciudad)</label>
+                    <input id="reg-address" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Calle 123, Ciudad">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Tarjeta (número, vencimiento, cvv)</label>
+                    <input id="reg-card" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="4532123456789010 12/26 123">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+                    <input id="reg-password" type="password" required minlength="8" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Mínimo 8 caracteres">
+                </div>
+                <button type="submit" class="w-full bg-primary text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-90">Crear cuenta</button>
+            </form>
+        </div>
+        <div class="px-6 py-4 border-t text-xs text-gray-500">Al continuar aceptas nuestros Términos y Política de Privacidad.</div>
     </div>
-  </div>
+</div>
 
-  <script>
-    // Auth helpers + modal
-    function isLoggedIn(){ try { return !!JSON.parse(localStorage.getItem('authUser')); } catch { return false; } }
-    function openAuthModal(){ document.getElementById('auth-modal').classList.remove('hidden'); }
-    function closeAuthModal(){ document.getElementById('auth-modal').classList.add('hidden'); }
-    function requireLogin(){ if (isLoggedIn()) return true; openAuthModal(); return false; }
-    document.getElementById('login-btn')?.addEventListener('click', function(e){ e.preventDefault(); openAuthModal(); });
+<script src="api.js"></script>
+<script>
+    // Auth helpers
+    function isLoggedIn() {
+        return !!localStorage.getItem('authToken');
+    }
+
+    function openAuthModal() {
+        document.getElementById('auth-modal').classList.remove('hidden');
+    }
+
+    function closeAuthModal() {
+        document.getElementById('auth-modal').classList.add('hidden');
+    }
+
+    function updateLoginButton() {
+        const btn = document.getElementById('login-btn');
+        if (!btn) return;
+
+        if (isLoggedIn()) {
+            btn.textContent = 'Cerrar sesión';
+        } else {
+            btn.textContent = 'Ingresar';
+        }
+    }
+
+    // Login button handler
+    document.getElementById('login-btn')?.addEventListener('click', async (e) => {
+        e.preventDefault();
+
+        if (isLoggedIn()) {
+            logoutUser();
+            updateLoginButton();
+            window.location.href = 'home.html';
+        } else {
+            openAuthModal();
+        }
+    });
 
     // Tabs modal
     const tabLogin = document.getElementById('tab-login');
     const tabRegister = document.getElementById('tab-register');
     const formLogin = document.getElementById('form-login');
     const formRegister = document.getElementById('form-register');
-    tabLogin?.addEventListener('click', ()=>{ tabLogin.className='px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold'; tabRegister.className='px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold'; formLogin.classList.remove('hidden'); formRegister.classList.add('hidden'); });
-    tabRegister?.addEventListener('click', ()=>{ tabRegister.className='px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold'; tabLogin.className='px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold'; formRegister.classList.remove('hidden'); formLogin.classList.add('hidden'); });
-    document.getElementById('auth-close')?.addEventListener('click', closeAuthModal);
-    document.getElementById('auth-modal')?.addEventListener('click', (e)=>{ if(e.target.id==='auth-modal') closeAuthModal(); });
 
-    // Submit login/register
-    formLogin?.addEventListener('submit', (e)=>{ e.preventDefault(); const email=document.getElementById('login-email').value.trim(); const password=document.getElementById('login-password').value.trim(); if(!email||!password){ document.getElementById('login-error').classList.remove('hidden'); return; } const user={ email, name: email.split('@')[0], loggedAt:new Date().toISOString() }; localStorage.setItem('authUser', JSON.stringify(user)); closeAuthModal(); });
-    formRegister?.addEventListener('submit', (e)=>{ e.preventDefault(); const name=document.getElementById('reg-name').value.trim(); const lastname=document.getElementById('reg-lastname').value.trim(); const document=document.getElementById('reg-document').value.trim(); const birthdate=document.getElementById('reg-birthdate').value.trim(); const phone=document.getElementById('reg-phone').value.trim(); const email=document.getElementById('reg-email').value.trim(); const address=document.getElementById('reg-address').value.trim(); const card=document.getElementById('reg-card').value.trim(); const password=document.getElementById('reg-password').value.trim(); if(!name||!lastname||!document||!birthdate||!phone||!email||!address||!card||password.length<6) return; const user={ email, name, lastname, document, birthdate, phone, address, card, loggedAt:new Date().toISOString(), registered:true }; localStorage.setItem('authUser', JSON.stringify(user)); closeAuthModal(); });
-
-    document.getElementById('track-order-link')?.addEventListener('click', function(e){
-      e.preventDefault();
-      if (requireLogin()) {
-        const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-        const last = orders[orders.length - 1];
-        if (last && last.id) {
-          window.location.href = `orden.html?id=${last.id}`;
-        } else {
-          window.location.href = 'orden.html';
-        }
-      }
+    tabLogin?.addEventListener('click', () => {
+        tabLogin.className = 'px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold';
+        tabRegister.className = 'px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold';
+        formLogin.classList.remove('hidden');
+        formRegister.classList.add('hidden');
     });
-  </script>
+
+    tabRegister?.addEventListener('click', () => {
+        tabRegister.className = 'px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold';
+        tabLogin.className = 'px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold';
+        formRegister.classList.remove('hidden');
+        formLogin.classList.add('hidden');
+    });
+
+    document.getElementById('auth-close')?.addEventListener('click', closeAuthModal);
+    document.getElementById('auth-modal')?.addEventListener('click', (e) => {
+        if (e.target.id === 'auth-modal') closeAuthModal();
+    });
+
+    // Submit login
+    formLogin?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value.trim();
+
+        if (!email || !password) {
+            document.getElementById('login-error').textContent = 'Por favor completa todos los campos';
+            document.getElementById('login-error').classList.remove('hidden');
+            return;
+        }
+
+        try {
+            const response = await loginUser(email, password);
+            if (response.success) {
+                closeAuthModal();
+                updateLoginButton();
+                formLogin.reset();
+                document.getElementById('login-error').classList.add('hidden');
+            } else {
+                document.getElementById('login-error').textContent = response.message || 'Credenciales inválidas';
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        } catch (error) {
+            document.getElementById('login-error').textContent = 'Error de conexión: ' + error.message;
+            document.getElementById('login-error').classList.remove('hidden');
+        }
+    });
+
+    // Submit register
+    formRegister?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const firstName = document.getElementById('reg-name').value.trim();
+        const lastName = document.getElementById('reg-lastname').value.trim();
+        const documentId = document.getElementById('reg-document').value.trim();
+        const birthDate = document.getElementById('reg-birthdate').value.trim();
+        const phone = document.getElementById('reg-phone').value.trim();
+        const email = document.getElementById('reg-email').value.trim();
+        const addressStr = document.getElementById('reg-address').value.trim();
+        const cardData = document.getElementById('reg-card').value.trim();
+        const password = document.getElementById('reg-password').value.trim();
+
+        if (!firstName || !lastName || !documentId || !birthDate || !phone || !email || !addressStr || !cardData || password.length < 8) {
+            alert('Por favor completa todos los campos requeridos');
+            return;
+        }
+
+        try {
+            // Parse address - format "street, city"
+            const [street, city] = addressStr.split(',').map(s => s.trim());
+            const cardParts = cardData.split(/\s+/);
+            const [cardNumber, expirationDate, cvv] = cardParts;
+
+            const userData = {
+                firstName,
+                lastName,
+                document: documentId,
+                birthDate,
+                phone,
+                email,
+                street: street || '',
+                number: '0',
+                apartment: '',
+                city: city || '',
+                department: city || '',
+                postalCode: '00000',
+                addressAdditionalInfo: '',
+                paymentType: 'CREDIT',
+                cardNumber,
+                cardHolder: firstName + ' ' + lastName,
+                expirationDate,
+                password
+            };
+
+            const response = await registerClient(userData);
+            if (response.success) {
+                closeAuthModal();
+                updateLoginButton();
+                formRegister.reset();
+            } else {
+                alert(response.message || 'Error al registrarse');
+            }
+        } catch (error) {
+            alert('Error al registrarse: ' + error.message);
+        }
+    });
+
+    document.getElementById('track-order-link')?.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (!isLoggedIn()) {
+            openAuthModal();
+            return;
+        }
+        window.location.href = 'order.html';
+    });
+
+    // Update button on page load and when storage changes
+    updateLoginButton();
+    window.addEventListener('storage', updateLoginButton);
+</script>
 </body>
 </html>
-
-

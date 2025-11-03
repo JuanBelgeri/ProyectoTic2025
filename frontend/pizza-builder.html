@@ -1,542 +1,437 @@
 <!DOCTYPE html>
-<!-- Constructor de Pizza: permite elegir tamaño, masa, salsa, queso y toppings -->
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Constructor de Pizza | PizzUM & BurgUM</title>
-  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
-  <!-- Librerías de estilos y utilidades -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
-  <script>
-    // Auth helpers (solo modal)
-    function isLoggedIn(){ try { return !!JSON.parse(localStorage.getItem('authUser')); } catch { return false; } }
-    function openAuthModal(){ document.getElementById('auth-modal')?.classList.remove('hidden'); }
-    function closeAuthModal(){ document.getElementById('auth-modal')?.classList.add('hidden'); }
-    function requireLogin(){ if (isLoggedIn()) return true; openAuthModal(); return false; }
-    // Configura colores de marca en Tailwind
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#FF0000',
-            secondary: '#000000',
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constructor de Pizza | PizzUM & BurgUM</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF0000',
+                        secondary: '#000000',
+                    }
+                }
+            }
         }
-      }
-    }
-  </script>
-  <style>
-    /* Estilos base y barra de scroll personalizada */
-    html, body { height:100%; margin:0; padding:0; }
-    body { overflow-x:hidden; }
-    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #FF0000; border-radius: 10px; }
-    .vanta-bg { position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; opacity:0.15; pointer-events:none; }
-  </style>
-  <script>
-    // Inicializa VANTA y reemplaza iconos cuando el DOM está listo
-    document.addEventListener('DOMContentLoaded', function () {
-      if (window.VANTA && VANTA.NET) {
-        VANTA.NET({ el: "#vanta-bg", color: 0xff0000, backgroundColor: 0xffffff, maxDistance: 20.00, spacing: 18.00 });
-      }
-      if (window.feather) { feather.replace(); }
-    });
-  </script>
+    </script>
+    <style>
+        html, body { height:100%; margin:0; padding:0; }
+        body { overflow-x:hidden; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #FF0000; border-radius: 10px; }
+        .vanta-bg { position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; opacity:0.15; pointer-events:none; }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (window.VANTA && VANTA.NET) {
+                VANTA.NET({ el: "#vanta-bg", color: 0xff0000, backgroundColor: 0xffffff, maxDistance: 20.00, spacing: 18.00 });
+            }
+            if (window.feather) { feather.replace(); }
+        });
+    </script>
 </head>
 <body class="bg-gray-50 font-sans custom-scrollbar">
-  <!-- Fondo animado -->
-  <div id="vanta-bg" class="vanta-bg"></div>
+<div id="vanta-bg" class="vanta-bg"></div>
 
-  <!-- Navegación principal -->
-  <nav class="bg-gradient-to-r from-primary to-secondary shadow-lg sticky top-0 z-50">
+<nav class="bg-gradient-to-r from-primary to-secondary shadow-lg sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex items-center">
-          <div class="flex-shrink-0 flex items-center">
-            <span class="text-xl font-bold text-white">PizzUM & BurgUM</span>
-          </div>
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="text-xl font-bold text-white">PizzUM & BurgUM</span>
+                </div>
+            </div>
+            <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+                <a href="home.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
+                <a href="builder.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Elegir Constructor</a>
+            </div>
+            <div class="md:hidden flex items-center">
+                <button aria-controls="mobile-menu" class="text-white hover:text-gray-200 focus:outline-none">
+                    <i data-feather="menu" class="h-6 w-6"></i>
+                </button>
+            </div>
         </div>
-        <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
-          <a href="home.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
-          <a href="builder.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Elegir Constructor</a>
-        </div>
-        <div class="md:hidden flex items-center">
-          <button aria-controls="mobile-menu" class="text-white hover:text-gray-200 focus:outline-none">
-            <i data-feather="menu" class="h-6 w-6"></i>
-          </button>
-        </div>
-      </div>
     </div>
-  </nav>
+</nav>
 
-  <!-- Contenido del constructor -->
-  <section class="relative overflow-hidden bg-white min-h-[70vh]">
+<section class="relative overflow-hidden bg-white min-h-[70vh]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="lg:flex lg:space-x-10">
-        <!-- Columna izquierda: Opciones de pizza -->
-        <div class="lg:w-2/3">
-          <h1 class="text-3xl font-extrabold text-gray-900">Construye tu Pizza</h1>
-          <p class="mt-2 text-gray-600">Elige tamaño, masa, salsa, queso y toppings.</p>
+        <div class="lg:flex lg:space-x-10">
+            <div class="lg:w-2/3">
+                <h1 class="text-3xl font-extrabold text-gray-900">Construye tu Pizza</h1>
+                <p class="mt-2 text-gray-600">Elige tamaño, masa, salsa, queso y toppings.</p>
 
-          <!-- Tamaño -->
-          <div class="mt-8">
-            <h2 class="text-xl font-bold text-gray-800">Tamaño</h2>
-            <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Pequeña (10")</span>
-                <input type="radio" name="size" value="Small" class="form-radio text-primary" checked>
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Mediana (12")</span>
-                <input type="radio" name="size" value="Medium" class="form-radio text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Grande (14")</span>
-                <input type="radio" name="size" value="Large" class="form-radio text-primary">
-              </label>
+                <!-- Tamaño -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-bold text-gray-800">Tamaño</h2>
+                    <div id="sizes-container" class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <p class="text-gray-500">Cargando...</p>
+                    </div>
+                </div>
+
+                <!-- Masa -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-bold text-gray-800">Masa</h2>
+                    <div id="doughs-container" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <p class="text-gray-500">Cargando...</p>
+                    </div>
+                </div>
+
+                <!-- Salsa -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-bold text-gray-800">Salsa</h2>
+                    <div id="sauces-container" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <p class="text-gray-500">Cargando...</p>
+                    </div>
+                </div>
+
+                <!-- Queso -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-bold text-gray-800">Queso</h2>
+                    <div id="cheeses-container" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <p class="text-gray-500">Cargando...</p>
+                    </div>
+                </div>
+
+                <!-- Toppings -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-bold text-gray-800">Toppings</h2>
+                    <p class="text-sm text-gray-500">Elige tantos como quieras.</p>
+                    <div id="toppings-container" class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <p class="text-gray-500">Cargando...</p>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex items-center space-x-3">
+                    <a href="builder.html" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
+                        <i data-feather="arrow-left" class="mr-2"></i>
+                        Volver a Elegir
+                    </a>
+                    <button id="add-to-favorites" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
+                        <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="mr-2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#FF0000" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        Guardar en Favoritos
+                    </button>
+                    <button id="add-to-order" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-opacity-90">
+                        <i data-feather="shopping-cart" class="mr-2"></i>
+                        Agregar al Pedido
+                    </button>
+                    <span id="action-toast" class="ml-2 text-sm text-green-600 hidden"></span>
+                </div>
             </div>
-          </div>
 
-          <!-- Masa (elección única) -->
-          <div class="mt-8">
-            <h2 class="text-xl font-bold text-gray-800">Masa</h2>
-            <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Clásica</span>
-                <input type="radio" name="dough" value="Classic" class="form-radio text-primary" checked>
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Fina</span>
-                <input type="radio" name="dough" value="Thin" class="form-radio text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Estilo Chicago</span>
-                <input type="radio" name="dough" value="DeepDish" class="form-radio text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Sin Gluten</span>
-                <input type="radio" name="dough" value="GlutenFree" class="form-radio text-primary">
-              </label>
+            <div class="lg:w-1/3 mt-10 lg:mt-0">
+                <div class="bg-white border-2 border-gray-100 rounded-lg shadow-lg p-6 sticky top-24">
+                    <h2 class="text-xl font-bold text-gray-800">Tu Pizza</h2>
+                    <ul class="mt-4 space-y-2 text-gray-700" id="summary-list">
+                        <li>Tamaño: <span id="summary-size">-</span></li>
+                        <li>Masa: <span id="summary-dough">-</span></li>
+                        <li>Salsa: <span id="summary-sauce">-</span></li>
+                        <li>Queso: <span id="summary-cheese">-</span></li>
+                        <li>Toppings: <span id="summary-toppings">Ninguno</span></li>
+                    </ul>
+                    <div class="mt-6 pt-6 border-t-2 border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold text-gray-800">Total:</span>
+                            <span class="text-2xl font-bold text-primary">$<span id="total-price">0.00</span></span>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-
-          <!-- Salsa (elección única) -->
-          <div class="mt-8">
-            <h2 class="text-xl font-bold text-gray-800">Salsa</h2>
-            <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Tomate y Albahaca</span>
-                <input type="radio" name="sauce" value="Tomato" class="form-radio text-primary" checked>
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Alfredo</span>
-                <input type="radio" name="sauce" value="Alfredo" class="form-radio text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>BBQ</span>
-                <input type="radio" name="sauce" value="BBQ" class="form-radio text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Pesto</span>
-                <input type="radio" name="sauce" value="Pesto" class="form-radio text-primary">
-              </label>
-            </div>
-          </div>
-
-          <!-- Queso (multi-selección) -->
-          <div class="mt-8">
-            <h2 class="text-xl font-bold text-gray-800">Queso</h2>
-            <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Mozzarella</span>
-                <input type="checkbox" name="cheese" value="Mozzarella" class="form-checkbox text-primary" checked>
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Cheddar</span>
-                <input type="checkbox" name="cheese" value="Cheddar" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Parmesano</span>
-                <input type="checkbox" name="cheese" value="Parmesan" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Queso Vegano</span>
-                <input type="checkbox" name="cheese" value="Vegan" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Sin queso</span>
-                <input type="checkbox" name="cheese" value="NoCheese" class="form-checkbox text-primary">
-              </label>
-            </div>
-          </div>
-
-          <!-- Toppings (0 o más) -->
-          <div class="mt-8">
-            <h2 class="text-xl font-bold text-gray-800">Toppings</h2>
-            <p class="text-sm text-gray-500">Elige tantos como quieras.</p>
-            <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Pepperoni</span>
-                <input type="checkbox" name="toppings" value="Pepperoni" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Champiñones</span>
-                <input type="checkbox" name="toppings" value="Mushrooms" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Cebolla</span>
-                <input type="checkbox" name="toppings" value="Onions" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Aceitunas</span>
-                <input type="checkbox" name="toppings" value="Olives" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Pimientos</span>
-                <input type="checkbox" name="toppings" value="BellPeppers" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Tocino</span>
-                <input type="checkbox" name="toppings" value="Bacon" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Jalapeños</span>
-                <input type="checkbox" name="toppings" value="Jalapenos" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Piña</span>
-                <input type="checkbox" name="toppings" value="Pineapple" class="form-checkbox text-primary">
-              </label>
-            </div>
-          </div>
-
-          <div class="mt-8 flex items-center space-x-3">
-            <!-- Acciones: volver, favoritos y agregar al pedido -->
-            <a href="builder.html" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
-              <i data-feather="arrow-left" class="mr-2"></i>
-              Volver a Elegir
-            </a>
-            <button id="add-to-favorites" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
-              <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="mr-2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#FF0000" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Guardar en Favoritos
-            </button>
-            <button id="add-to-order" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-opacity-90">
-              <i data-feather="shopping-cart" class="mr-2"></i>
-              Agregar al Pedido
-            </button>
-            <span id="favorites-toast" class="ml-2 text-sm text-green-600 hidden">¡Guardado en favoritos!</span>
-          </div>
         </div>
-
-        <!-- Columna derecha: Resumen en vivo de la selección -->
-        <div class="lg:w-1/3 mt-10 lg:mt-0">
-          <div class="bg-white border-2 border-gray-100 rounded-lg shadow-lg p-6 sticky top-24">
-            <h2 class="text-xl font-bold text-gray-800">Tu Pizza</h2>
-            <ul class="mt-4 space-y-2 text-gray-700" id="summary-list">
-              <li>Tamaño: <span id="summary-size">Pequeña (10")</span></li>
-              <li>Masa: <span id="summary-dough">Clásica</span></li>
-              <li>Salsa: <span id="summary-sauce">Tomate y Albahaca</span></li>
-              <li>Queso: <span id="summary-cheese">Mozzarella</span></li>
-              <li>Toppings: <span id="summary-toppings">Ninguno</span></li>
-            </ul>
-          </div>
-        </div>
-      </div>
     </div>
-  </section>
+</section>
 
-  <script>
-    // Actualiza el resumen en vivo cuando cambian las opciones
+<footer class="bg-gray-800">
+    <div class="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
+        <p class="text-center text-base text-gray-400">&copy; 2025 PizzUM & BurgUM. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<script src="api.js"></script>
+<script>
+    let componentsData = {
+        sizes: [],
+        doughs: [],
+        sauces: [],
+        cheeses: [],
+        toppings: []
+    };
+
+    async function loadComponents() {
+        try {
+            const [sizesRes, doughsRes, saucesRes, cheesesRes, toppingsRes] = await Promise.all([
+                getPizzaSizes(),
+                getDoughTypes(),
+                getSauces(),
+                getCheeses(),
+                getToppings()
+            ]);
+
+            if (sizesRes.success) componentsData.sizes = sizesRes.data || [];
+            if (doughsRes.success) componentsData.doughs = doughsRes.data || [];
+            if (saucesRes.success) componentsData.sauces = saucesRes.data || [];
+            if (cheesesRes.success) componentsData.cheeses = cheesesRes.data || [];
+            if (toppingsRes.success) componentsData.toppings = toppingsRes.data || [];
+
+            renderComponents();
+        } catch (error) {
+            console.error('Error loading components:', error);
+            showToast('Error al cargar componentes: ' + error.message, 'error');
+        }
+    }
+
+    function renderComponents() {
+        renderSizes();
+        renderDoughs();
+        renderSauces();
+        renderCheeses();
+        renderToppings();
+    }
+
+    function renderSizes() {
+        const container = document.getElementById('sizes-container');
+        if (!componentsData.sizes.length) {
+            container.innerHTML = '<p class="text-gray-500">No hay tamaños disponibles</p>';
+            return;
+        }
+        container.innerHTML = componentsData.sizes.map((size, idx) => `
+        <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+          <span>${size.name} - $${size.price}</span>
+          <input type="radio" name="size" value="${size.id}" data-name="${size.name}" data-price="${size.price}" class="form-radio text-primary" ${idx === 0 ? 'checked' : ''}>
+        </label>
+      `).join('');
+        setupChangeListeners();
+    }
+
+    function renderDoughs() {
+        const container = document.getElementById('doughs-container');
+        if (!componentsData.doughs.length) {
+            container.innerHTML = '<p class="text-gray-500">No hay masas disponibles</p>';
+            return;
+        }
+        container.innerHTML = componentsData.doughs.map((dough, idx) => `
+        <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+          <span>${dough.name} - $${dough.price}</span>
+          <input type="radio" name="dough" value="${dough.id}" data-name="${dough.name}" data-price="${dough.price}" class="form-radio text-primary" ${idx === 0 ? 'checked' : ''}>
+        </label>
+      `).join('');
+        setupChangeListeners();
+    }
+
+    function renderSauces() {
+        const container = document.getElementById('sauces-container');
+        if (!componentsData.sauces.length) {
+            container.innerHTML = '<p class="text-gray-500">No hay salsas disponibles</p>';
+            return;
+        }
+        container.innerHTML = componentsData.sauces.map((sauce, idx) => `
+        <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+          <span>${sauce.name} - $${sauce.price}</span>
+          <input type="radio" name="sauce" value="${sauce.id}" data-name="${sauce.name}" data-price="${sauce.price}" class="form-radio text-primary" ${idx === 0 ? 'checked' : ''}>
+        </label>
+      `).join('');
+        setupChangeListeners();
+    }
+
+    function renderCheeses() {
+        const container = document.getElementById('cheeses-container');
+        if (!componentsData.cheeses.length) {
+            container.innerHTML = '<p class="text-gray-500">No hay quesos disponibles</p>';
+            return;
+        }
+        container.innerHTML = componentsData.cheeses.map((cheese, idx) => `
+        <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+          <span>${cheese.name} - $${cheese.price}</span>
+          <input type="checkbox" name="cheese" value="${cheese.id}" data-name="${cheese.name}" data-price="${cheese.price}" class="form-checkbox text-primary" ${idx === 0 ? 'checked' : ''}>
+        </label>
+      `).join('');
+        setupChangeListeners();
+    }
+
+    function renderToppings() {
+        const container = document.getElementById('toppings-container');
+        if (!componentsData.toppings.length) {
+            container.innerHTML = '<p class="text-gray-500">No hay toppings disponibles</p>';
+            return;
+        }
+        container.innerHTML = componentsData.toppings.map(topping => `
+        <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+          <span>${topping.name} - $${topping.price}</span>
+          <input type="checkbox" name="topping" value="${topping.id}" data-name="${topping.name}" data-price="${topping.price}" class="form-checkbox text-primary">
+        </label>
+      `).join('');
+        setupChangeListeners();
+    }
+
+    function setupChangeListeners() {
+        document.querySelectorAll('input[name="size"], input[name="dough"], input[name="sauce"], input[name="cheese"], input[name="topping"]').forEach(input => {
+            input.removeEventListener('change', updateSummary);
+            input.addEventListener('change', updateSummary);
+        });
+    }
+
     function updateSummary() {
-      const size = document.querySelector('input[name="size"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
-      const dough = document.querySelector('input[name="dough"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
-      const sauce = document.querySelector('input[name="sauce"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
-      const cheeses = Array.from(document.querySelectorAll('input[name="cheese"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent);
-      const toppings = Array.from(document.querySelectorAll('input[name="toppings"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent);
-      document.getElementById('summary-size').textContent = size;
-      document.getElementById('summary-dough').textContent = dough;
-      document.getElementById('summary-sauce').textContent = sauce;
-      document.getElementById('summary-cheese').textContent = cheeses.length ? cheeses.join(', ') : 'Sin queso';
-      document.getElementById('summary-toppings').textContent = toppings.length ? toppings.join(', ') : 'Ninguno';
+        const size = document.querySelector('input[name="size"]:checked');
+        const dough = document.querySelector('input[name="dough"]:checked');
+        const sauce = document.querySelector('input[name="sauce"]:checked');
+        const cheeses = Array.from(document.querySelectorAll('input[name="cheese"]:checked'));
+        const toppings = Array.from(document.querySelectorAll('input[name="topping"]:checked'));
+
+        document.getElementById('summary-size').textContent = size ? size.dataset.name : '-';
+        document.getElementById('summary-dough').textContent = dough ? dough.dataset.name : '-';
+        document.getElementById('summary-sauce').textContent = sauce ? sauce.dataset.name : '-';
+        document.getElementById('summary-cheese').textContent = cheeses.length ? cheeses.map(c => c.dataset.name).join(', ') : 'Sin queso';
+        document.getElementById('summary-toppings').textContent = toppings.length ? toppings.map(t => t.dataset.name).join(', ') : 'Ninguno';
+
+        calculatePrice();
     }
-    document.addEventListener('change', function (e) {
-      if (e.target.matches('input[name="size"], input[name="dough"], input[name="sauce"], input[name="cheese"], input[name="toppings"]')) {
-        updateSummary();
-      }
+
+    function calculatePrice() {
+        let total = 0;
+
+        const size = document.querySelector('input[name="size"]:checked');
+        if (size) total += parseFloat(size.dataset.price) || 0;
+
+        const dough = document.querySelector('input[name="dough"]:checked');
+        if (dough) total += parseFloat(dough.dataset.price) || 0;
+
+        const sauce = document.querySelector('input[name="sauce"]:checked');
+        if (sauce) total += parseFloat(sauce.dataset.price) || 0;
+
+        const cheeses = Array.from(document.querySelectorAll('input[name="cheese"]:checked'));
+        cheeses.forEach(cheese => {
+            total += parseFloat(cheese.dataset.price) || 0;
+        });
+
+        const toppings = Array.from(document.querySelectorAll('input[name="topping"]:checked'));
+        toppings.forEach(topping => {
+            total += parseFloat(topping.dataset.price) || 0;
+        });
+
+        document.getElementById('total-price').textContent = total.toFixed(2);
+    }
+
+    function getSelectedPizza() {
+        const size = document.querySelector('input[name="size"]:checked');
+        const dough = document.querySelector('input[name="dough"]:checked');
+        const sauce = document.querySelector('input[name="sauce"]:checked');
+        const cheeses = Array.from(document.querySelectorAll('input[name="cheese"]:checked'));
+        const toppings = Array.from(document.querySelectorAll('input[name="topping"]:checked'));
+
+        return {
+            name: `Pizza Personalizada`,
+            sizeId: parseInt(size?.value) || null,
+            doughId: parseInt(dough?.value) || null,
+            sauceId: parseInt(sauce?.value) || null,
+            cheeseIds: cheeses.map(c => parseInt(c.value)),
+            vegetableIds: toppings.map(t => parseInt(t.value))
+        };
+    }
+
+    function showToast(message, type = 'success') {
+        const toast = document.getElementById('action-toast');
+        if (!toast) return;
+        toast.textContent = message;
+        toast.className = `ml-2 text-sm ${type === 'error' ? 'text-red-600' : 'text-green-600'} hidden`;
+        toast.classList.remove('hidden');
+        setTimeout(() => {
+            toast.classList.add('hidden');
+        }, 2000);
+    }
+
+    function isLoggedIn() {
+        return !!localStorage.getItem('authToken');
+    }
+
+    document.getElementById('add-to-favorites').addEventListener('click', async () => {
+        if (!isLoggedIn()) {
+            showToast('Debes ingresar para guardar favoritos', 'error');
+            return;
+        }
+
+        try {
+            const pizza = getSelectedPizza();
+            const response = await addToFavorites({
+                itemType: 'PIZZA',
+                itemId: null,
+                customName: pizza.name
+            });
+
+            if (response.success) {
+                showToast('¡Guardado en favoritos!');
+            } else {
+                showToast(response.message || 'Error al guardar', 'error');
+            }
+        } catch (error) {
+            showToast('Error al guardar en favoritos', 'error');
+            console.error(error);
+        }
     });
-    document.addEventListener('DOMContentLoaded', updateSummary);
 
-    // Hacer que "Sin queso" sea una opción exclusiva: si se selecciona, desmarcar los demás; si se selecciona otro queso, desmarcar "Sin queso"
-    document.addEventListener('change', function (e) {
-      if (!e.target.matches('input[name="cheese"]')) return;
-      const noCheese = document.querySelector('input[name="cheese"][value="NoCheese"]');
-      if (!noCheese) return;
-      if (e.target === noCheese && noCheese.checked) {
-        // desmarcar todos los demás
-        Array.from(document.querySelectorAll('input[name="cheese"]')).forEach(cb => { if (cb !== noCheese) cb.checked = false; });
-      } else if (e.target !== noCheese && e.target.checked) {
-        // desmarcar sin queso
-        noCheese.checked = false;
-      }
-      updateSummary();
+    document.getElementById('add-to-order').addEventListener('click', async () => {
+        if (!isLoggedIn()) {
+            showToast('Debes ingresar para agregar al pedido', 'error');
+            return;
+        }
+
+        const btn = document.getElementById('add-to-order');
+        btn.disabled = true;
+        btn.textContent = 'Agregando...';
+
+        try {
+            const pizza = getSelectedPizza();
+
+            // Step 1: Create the pizza first
+            const createResponse = await createPizza(pizza);
+
+            if (!createResponse.success) {
+                showToast(createResponse.message || 'Error al crear pizza', 'error');
+                btn.disabled = false;
+                btn.textContent = 'Agregar al Pedido';
+                return;
+            }
+
+            const pizzaId = createResponse.data?.id;
+            if (!pizzaId) {
+                showToast('Error: No se obtuvo ID de pizza', 'error');
+                btn.disabled = false;
+                btn.textContent = 'Agregar al Pedido';
+                return;
+            }
+
+            // Step 2: Add to cart using the created pizza ID
+            const cartResponse = await addToCart({
+                itemType: 'PIZZA',
+                itemId: pizzaId,
+                quantity: 1
+            });
+
+            if (cartResponse.success) {
+                showToast('¡Agregado al pedido!');
+                setTimeout(() => {
+                    window.location.href = 'checkout.html';
+                }, 1000);
+            } else {
+                showToast(cartResponse.message || 'Error al agregar', 'error');
+                btn.disabled = false;
+                btn.textContent = 'Agregar al Pedido';
+            }
+        } catch (error) {
+            showToast('Error: ' + error.message, 'error');
+            console.error('Add to cart error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Agregar al Pedido';
+        }
     });
 
-    // Persistencia de favoritos en localStorage
-    function getSelectedText(selector) {
-      return document.querySelector(selector)?.parentElement?.querySelector('span')?.textContent || '';
-    }
-    function getPizzaBuild() {
-      return {
-        type: 'pizza',
-        size: getSelectedText('input[name="size"]:checked'),
-        dough: getSelectedText('input[name="dough"]:checked'),
-        sauce: getSelectedText('input[name="sauce"]:checked'),
-        cheese: Array.from(document.querySelectorAll('input[name="cheese"]:checked')).map(cb => cb.value === 'NoCheese' ? 'Sin queso' : cb.parentElement.querySelector('span').textContent),
-        toppings: Array.from(document.querySelectorAll('input[name="toppings"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent),
-        createdAt: new Date().toISOString()
-      };
-    }
-    function getFavorites() {
-      try {
-        return JSON.parse(localStorage.getItem('favorites') || '[]');
-      } catch (e) {
-        console.error('Failed to read favorites', e);
-        return [];
-      }
-    }
-
-    function setFavorites(list) {
-      try {
-        localStorage.setItem('favorites', JSON.stringify(list));
-      } catch (e) {
-        console.error('Failed to write favorites', e);
-      }
-    }
-
-    function saveFavorite(build) {
-      try {
-        const current = getFavorites();
-        current.push(build);
-        setFavorites(current);
-        showFavoritesToast('¡Guardado en favoritos!');
-      } catch (e) {
-        console.error('Failed to save favorite', e);
-      }
-    }
-
-    function removeFavorite(build) {
-      try {
-        const current = getFavorites();
-        const filtered = current.filter(f => !isSamePizzaBuild(f, build));
-        setFavorites(filtered);
-        showFavoritesToast('Eliminado de favoritos');
-      } catch (e) {
-        console.error('Failed to remove favorite', e);
-      }
-    }
-
-    function showFavoritesToast(message) {
-      const toast = document.getElementById('favorites-toast');
-      if (!toast) return;
-      toast.textContent = message;
-      toast.classList.remove('hidden');
-      setTimeout(() => {
-        toast.classList.add('hidden');
-        toast.textContent = '¡Guardado en favoritos!';
-      }, 1500);
-    }
-    // Compara arrays sin importar el orden
-    function areArraysEqualAsSets(a, b) {
-      if (!Array.isArray(a) || !Array.isArray(b)) return false;
-      const as = new Set(a);
-      const bs = new Set(b);
-      if (as.size !== bs.size) return false;
-      for (const v of as) if (!bs.has(v)) return false;
-      return true;
-    }
-    // Determina si dos configuraciones de pizza son iguales
-    function isSamePizzaBuild(a, b) {
-      return a && b && a.type === 'pizza' && b.type === 'pizza' &&
-        a.size === b.size && a.dough === b.dough && a.sauce === b.sauce &&
-        areArraysEqualAsSets(a.cheese || [], b.cheese || []) &&
-        areArraysEqualAsSets(a.toppings || [], b.toppings || []);
-    }
-    // Verifica si la configuración actual ya está en favoritos
-    function isCurrentPizzaFavorited() {
-      try {
-        const key = 'favorites';
-        const current = JSON.parse(localStorage.getItem(key) || '[]');
-        const now = getPizzaBuild();
-        return current.some(f => isSamePizzaBuild(f, now));
-      } catch (_) { return false; }
-    }
-    // Rellena o contornea el ícono de corazón según estado
-    function setHeartFilled(filled) {
-      const svg = document.getElementById('heart-icon');
-      if (!svg) return;
-      const path = svg.querySelector('path');
-      if (!path) return;
-      if (filled) {
-        path.setAttribute('fill', '#FF0000');
-        path.setAttribute('stroke', '#FF0000');
-      } else {
-        path.setAttribute('fill', 'none');
-        path.setAttribute('stroke', '#FF0000');
-      }
-    }
-    // Guardar en favoritos y actualizar ícono (requiere login)
-    document.getElementById('add-to-favorites').addEventListener('click', function () {
-      if (!requireLogin()) return;
-      const build = getPizzaBuild();
-      // Si ya está en favoritos, eliminar; si no, agregar
-      if (isCurrentPizzaFavorited()) {
-        removeFavorite(build);
-        setHeartFilled(false);
-      } else {
-        saveFavorite(build);
-        setHeartFilled(true);
-      }
-    });
-  // Proteger Agregar al Pedido (el handler de añadir al carrito está definido más abajo)
-    // Establece estado inicial del corazón
-    document.addEventListener('DOMContentLoaded', function(){ setHeartFilled(isCurrentPizzaFavorited()); });
-    // --- Agregar al carrito (compatibilidad con checkout.html) ---
-    function getCart() {
-      try {
-        return JSON.parse(localStorage.getItem('cart') || '[]');
-      } catch (e) {
-        console.error('Failed to read cart', e);
-        return [];
-      }
-    }
-
-    function setCart(list) {
-      try {
-        localStorage.setItem('cart', JSON.stringify(list));
-      } catch (e) {
-        console.error('Failed to write cart', e);
-      }
-    }
-
-    function addToCart(item) {
-      try {
-        const current = getCart();
-        // Añadir campos mínimos que espera checkout: qty y total
-        const toAdd = Object.assign({}, item, { qty: 1, total: item.total || 0 });
-        current.push(toAdd);
-        setCart(current);
-      } catch (e) {
-        console.error('Failed to add to cart', e);
-      }
-    }
-
-    document.getElementById('add-to-order').addEventListener('click', function () {
-      const build = getPizzaBuild();
-      addToCart(build);
-      // Redirigir al checkout para completar el pedido
-      window.location.href = 'checkout.html';
-    });
-  </script>
-
-  <!-- Modal Auth reutilizable -->
-  <div id="auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
-    <div class="relative max-w-md w-full max-h-[90vh] bg-white border-2 border-gray-100 rounded-lg shadow-xl overflow-y-auto">
-      <div class="flex items-center justify-between px-4 py-3 border-b">
-        <h3 class="text-lg font-bold text-gray-900">Tu cuenta</h3>
-        <button id="auth-close" class="text-gray-400 hover:text-gray-600">✕</button>
-      </div>
-      <div class="px-6 pt-4">
-        <div class="flex space-x-4 mb-4">
-          <button id="tab-login" class="px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold">Ingresar</button>
-          <button id="tab-register" class="px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold">Crear cuenta</button>
-        </div>
-        <form id="form-login" class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
-            <input id="login-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Contraseña</label>
-            <input id="login-password" type="password" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-          </div>
-          <button type="submit" class="w-full bg-primary text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-90">Ingresar</button>
-          <p id="login-error" class="text-sm text-red-600 hidden">Credenciales inválidas</p>
-        </form>
-        <form id="form-register" class="space-y-4 hidden">
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700">Nombre</label>
-              <input id="reg-name" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700">Apellido</label>
-              <input id="reg-lastname" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-            </div>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Documento</label>
-            <input id="reg-document" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
-            <input id="reg-birthdate" type="date" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Teléfono</label>
-            <input id="reg-phone" type="tel" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
-            <input id="reg-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Dirección</label>
-            <input id="reg-address" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Tarjeta de Crédito/Débito</label>
-            <input id="reg-card" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="1234 5678 9012 3456">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Contraseña</label>
-            <input id="reg-password" type="password" required minlength="6" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-          </div>
-          <button type="submit" class="w-full bg-primary text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-90">Crear cuenta</button>
-        </form>
-      </div>
-      <div class="px-6 py-4 border-t text-xs text-gray-500">Al continuar aceptas nuestros Términos y Política de Privacidad.</div>
-    </div>
-  </div>
-
-  <script>
-    // Tabs y envío de formularios para el modal
-    (function(){
-      const tabLogin=document.getElementById('tab-login');
-      const tabRegister=document.getElementById('tab-register');
-      const formLogin=document.getElementById('form-login');
-      const formRegister=document.getElementById('form-register');
-      document.getElementById('auth-close')?.addEventListener('click', ()=> document.getElementById('auth-modal').classList.add('hidden'));
-      document.getElementById('auth-modal')?.addEventListener('click', (e)=>{ if(e.target.id==='auth-modal') document.getElementById('auth-modal').classList.add('hidden'); });
-      tabLogin?.addEventListener('click', ()=>{ tabLogin.className='px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold'; tabRegister.className='px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold'; formLogin.classList.remove('hidden'); formRegister.classList.add('hidden'); });
-      tabRegister?.addEventListener('click', ()=>{ tabRegister.className='px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold'; tabLogin.className='px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold'; formRegister.classList.remove('hidden'); formLogin.classList.add('hidden'); });
-      formLogin?.addEventListener('submit', (e)=>{ e.preventDefault(); const email=document.getElementById('login-email').value.trim(); const password=document.getElementById('login-password').value.trim(); if(!email||!password){ document.getElementById('login-error').classList.remove('hidden'); return; } const user={ email, name: email.split('@')[0], loggedAt:new Date().toISOString() }; localStorage.setItem('authUser', JSON.stringify(user)); document.getElementById('auth-modal').classList.add('hidden'); });
-      formRegister?.addEventListener('submit', (e)=>{ e.preventDefault(); const name=document.getElementById('reg-name').value.trim(); const lastname=document.getElementById('reg-lastname').value.trim(); const document=document.getElementById('reg-document').value.trim(); const birthdate=document.getElementById('reg-birthdate').value.trim(); const phone=document.getElementById('reg-phone').value.trim(); const email=document.getElementById('reg-email').value.trim(); const address=document.getElementById('reg-address').value.trim(); const card=document.getElementById('reg-card').value.trim(); const password=document.getElementById('reg-password').value.trim(); if(!name||!lastname||!document||!birthdate||!phone||!email||!address||!card||password.length<6) return; const user={ email, name, lastname, document, birthdate, phone, address, card, loggedAt:new Date().toISOString(), registered:true }; localStorage.setItem('authUser', JSON.stringify(user)); document.getElementById('auth-modal').classList.add('hidden'); });
-    })();
-  </script>
-
-  <footer class="bg-gray-800">
-      <div class="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
-          <p class="text-center text-base text-gray-400">&copy; 2025 PizzUM & BurgUM. Todos los derechos reservados.</p>
-      </div>
-  </footer>
+    loadComponents();
+</script>
 </body>
 </html>
-
-
-
-

@@ -1,582 +1,437 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Constructor de Hamburguesa | PizzUM & BurgUM</title>
-  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: { primary: '#FF0000', secondary: '#000000' }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constructor de Hamburguesa | PizzUM & BurgUM</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#FF0000', secondary: '#000000' }
+                }
+            }
         }
-      }
-    }
-  </script>
-  <style>
-    html, body { height:100%; margin:0; padding:0; }
-    body { overflow-x:hidden; }
-    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #FF0000; border-radius: 10px; }
-    .vanta-bg { position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; opacity:0.15; pointer-events:none; }
-  </style>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      if (window.VANTA && VANTA.NET) {
-        VANTA.NET({ el: "#vanta-bg", color: 0xff0000, backgroundColor: 0xffffff, maxDistance: 20.00, spacing: 18.00 });
-      }
-      if (window.feather) { feather.replace(); }
-    });
-  </script>
+    </script>
+    <style>
+        html, body { height:100%; margin:0; padding:0; }
+        body { overflow-x:hidden; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #FF0000; border-radius: 10px; }
+        .vanta-bg { position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; opacity:0.15; pointer-events:none; }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (window.VANTA && VANTA.NET) {
+                VANTA.NET({ el: "#vanta-bg", color: 0xff0000, backgroundColor: 0xffffff, maxDistance: 20.00, spacing: 18.00 });
+            }
+            if (window.feather) { feather.replace(); }
+        });
+    </script>
 </head>
 <body class="bg-gray-50 font-sans custom-scrollbar">
-  <div id="vanta-bg" class="vanta-bg"></div>
+<div id="vanta-bg" class="vanta-bg"></div>
 
-  <!-- Navigation -->
-  <nav class="bg-gradient-to-r from-primary to-secondary shadow-lg sticky top-0 z-50">
+<nav class="bg-gradient-to-r from-primary to-secondary shadow-lg sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex items-center">
-          <div class="flex-shrink-0 flex items-center">
-            <span class="text-xl font-bold text-white">PizzUM & BurgUM</span>
-          </div>
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="text-xl font-bold text-white">PizzUM & BurgUM</span>
+                </div>
+            </div>
+            <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+                <a href="home.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
+                <a href="builder.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Elegir Constructor</a>
+            </div>
+            <div class="md:hidden flex items-center">
+                <button aria-controls="mobile-menu" class="text-white hover:text-gray-200 focus:outline-none">
+                    <i data-feather="menu" class="h-6 w-6"></i>
+                </button>
+            </div>
         </div>
-        <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
-          <a href="home.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
-          <a href="builder.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Elegir Constructor</a>
-        </div>
-        <div class="md:hidden flex items-center">
-          <button aria-controls="mobile-menu" class="text-white hover:text-gray-200 focus:outline-none">
-            <i data-feather="menu" class="h-6 w-6"></i>
-          </button>
-        </div>
-      </div>
     </div>
-  </nav>
+</nav>
 
-  <!-- Builder Content: Hamburguesa -->
-  <section class="relative overflow-hidden bg-white min-h-[70vh]">
+<section class="relative overflow-hidden bg-white min-h-[70vh]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="lg:flex lg:space-x-10">
-        <!-- Left: Options -->
-        <div class="lg:w-2/3">
-          <h1 class="text-3xl font-extrabold text-gray-900">Construye tu Hamburguesa</h1>
-          <p class="mt-2 text-gray-600">Elige tamaño, pan, carnes, queso, salsas y extras.</p>
+        <div class="lg:flex lg:space-x-10">
+            <div class="lg:w-2/3">
+                <h1 class="text-3xl font-extrabold text-gray-900">Construye tu Hamburguesa</h1>
+                <p class="mt-2 text-gray-600">Elige pan, carne, queso, salsas y extras.</p>
 
-          <!-- Tamaño -->
-          <div class="mt-8">
-            <h2 class="text-xl font-bold text-gray-800">Tamaño</h2>
-            <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Simple (1 carne)</span>
-                <input type="radio" name="b-size" value="Simple" class="form-radio text-primary" checked>
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Doble (2 carnes)</span>
-                <input type="radio" name="b-size" value="Doble" class="form-radio text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Triple (3 carnes)</span>
-                <input type="radio" name="b-size" value="Triple" class="form-radio text-primary">
-              </label>
+                <!-- Pan -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-bold text-gray-800">Pan</h2>
+                    <div id="breads-container" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <p class="text-gray-500">Cargando...</p>
+                    </div>
+                </div>
+
+                <!-- Tipo de Carne -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-bold text-gray-800">Tipo de Carne</h2>
+                    <div id="meats-container" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <p class="text-gray-500">Cargando...</p>
+                    </div>
+                </div>
+
+                <!-- Queso -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-bold text-gray-800">Queso</h2>
+                    <div id="cheeses-container" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <p class="text-gray-500">Cargando...</p>
+                    </div>
+                </div>
+
+                <!-- Condimentos (salsas) -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-bold text-gray-800">Salsas</h2>
+                    <p class="text-sm text-gray-500">Elige tantas como quieras.</p>
+                    <div id="condiments-container" class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <p class="text-gray-500">Cargando...</p>
+                    </div>
+                </div>
+
+                <!-- Extras (toppings) -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-bold text-gray-800">Extras</h2>
+                    <p class="text-sm text-gray-500">Elige tantos como quieras.</p>
+                    <div id="toppings-container" class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <p class="text-gray-500">Cargando...</p>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex items-center space-x-3">
+                    <a href="builder.html" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
+                        <i data-feather="arrow-left" class="mr-2"></i>
+                        Volver a Elegir
+                    </a>
+                    <button id="add-to-favorites" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
+                        <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="mr-2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#FF0000" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        Guardar en Favoritos
+                    </button>
+                    <button id="add-to-order" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-opacity-90">
+                        <i data-feather="shopping-cart" class="mr-2"></i>
+                        Agregar al Pedido
+                    </button>
+                    <span id="action-toast" class="ml-2 text-sm text-green-600 hidden"></span>
+                </div>
             </div>
-          </div>
 
-          <!-- Pan (single choice) -->
-          <div class="mt-8">
-            <h2 class="text-xl font-bold text-gray-800">Pan</h2>
-            <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Brioche</span>
-                <input type="radio" name="bun" value="Brioche" class="form-radio text-primary" checked>
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Clásico con sésamo</span>
-                <input type="radio" name="bun" value="Clasico" class="form-radio text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Integral</span>
-                <input type="radio" name="bun" value="Integral" class="form-radio text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Sin Gluten</span>
-                <input type="radio" name="bun" value="SinGluten" class="form-radio text-primary">
-              </label>
+            <div class="lg:w-1/3 mt-10 lg:mt-0">
+                <div class="bg-white border-2 border-gray-100 rounded-lg shadow-lg p-6 sticky top-24">
+                    <h2 class="text-xl font-bold text-gray-800">Tu Hamburguesa</h2>
+                    <ul class="mt-4 space-y-2 text-gray-700" id="summary-list">
+                        <li>Pan: <span id="summary-bread">-</span></li>
+                        <li>Carne: <span id="summary-meat">-</span></li>
+                        <li>Queso: <span id="summary-cheese">-</span></li>
+                        <li>Salsas: <span id="summary-condiments">Ninguna</span></li>
+                        <li>Extras: <span id="summary-toppings">Ninguno</span></li>
+                    </ul>
+                    <div class="mt-6 pt-6 border-t-2 border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold text-gray-800">Total:</span>
+                            <span class="text-2xl font-bold text-primary">$<span id="total-price">0.00</span></span>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-
-          <!-- Tipo de Carne (single choice) -->
-          <div class="mt-8">
-            <h2 class="text-xl font-bold text-gray-800">Tipo de Carne</h2>
-            <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Carne vacuna</span>
-                <input type="radio" name="patty" value="Carne vacuna" class="form-radio text-primary" checked>
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Pollo</span>
-                <input type="radio" name="patty" value="Pollo" class="form-radio text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Vegetariano (legumbres)</span>
-                <input type="radio" name="patty" value="Vegetariano" class="form-radio text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Vegano</span>
-                <input type="radio" name="patty" value="Vegano" class="form-radio text-primary">
-              </label>
-            </div>
-          </div>
-
-          
-
-          <!-- Queso (single choice) -->
-          <div class="mt-8">
-            <h2 class="text-xl font-bold text-gray-800">Queso</h2>
-            <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Cheddar</span>
-                <input type="checkbox" name="b-cheese" value="Cheddar" class="form-checkbox text-primary" checked>
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Mozzarella</span>
-                <input type="checkbox" name="b-cheese" value="Mozzarella" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Suizo</span>
-                <input type="checkbox" name="b-cheese" value="Suizo" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Sin queso</span>
-                <input type="checkbox" name="b-cheese" value="Sin queso" class="form-checkbox text-primary">
-              </label>
-            </div>
-          </div>
-
-          <!-- Salsas (0 o más) -->
-          <div class="mt-8">
-            <h2 class="text-xl font-bold text-gray-800">Salsas</h2>
-            <p class="text-sm text-gray-500">Elige tantas como quieras.</p>
-            <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Mayonesa</span>
-                <input type="checkbox" name="sauces" value="Mayonesa" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Ketchup</span>
-                <input type="checkbox" name="sauces" value="Ketchup" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Mostaza</span>
-                <input type="checkbox" name="sauces" value="Mostaza" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>BBQ</span>
-                <input type="checkbox" name="sauces" value="BBQ" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Alioli</span>
-                <input type="checkbox" name="sauces" value="Alioli" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Sriracha</span>
-                <input type="checkbox" name="sauces" value="Sriracha" class="form-checkbox text-primary">
-              </label>
-            </div>
-          </div>
-
-          <!-- Extras (0 o más) -->
-          <div class="mt-8">
-            <h2 class="text-xl font-bold text-gray-800">Extras</h2>
-            <p class="text-sm text-gray-500">Elige tantos como quieras.</p>
-            <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Bacon</span>
-                <input type="checkbox" name="extras" value="Tocino" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Cebolla caramelizada</span>
-                <input type="checkbox" name="extras" value="Cebolla caramelizada" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Cebolla crujiente</span>
-                <input type="checkbox" name="extras" value="Cebolla crujiente" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Lechuga</span>
-                <input type="checkbox" name="extras" value="Lechuga" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Tomate</span>
-                <input type="checkbox" name="extras" value="Tomate" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Pepinillos</span>
-                <input type="checkbox" name="extras" value="Pepinillos" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Jalapeños</span>
-                <input type="checkbox" name="extras" value="Jalapeños" class="form-checkbox text-primary">
-              </label>
-              <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-                <span>Huevo a la plancha</span>
-                <input type="checkbox" name="extras" value="Huevo" class="form-checkbox text-primary">
-              </label>
-            </div>
-          </div>
-
-          <!-- Acciones -->
-          <div class="mt-8 flex items-center space-x-3">
-            <a href="builder.html" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
-              <i data-feather="arrow-left" class="mr-2"></i>
-              Volver a Elegir
-            </a>
-            <button id="b-add-to-favorites" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
-              <svg id="b-heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" class="mr-2">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#FF0000" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              Guardar en Favoritos
-            </button>
-            <button id="b-add-to-order" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-opacity-90">
-              <i data-feather="shopping-cart" class="mr-2"></i>
-              Agregar al Pedido
-            </button>
-            <span id="b-favorites-toast" class="ml-2 text-sm text-green-600 hidden">¡Guardado en favoritos!</span>
-          </div>
         </div>
-
-        <!-- Right: Summary -->
-        <div class="lg:w-1/3 mt-10 lg:mt-0">
-          <div class="bg-white border-2 border-gray-100 rounded-lg shadow-lg p-6 sticky top-24">
-            <h2 class="text-xl font-bold text-gray-800">Tu Hamburguesa</h2>
-            <ul class="mt-4 space-y-2 text-gray-700" id="b-summary-list">
-              <li>Tamaño: <span id="b-summary-size">Simple (1 carne)</span></li>
-              <li>Pan: <span id="b-summary-bun">Brioche</span></li>
-              <li>Medallón: <span id="b-summary-patty">Carne vacuna</span></li>
-              <li>Punto: <span id="b-summary-doneness">Jugosa</span></li>
-              <li>Queso: <span id="b-summary-cheese">Cheddar</span></li>
-              <li>Salsas: <span id="b-summary-sauces">Ninguna</span></li>
-              <li>Extras: <span id="b-summary-extras">Ninguno</span></li>
-            </ul>
-          </div>
-        </div>
-      </div>
     </div>
-  </section>
+</section>
 
-  <!-- Scripts -->
-  <script>
-    // Live summary updates (Hamburguesa)
-    function updateBurgerSummary() {
-      const size = document.querySelector('input[name="b-size"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
-      const bun = document.querySelector('input[name="bun"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
-      const patty = document.querySelector('input[name="patty"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
-      const donenessSel = document.querySelector('input[name="doneness"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
-      const sauces = Array.from(document.querySelectorAll('input[name="sauces"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent);
-      const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent);
-
-      // Punto seguro para pollo/veg
-      const safeDoneness = (/Pollo|Veg/).test(patty) ? 'Bien cocida' : donenessSel;
-
-  // Queso: ahora múltiple choice (checkboxes)
-  const cheeses = Array.from(document.querySelectorAll('input[name="b-cheese"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent);
-  const cheese = cheeses.length ? cheeses.join(', ') : 'Sin queso';
-
-      // Pinta el resumen
-      document.getElementById('b-summary-size').textContent = size;
-      document.getElementById('b-summary-bun').textContent = bun;
-      document.getElementById('b-summary-patty').textContent = patty;
-      document.getElementById('b-summary-doneness').textContent = safeDoneness;
-      document.getElementById('b-summary-cheese').textContent = cheese;
-      document.getElementById('b-summary-sauces').textContent = sauces.length ? sauces.join(', ') : 'Ninguna';
-      document.getElementById('b-summary-extras').textContent = extras.length ? extras.join(', ') : 'Ninguno';
-    }
-
-    // Refrescar cuando cambian inputs relevantes
-    document.addEventListener('change', function (e) {
-      if (e.target.matches('input[name="b-size"], input[name="bun"], input[name="patty"], input[name="doneness"], input[name="b-cheese"], input[name="sauces"], input[name="extras"]')) {
-        updateBurgerSummary();
-      }
-    });
-    document.addEventListener('DOMContentLoaded', updateBurgerSummary);
-  </script>
-
-  <script>
-    // Favoritos / Corazón (IDs corregidos con prefijo b-)
-</script>
-
-<script>
-// Cualquier cambio en inputs relevantes refresca el resumen
-document.addEventListener('change', (e) => {
-  if (e.target.matches('input[name="b-size"], input[name="bun"], input[name="patty"], input[name="doneness"], input[name="sauces"], input[name="extras"], input[name="cheeses"]')) {
-    updateBurgerSummary();
-  }
-});
-
-// Botones +/− de cantidad de queso también refrescan
-document.addEventListener('click', (e) => {
-  if (e.target.classList.contains('plus-btn') || e.target.classList.contains('minus-btn')) {
-    setTimeout(updateBurgerSummary, 0);
-  }
-});
-
-// Init
-document.addEventListener('DOMContentLoaded', updateBurgerSummary);
-</script>
-
-
-
-<script>
-  // Auth helpers (usar modal en lugar de redirigir)
-  function isLoggedIn(){ try { return !!JSON.parse(localStorage.getItem('authUser')); } catch { return false; } }
-  function openAuthModal(){ document.getElementById('auth-modal')?.classList.remove('hidden'); }
-  function requireLogin(){ if (isLoggedIn()) return true; openAuthModal(); return false; }
-
-  // Favoritos (hamburguesa): guardar y controlar ícono/toast
-  function getFavorites() {
-    try {
-      return JSON.parse(localStorage.getItem('favorites') || '[]');
-    } catch (e) {
-      console.error('Failed to read favorites', e);
-      return [];
-    }
-  }
-
-  function setFavorites(list) {
-    try {
-      localStorage.setItem('favorites', JSON.stringify(list));
-    } catch (e) {
-      console.error('Failed to write favorites', e);
-    }
-  }
-
-  function saveFavorite(build) {
-    try {
-      const current = getFavorites();
-      current.push(build);
-      setFavorites(current);
-      showFavoritesToast('¡Guardado en favoritos!');
-    } catch (e) {
-      console.error('Failed to save favorite', e);
-    }
-  }
-
-  function removeFavorite(build) {
-    try {
-      const current = getFavorites();
-      const filtered = current.filter(f => !isSameBurgerBuild(f, build));
-      setFavorites(filtered);
-      showFavoritesToast('Eliminado de favoritos');
-    } catch (e) {
-      console.error('Failed to remove favorite', e);
-    }
-  }
-
-  function showFavoritesToast(message) {
-    const toast = document.getElementById('b-favorites-toast');
-    if (!toast) return;
-    toast.textContent = message;
-    toast.classList.remove('hidden');
-    setTimeout(() => {
-      toast.classList.add('hidden');
-      toast.textContent = '¡Guardado en favoritos!';
-    }, 1500);
-  }
-
-  function setHeartFilled(filled) {
-    const svg = document.getElementById('b-heart-icon');
-    if (!svg) return;
-    const path = svg.querySelector('path');
-    if (!path) return;
-    if (filled) {
-      path.setAttribute('fill', '#FF0000');
-      path.setAttribute('stroke', '#FF0000');
-    } else {
-      path.setAttribute('fill', 'none');
-      path.setAttribute('stroke', '#FF0000');
-    }
-  }
-
-  // Compara arrays sin importar el orden
-  function areArraysEqualAsSets(a, b) {
-    if (!Array.isArray(a) || !Array.isArray(b)) return false;
-    const as = new Set(a);
-    const bs = new Set(b);
-    if (as.size !== bs.size) return false;
-    for (const v of as) if (!bs.has(v)) return false;
-    return true;
-  }
-
-  // Determina si dos configuraciones de hamburguesa son iguales
-  function isSameBurgerBuild(a, b) {
-    return a && b && a.type === 'burger' && b.type === 'burger' &&
-      a.size === b.size && a.bun === b.bun && a.patty === b.patty &&
-      areArraysEqualAsSets(a.cheese || [], b.cheese || []) &&
-      areArraysEqualAsSets(a.sauces || [], b.sauces || []) &&
-      areArraysEqualAsSets(a.extras || [], b.extras || []);
-  }
-
-  // Verifica si la configuración actual ya está en favoritos
-  function isCurrentBurgerFavorited() {
-    try {
-      const current = getFavorites();
-      const now = getCurrentBuild();
-      return current.some(f => isSameBurgerBuild(f, now));
-    } catch (_) { return false; }
-  }
-
-  // Obtiene la configuración actual de la hamburguesa
-  function getCurrentBuild() {
-    const size = document.querySelector('input[name="b-size"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
-    const bun = document.querySelector('input[name="bun"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
-    const patty = document.querySelector('input[name="patty"]:checked')?.parentElement?.querySelector('span')?.textContent || '';
-  const cheeses = Array.from(document.querySelectorAll('input[name="b-cheese"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent || '').sort();
-    const sauces = Array.from(document.querySelectorAll('input[name="sauces"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent || '').sort();
-    const extras = Array.from(document.querySelectorAll('input[name="extras"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent || '').sort();
-  return { type: 'burger', size, bun, patty, cheese: cheeses, sauces, extras, createdAt: new Date().toISOString() };
-  }
-  document.getElementById('b-add-to-favorites').addEventListener('click', function () {
-    if (!requireLogin()) return;
-    const build = getCurrentBuild();
-    // Si ya está en favoritos, eliminar; si no, agregar
-    if (isCurrentBurgerFavorited()) {
-      removeFavorite(build);
-      setHeartFilled(false);
-    } else {
-      saveFavorite(build);
-      setHeartFilled(true);
-    }
-  });
-  document.addEventListener('DOMContentLoaded', function(){ setHeartFilled(isCurrentBurgerFavorited()); });
-
-  // Proteger Agregar al Pedido
-  // Funciones para cart (compatibles con checkout.html)
-  function getCart() {
-    try { return JSON.parse(localStorage.getItem('cart') || '[]'); } catch { return []; }
-  }
-  function setCart(list) { try { localStorage.setItem('cart', JSON.stringify(list)); } catch (e) { console.error('Failed to write cart', e); } }
-  function addToCart(item) {
-    try {
-      const cart = getCart();
-      const toAdd = Object.assign({}, item, { qty: 1, total: item.total || 0 });
-      cart.push(toAdd);
-      setCart(cart);
-    } catch (e) { console.error('Failed to add to cart', e); }
-  }
-
-  document.getElementById('b-add-to-order')?.addEventListener('click', function(){
-    if (!requireLogin()) return;
-    const build = getCurrentBuild();
-    addToCart(build);
-    // Redirigir al checkout para revisar el carrito
-    window.location.href = 'checkout.html';
-  });
-</script>
-
-<!-- Modal Auth reutilizable -->
-<div id="auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-  <div class="absolute inset-0 bg-black bg-opacity-50"></div>
-  <div class="relative max-w-md w-full max-h-[90vh] bg-white border-2 border-gray-100 rounded-lg shadow-xl overflow-y-auto">
-    <div class="flex items-center justify-between px-4 py-3 border-b">
-      <h3 class="text-lg font-bold text-gray-900">Tu cuenta</h3>
-      <button id="auth-close" class="text-gray-400 hover:text-gray-600">✕</button>
-    </div>
-    <div class="px-6 pt-4">
-      <div class="flex space-x-4 mb-4">
-        <button id="tab-login" class="px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold">Ingresar</button>
-        <button id="tab-register" class="px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold">Crear cuenta</button>
-      </div>
-      <form id="form-login" class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
-          <input id="login-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Contraseña</label>
-          <input id="login-password" type="password" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-        </div>
-        <button type="submit" class="w-full bg-primary text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-90">Ingresar</button>
-        <p id="login-error" class="text-sm text-red-600 hidden">Credenciales inválidas</p>
-      </form>
-      <form id="form-register" class="space-y-4 hidden">
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Nombre</label>
-            <input id="reg-name" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Apellido</label>
-            <input id="reg-lastname" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-          </div>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Documento</label>
-          <input id="reg-document" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
-          <input id="reg-birthdate" type="date" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Teléfono</label>
-          <input id="reg-phone" type="tel" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
-          <input id="reg-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Dirección</label>
-          <input id="reg-address" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Tarjeta de Crédito/Débito</label>
-          <input id="reg-card" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="1234 5678 9012 3456">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Contraseña</label>
-          <input id="reg-password" type="password" required minlength="6" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-        </div>
-        <button type="submit" class="w-full bg-primary text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-90">Crear cuenta</button>
-      </form>
-    </div>
-    <div class="px-6 py-4 border-t text-xs text-gray-500">Al continuar aceptas nuestros Términos y Política de Privacidad.</div>
-  </div>
-</div>
-
-<script>
-  // Modal wiring
-  (function(){
-    const tabLogin=document.getElementById('tab-login');
-    const tabRegister=document.getElementById('tab-register');
-    const formLogin=document.getElementById('form-login');
-    const formRegister=document.getElementById('form-register');
-    document.getElementById('auth-close')?.addEventListener('click', ()=> document.getElementById('auth-modal').classList.add('hidden'));
-    document.getElementById('auth-modal')?.addEventListener('click', (e)=>{ if(e.target.id==='auth-modal') document.getElementById('auth-modal').classList.add('hidden'); });
-    tabLogin?.addEventListener('click', ()=>{ tabLogin.className='px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold'; tabRegister.className='px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold'; formLogin.classList.remove('hidden'); formRegister.classList.add('hidden'); });
-    tabRegister?.addEventListener('click', ()=>{ tabRegister.className='px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold'; tabLogin.className='px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold'; formRegister.classList.remove('hidden'); formLogin.classList.add('hidden'); });
-    formLogin?.addEventListener('submit', (e)=>{ e.preventDefault(); const email=document.getElementById('login-email').value.trim(); const password=document.getElementById('login-password').value.trim(); if(!email||!password){ document.getElementById('login-error').classList.remove('hidden'); return; } const user={ email, name: email.split('@')[0], loggedAt:new Date().toISOString() }; localStorage.setItem('authUser', JSON.stringify(user)); document.getElementById('auth-modal').classList.add('hidden'); });
-    formRegister?.addEventListener('submit', (e)=>{ e.preventDefault(); const name=document.getElementById('reg-name').value.trim(); const lastname=document.getElementById('reg-lastname').value.trim(); const document=document.getElementById('reg-document').value.trim(); const birthdate=document.getElementById('reg-birthdate').value.trim(); const phone=document.getElementById('reg-phone').value.trim(); const email=document.getElementById('reg-email').value.trim(); const address=document.getElementById('reg-address').value.trim(); const card=document.getElementById('reg-card').value.trim(); const password=document.getElementById('reg-password').value.trim(); if(!name||!lastname||!document||!birthdate||!phone||!email||!address||!card||password.length<6) return; const user={ email, name, lastname, document, birthdate, phone, address, card, loggedAt:new Date().toISOString(), registered:true }; localStorage.setItem('authUser', JSON.stringify(user)); document.getElementById('auth-modal').classList.add('hidden'); });
-  })();
-</script>
-
-  <footer class="bg-gray-800">
+<footer class="bg-gray-800">
     <div class="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
-      <p class="text-center text-base text-gray-400">&copy; 2025 PizzUM & BurgUM. Todos los derechos reservados.</p>
+        <p class="text-center text-base text-gray-400">&copy; 2025 PizzUM & BurgUM. Todos los derechos reservados.</p>
     </div>
-  </footer>
+</footer>
 
+<script src="api.js"></script>
+<script>
+    let componentsData = {
+        breads: [],
+        meats: [],
+        cheeses: [],
+        condiments: [],
+        toppings: []
+    };
+
+    async function loadComponents() {
+        try {
+            const [breadsRes, meatsRes, cheesesRes, condimentsRes, toppingsRes] = await Promise.all([
+                getBreadTypes(),
+                getMeatTypes(),
+                getCheeses(),
+                getCondiments(),
+                getToppings()
+            ]);
+
+            if (breadsRes.success) componentsData.breads = breadsRes.data || [];
+            if (meatsRes.success) componentsData.meats = meatsRes.data || [];
+            if (cheesesRes.success) componentsData.cheeses = cheesesRes.data || [];
+            if (condimentsRes.success) componentsData.condiments = condimentsRes.data || [];
+            if (toppingsRes.success) componentsData.toppings = toppingsRes.data || [];
+
+            renderComponents();
+        } catch (error) {
+            console.error('Error loading components:', error);
+            showToast('Error al cargar componentes: ' + error.message, 'error');
+        }
+    }
+
+    function renderComponents() {
+        renderBreads();
+        renderMeats();
+        renderCheeses();
+        renderCondiments();
+        renderToppings();
+    }
+
+    function renderBreads() {
+        const container = document.getElementById('breads-container');
+        if (!componentsData.breads.length) {
+            container.innerHTML = '<p class="text-gray-500">No hay panes disponibles</p>';
+            return;
+        }
+        container.innerHTML = componentsData.breads.map((bread, idx) => `
+        <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+          <span>${bread.name} - $${bread.price}</span>
+          <input type="radio" name="bread" value="${bread.id}" data-name="${bread.name}" data-price="${bread.price}" class="form-radio text-primary" ${idx === 0 ? 'checked' : ''}>
+        </label>
+      `).join('');
+        setupChangeListeners();
+    }
+
+    function renderMeats() {
+        const container = document.getElementById('meats-container');
+        if (!componentsData.meats.length) {
+            container.innerHTML = '<p class="text-gray-500">No hay carnes disponibles</p>';
+            return;
+        }
+        container.innerHTML = componentsData.meats.map((meat, idx) => `
+        <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+          <span>${meat.name} - $${meat.price}</span>
+          <input type="radio" name="meat" value="${meat.id}" data-name="${meat.name}" data-price="${meat.price}" class="form-radio text-primary" ${idx === 0 ? 'checked' : ''}>
+        </label>
+      `).join('');
+        setupChangeListeners();
+    }
+
+    function renderCheeses() {
+        const container = document.getElementById('cheeses-container');
+        if (!componentsData.cheeses.length) {
+            container.innerHTML = '<p class="text-gray-500">No hay quesos disponibles</p>';
+            return;
+        }
+        container.innerHTML = componentsData.cheeses.map((cheese, idx) => `
+        <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+          <span>${cheese.name} - $${cheese.price}</span>
+          <input type="checkbox" name="cheese" value="${cheese.id}" data-name="${cheese.name}" data-price="${cheese.price}" class="form-checkbox text-primary" ${idx === 0 ? 'checked' : ''}>
+        </label>
+      `).join('');
+        setupChangeListeners();
+    }
+
+    function renderCondiments() {
+        const container = document.getElementById('condiments-container');
+        if (!componentsData.condiments.length) {
+            container.innerHTML = '<p class="text-gray-500">No hay salsas disponibles</p>';
+            return;
+        }
+        container.innerHTML = componentsData.condiments.map(condiment => `
+        <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+          <span>${condiment.name} - $${condiment.price}</span>
+          <input type="checkbox" name="condiment" value="${condiment.id}" data-name="${condiment.name}" data-price="${condiment.price}" class="form-checkbox text-primary">
+        </label>
+      `).join('');
+        setupChangeListeners();
+    }
+
+    function renderToppings() {
+        const container = document.getElementById('toppings-container');
+        if (!componentsData.toppings.length) {
+            container.innerHTML = '<p class="text-gray-500">No hay extras disponibles</p>';
+            return;
+        }
+        container.innerHTML = componentsData.toppings.map(topping => `
+        <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+          <span>${topping.name} - $${topping.price}</span>
+          <input type="checkbox" name="topping" value="${topping.id}" data-name="${topping.name}" data-price="${topping.price}" class="form-checkbox text-primary">
+        </label>
+      `).join('');
+        setupChangeListeners();
+    }
+
+    function setupChangeListeners() {
+        document.querySelectorAll('input[name="bread"], input[name="meat"], input[name="cheese"], input[name="condiment"], input[name="topping"]').forEach(input => {
+            input.removeEventListener('change', updateSummary);
+            input.addEventListener('change', updateSummary);
+        });
+    }
+
+    function updateSummary() {
+        const bread = document.querySelector('input[name="bread"]:checked');
+        const meat = document.querySelector('input[name="meat"]:checked');
+        const cheeses = Array.from(document.querySelectorAll('input[name="cheese"]:checked'));
+        const condiments = Array.from(document.querySelectorAll('input[name="condiment"]:checked'));
+        const toppings = Array.from(document.querySelectorAll('input[name="topping"]:checked'));
+
+        document.getElementById('summary-bread').textContent = bread ? bread.dataset.name : '-';
+        document.getElementById('summary-meat').textContent = meat ? meat.dataset.name : '-';
+        document.getElementById('summary-cheese').textContent = cheeses.length ? cheeses.map(c => c.dataset.name).join(', ') : 'Sin queso';
+        document.getElementById('summary-condiments').textContent = condiments.length ? condiments.map(c => c.dataset.name).join(', ') : 'Ninguna';
+        document.getElementById('summary-toppings').textContent = toppings.length ? toppings.map(t => t.dataset.name).join(', ') : 'Ninguno';
+
+        calculatePrice();
+    }
+
+    function calculatePrice() {
+        let total = 0;
+
+        const bread = document.querySelector('input[name="bread"]:checked');
+        if (bread) total += parseFloat(bread.dataset.price) || 0;
+
+        const meat = document.querySelector('input[name="meat"]:checked');
+        if (meat) total += parseFloat(meat.dataset.price) || 0;
+
+        const cheeses = Array.from(document.querySelectorAll('input[name="cheese"]:checked'));
+        cheeses.forEach(cheese => {
+            total += parseFloat(cheese.dataset.price) || 0;
+        });
+
+        const condiments = Array.from(document.querySelectorAll('input[name="condiment"]:checked'));
+        condiments.forEach(condiment => {
+            total += parseFloat(condiment.dataset.price) || 0;
+        });
+
+        const toppings = Array.from(document.querySelectorAll('input[name="topping"]:checked'));
+        toppings.forEach(topping => {
+            total += parseFloat(topping.dataset.price) || 0;
+        });
+
+        document.getElementById('total-price').textContent = total.toFixed(2);
+    }
+
+    function getSelectedBurger() {
+        const bread = document.querySelector('input[name="bread"]:checked');
+        const meat = document.querySelector('input[name="meat"]:checked');
+        const cheeses = Array.from(document.querySelectorAll('input[name="cheese"]:checked'));
+        const condiments = Array.from(document.querySelectorAll('input[name="condiment"]:checked'));
+        const toppings = Array.from(document.querySelectorAll('input[name="topping"]:checked'));
+
+        return {
+            name: `Hamburguesa Personalizada`,
+            breadId: parseInt(bread?.value) || null,
+            meatId: parseInt(meat?.value) || null,
+            cheeseIds: cheeses.map(c => parseInt(c.value)),
+            condimentIds: condiments.map(c => parseInt(c.value)),
+            toppingIds: toppings.map(t => parseInt(t.value))
+        };
+    }
+
+    function showToast(message, type = 'success') {
+        const toast = document.getElementById('action-toast');
+        if (!toast) return;
+        toast.textContent = message;
+        toast.className = `ml-2 text-sm ${type === 'error' ? 'text-red-600' : 'text-green-600'} hidden`;
+        toast.classList.remove('hidden');
+        setTimeout(() => {
+            toast.classList.add('hidden');
+        }, 2000);
+    }
+
+    function isLoggedIn() {
+        return !!localStorage.getItem('authToken');
+    }
+
+    document.getElementById('add-to-favorites').addEventListener('click', async () => {
+        if (!isLoggedIn()) {
+            showToast('Debes ingresar para guardar favoritos', 'error');
+            return;
+        }
+
+        try {
+            const burger = getSelectedBurger();
+            const response = await addToFavorites({
+                itemType: 'HAMBURGER',
+                itemId: null,
+                customName: burger.name
+            });
+
+            if (response.success) {
+                showToast('¡Guardado en favoritos!');
+            } else {
+                showToast(response.message || 'Error al guardar', 'error');
+            }
+        } catch (error) {
+            showToast('Error al guardar en favoritos', 'error');
+            console.error(error);
+        }
+    });
+
+    document.getElementById('add-to-order').addEventListener('click', async () => {
+        if (!isLoggedIn()) {
+            showToast('Debes ingresar para agregar al pedido', 'error');
+            return;
+        }
+
+        const btn = document.getElementById('add-to-order');
+        btn.disabled = true;
+        btn.textContent = 'Agregando...';
+
+        try {
+            const burger = getSelectedBurger();
+
+            // Step 1: Create the hamburger first
+            const createResponse = await createHamburger(burger);
+
+            if (!createResponse.success) {
+                showToast(createResponse.message || 'Error al crear hamburguesa', 'error');
+                btn.disabled = false;
+                btn.textContent = 'Agregar al Pedido';
+                return;
+            }
+
+            const burgerId = createResponse.data?.id;
+            if (!burgerId) {
+                showToast('Error: No se obtuvo ID de hamburguesa', 'error');
+                btn.disabled = false;
+                btn.textContent = 'Agregar al Pedido';
+                return;
+            }
+
+            // Step 2: Add to cart using the created hamburger ID
+            const cartResponse = await addToCart({
+                itemType: 'HAMBURGER',
+                itemId: burgerId,
+                quantity: 1
+            });
+
+            if (cartResponse.success) {
+                showToast('¡Agregado al pedido!');
+                setTimeout(() => {
+                    window.location.href = 'checkout.html';
+                }, 1000);
+            } else {
+                showToast(cartResponse.message || 'Error al agregar', 'error');
+                btn.disabled = false;
+                btn.textContent = 'Agregar al Pedido';
+            }
+        } catch (error) {
+            showToast('Error: ' + error.message, 'error');
+            console.error('Add to cart error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Agregar al Pedido';
+        }
+    });
+
+    loadComponents();
+</script>
 </body>
 </html>
-
-
-
-
-
-
-
