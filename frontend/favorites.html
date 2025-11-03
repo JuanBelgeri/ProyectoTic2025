@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Favoritos | PizzUM & BurgUM</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF0000',
+                        secondary: '#000000',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html, body { 
+            height:100%; 
+            margin:0; 
+            padding:0; 
+            display: flex;
+            flex-direction: column;
+        }
+        body { 
+            overflow-x:hidden; 
+        }
+        main {
+            flex: 1;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #FF0000; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans custom-scrollbar">
+
+<!-- Navigation -->
+<nav class="bg-gradient-to-r from-primary to-secondary shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="text-xl font-bold text-white">PizzUM & BurgUM</span>
+                </div>
+            </div>
+            <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+                <a href="home.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
+                <a href="builder.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Crea tu pedido</a>
+                <a href="orden.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Mis Pedidos</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Header -->
+<header class="bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900">Mis Favoritos</h1>
+        <p class="mt-2 text-gray-600">Tus creaciones guardadas para pedir rápidamente.</p>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 min-h-[60vh]">
+    <!-- Loading State -->
+    <div id="loading-state" class="text-center text-gray-500 py-12">
+        <p>Cargando favoritos...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="hidden text-center py-12">
+        <div class="mx-auto w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+            <svg viewBox="0 0 24 24" class="w-12 h-12 text-gray-400">
+                <path fill="currentColor" d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">No tienes favoritos aún</h2>
+        <p class="text-gray-600 mb-6">Guarda tus creaciones favoritas mientras construyes pizzas o hamburguesas.</p>
+        <a href="builder.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-opacity-90">
+            Crear una pizza o hamburguesa
+        </a>
+    </div>
+
+    <!-- Favorites Grid -->
+    <div id="favorites-container" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Favorites will be injected here -->
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-gray-800 mt-auto">
+    <div class="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
+        <p class="text-center text-base text-gray-400">&copy; 2025 PizzUM & BurgUM. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<!-- Auth Modal -->
+<div id="auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+    <div class="relative max-w-md w-full max-h-[90vh] bg-white border-2 border-gray-100 rounded-lg shadow-xl overflow-y-auto">
+        <div class="flex items-center justify-between px-4 py-3 border-b">
+            <h3 class="text-lg font-bold text-gray-900">Tu cuenta</h3>
+            <button id="auth-close" class="text-gray-400 hover:text-gray-600">✕</button>
+        </div>
+        <div class="px-6 pt-4">
+            <div class="flex space-x-4 mb-4">
+                <button id="tab-login" class="px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold">Ingresar</button>
+                <button id="tab-register" class="px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold">Crear cuenta</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="form-login" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+                    <input id="login-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="tu@email.com">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+                    <input id="login-password" type="password" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="••••••••">
+                </div>
+                <button type="submit" id="login-submit-btn" class="w-full bg-primary text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-90">Ingresar</button>
+                <p id="login-error" class="text-sm text-red-600 hidden"></p>
+            </form>
+
+            <!-- Register Form -->
+            <form id="form-register" class="space-y-4 hidden">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                        <input id="reg-firstName" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Tu nombre">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Apellido</label>
+                        <input id="reg-lastName" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Tu apellido">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Documento</label>
+                    <input id="reg-document" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="12345678">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
+                    <input id="reg-birthDate" type="date" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Teléfono</label>
+                    <input id="reg-phone" type="tel" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="+54 9 11 1234-5678">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+                    <input id="reg-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="tu@email.com">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Calle</label>
+                    <input id="reg-street" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Calle principal">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Número</label>
+                        <input id="reg-number" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="123">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Apartamento</label>
+                        <input id="reg-apartment" type="text" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Opcional">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Ciudad</label>
+                        <input id="reg-city" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Ciudad">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Código postal</label>
+                        <input id="reg-postalCode" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="12345">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Información adicional (opcional)</label>
+                    <input id="reg-addressAdditionalInfo" type="text" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Ej: puerta azul">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Tipo de tarjeta</label>
+                    <select id="reg-paymentType" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+                        <option value="">Selecciona tipo</option>
+                        <option value="CREDIT">Crédito</option>
+                        <option value="DEBIT">Débito</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Nombre del titular</label>
+                    <input id="reg-cardHolder" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Nombre completo">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Número de tarjeta</label>
+                    <input id="reg-cardNumber" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="1234 5678 9012 3456">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Vencimiento (MM/YY)</label>
+                        <input id="reg-expirationDate" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="12/26">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+                    <input id="reg-password" type="password" required minlength="8" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Mínimo 8 caracteres">
+                </div>
+                <button type="submit" id="register-submit-btn" class="w-full bg-primary text-white px-4 py-2 rounded-md font-bold hover:bg-opacity-90">Crear cuenta</button>
+                <p id="register-error" class="text-sm text-red-600 hidden"></p>
+            </form>
+        </div>
+        <div class="px-6 py-4 border-t text-xs text-gray-500">Al continuar aceptas nuestros Términos y Política de Privacidad.</div>
+    </div>
+</div>
+
+<script src="api.js"></script>
+<script>
+    function isLoggedIn() {
+        return !!localStorage.getItem('authToken');
+    }
+
+    function openAuthModal() {
+        document.getElementById('auth-modal').classList.remove('hidden');
+    }
+
+    function closeAuthModal() {
+        document.getElementById('auth-modal').classList.add('hidden');
+    }
+
+    function formatDate(dateString) {
+        if (!dateString) return 'Fecha desconocida';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('es-ES', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    function renderFavoriteCard(favorite, itemDetails = null) {
+        const badge = favorite.itemType === 'HAMBURGER' ? '🍔' : favorite.itemType === 'PIZZA' ? '🍕' : '🧾';
+        const typeText = favorite.itemType === 'HAMBURGER' ? 'Hamburguesa' : 'Pizza';
+        
+        // Build ingredients list
+        let ingredientsHtml = '';
+        if (itemDetails && itemDetails.success && itemDetails.data) {
+            const item = itemDetails.data;
+            if (favorite.itemType === 'PIZZA') {
+                const ingredients = [];
+                if (item.sizeName && item.sizeName !== 'None') ingredients.push(`<strong>Tamaño:</strong> ${item.sizeName}`);
+                if (item.doughName && item.doughName !== 'None') ingredients.push(`<strong>Masa:</strong> ${item.doughName}`);
+                if (item.sauceName && item.sauceName !== 'None') ingredients.push(`<strong>Salsa:</strong> ${item.sauceName}`);
+                if (item.cheeseName && item.cheeseName !== 'None') ingredients.push(`<strong>Queso:</strong> ${item.cheeseName}`);
+                if (item.toppings && item.toppings !== 'None') {
+                    const toppingsList = item.toppings.split(',').map(t => t.trim()).join(', ');
+                    ingredients.push(`<strong>Toppings:</strong> ${toppingsList}`);
+                }
+                if (ingredients.length > 0) {
+                    ingredientsHtml = `
+                        <div class="mt-3 pt-3 border-t border-gray-200">
+                            <p class="text-xs font-semibold text-gray-700 mb-2">Ingredientes:</p>
+                            <div class="text-xs text-gray-600 space-y-1">
+                                ${ingredients.map(ing => `<div>${ing}</div>`).join('')}
+                            </div>
+                            ${item.totalPrice ? `<p class="mt-2 text-sm font-bold text-primary">Precio: $${parseFloat(item.totalPrice).toFixed(2)}</p>` : ''}
+                        </div>
+                    `;
+                }
+            } else if (favorite.itemType === 'HAMBURGER') {
+                const ingredients = [];
+                if (item.breadName && item.breadName !== 'None') ingredients.push(`<strong>Pan:</strong> ${item.breadName}`);
+                if (item.meatName && item.meatName !== 'None') ingredients.push(`<strong>Carne:</strong> ${item.meatName}`);
+                if (item.cheeseName && item.cheeseName !== 'None') ingredients.push(`<strong>Queso:</strong> ${item.cheeseName}`);
+                if (item.toppings && item.toppings !== 'None') {
+                    const toppingsList = item.toppings.split(',').map(t => t.trim()).join(', ');
+                    ingredients.push(`<strong>Toppings:</strong> ${toppingsList}`);
+                }
+                if (item.condiments && item.condiments !== 'None') {
+                    const condimentsList = item.condiments.split(',').map(c => c.trim()).join(', ');
+                    ingredients.push(`<strong>Condimentos:</strong> ${condimentsList}`);
+                }
+                if (ingredients.length > 0) {
+                    ingredientsHtml = `
+                        <div class="mt-3 pt-3 border-t border-gray-200">
+                            <p class="text-xs font-semibold text-gray-700 mb-2">Ingredientes:</p>
+                            <div class="text-xs text-gray-600 space-y-1">
+                                ${ingredients.map(ing => `<div>${ing}</div>`).join('')}
+                            </div>
+                            ${item.totalPrice ? `<p class="mt-2 text-sm font-bold text-primary">Precio: $${parseFloat(item.totalPrice).toFixed(2)}</p>` : ''}
+                        </div>
+                    `;
+                }
+            }
+        } else {
+            ingredientsHtml = `
+                <div class="mt-3 pt-3 border-t border-gray-200">
+                    <p class="text-xs text-gray-500 italic">Cargando ingredientes...</p>
+                </div>
+            `;
+        }
+        
+        const card = document.createElement('div');
+        card.className = 'bg-white border-2 border-gray-100 rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow';
+        card.id = `favorite-${favorite.id}`;
+        
+        card.innerHTML = `
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-4xl">${badge}</span>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-bold text-gray-900">${favorite.customName || 'Sin nombre'}</h3>
+                        <p class="text-sm text-gray-500">${typeText}</p>
+                    </div>
+                </div>
+            </div>
+            
+            ${ingredientsHtml}
+            
+            <div class="mb-4 pt-4 border-t border-gray-200">
+                <p class="text-xs text-gray-500">
+                    <svg class="inline w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Guardado el ${formatDate(favorite.addedAt)}
+                </p>
+            </div>
+            
+            <div class="flex gap-2 mt-4">
+                <button 
+                    class="add-to-cart-btn flex-1 inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-opacity-90 transition"
+                    data-favorite-id="${favorite.id}"
+                    data-item-type="${favorite.itemType}"
+                    data-item-id="${favorite.itemId}">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    Agregar al carrito
+                </button>
+                <button 
+                    class="remove-favorite-btn inline-flex items-center justify-center px-4 py-2 border border-red-300 text-sm font-medium rounded-md text-red-600 bg-white hover:bg-red-50 transition"
+                    data-favorite-id="${favorite.id}">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                </button>
+            </div>
+        `;
+        
+        return card;
+    }
+
+    function showToast(message, type = 'success') {
+        // Create toast notification
+        const toast = document.createElement('div');
+        toast.className = `fixed top-20 right-4 px-6 py-3 rounded-lg shadow-lg z-50 ${
+            type === 'error' ? 'bg-red-600' : 'bg-green-600'
+        } text-white font-medium transition-opacity`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    async function loadItemDetails(favorite) {
+        try {
+            if (favorite.itemType === 'PIZZA') {
+                const response = await getPizzaById(favorite.itemId);
+                return response;
+            } else if (favorite.itemType === 'HAMBURGER') {
+                const response = await getHamburgerById(favorite.itemId);
+                return response;
+            }
+            return null;
+        } catch (error) {
+            console.error('Error loading item details:', error);
+            return null;
+        }
+    }
+
+    async function loadFavorites() {
+        const loadingState = document.getElementById('loading-state');
+        const emptyState = document.getElementById('empty-state');
+        const container = document.getElementById('favorites-container');
+        
+        if (!isLoggedIn()) {
+            showToast('Debes iniciar sesión para ver tus favoritos', 'error');
+            openAuthModal();
+            return;
+        }
+
+        try {
+            const favorites = await getFavorites();
+            
+            loadingState.classList.add('hidden');
+            
+            if (!favorites || favorites.length === 0) {
+                emptyState.classList.remove('hidden');
+                container.classList.add('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            container.classList.remove('hidden');
+            container.innerHTML = '';
+
+            // Load all item details in parallel
+            const itemDetailsPromises = favorites.map(favorite => loadItemDetails(favorite));
+            const itemDetailsResults = await Promise.all(itemDetailsPromises);
+
+            // Render cards with their ingredient details
+            favorites.forEach((favorite, index) => {
+                const itemDetails = itemDetailsResults[index];
+                const card = renderFavoriteCard(favorite, itemDetails);
+                container.appendChild(card);
+            });
+
+            // Event listeners are handled via event delegation in document.addEventListener
+
+        } catch (error) {
+            console.error('Error loading favorites:', error);
+            loadingState.classList.add('hidden');
+            emptyState.classList.remove('hidden');
+            emptyState.querySelector('h2').textContent = 'Error al cargar favoritos';
+            emptyState.querySelector('p').textContent = error.message;
+        }
+    }
+
+    // Use event delegation to handle clicks on dynamically added buttons
+    document.addEventListener('click', async (e) => {
+        const container = document.getElementById('favorites-container');
+        if (!container || !container.contains(e.target)) return;
+
+        // Handle add to cart
+        const addToCartBtn = e.target.closest('.add-to-cart-btn');
+        if (addToCartBtn && !addToCartBtn.disabled) {
+            const favoriteId = addToCartBtn.dataset.favoriteId;
+            const itemType = addToCartBtn.dataset.itemType;
+            const itemId = addToCartBtn.dataset.itemId;
+            
+            addToCartBtn.disabled = true;
+            addToCartBtn.innerHTML = '<span class="animate-spin">⏳</span>';
+
+            try {
+                const response = await addToCart({
+                    itemType: itemType,
+                    itemId: parseInt(itemId),
+                    quantity: 1
+                });
+
+                if (response.success) {
+                    showToast('¡Agregado al carrito!', 'success');
+                    addToCartBtn.disabled = false;
+                    addToCartBtn.innerHTML = `
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        Agregar al carrito
+                    `;
+                } else {
+                    showToast(response.message || 'Error al agregar al carrito', 'error');
+                    addToCartBtn.disabled = false;
+                    addToCartBtn.innerHTML = `
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        Agregar al carrito
+                    `;
+                }
+            } catch (error) {
+                showToast('Error al agregar al carrito: ' + error.message, 'error');
+                addToCartBtn.disabled = false;
+                addToCartBtn.innerHTML = `
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    Agregar al carrito
+                `;
+            }
+            return;
+        }
+
+        // Handle remove favorite
+        const removeBtn = e.target.closest('.remove-favorite-btn');
+        if (removeBtn && !removeBtn.disabled) {
+            const favoriteId = removeBtn.dataset.favoriteId;
+            
+            if (!confirm('¿Estás seguro de que quieres eliminar este favorito?')) {
+                return;
+            }
+
+            removeBtn.disabled = true;
+            removeBtn.innerHTML = '<span class="animate-spin">⏳</span>';
+
+            try {
+                const response = await removeFromFavorites(parseInt(favoriteId));
+
+                if (response.success) {
+                    // Remove card from DOM
+                    const card = document.getElementById(`favorite-${favoriteId}`);
+                    if (card) {
+                        card.style.opacity = '0';
+                        card.style.transition = 'opacity 0.3s';
+                        setTimeout(() => card.remove(), 300);
+                        
+                        // Check if no favorites left
+                        setTimeout(() => {
+                            const container = document.getElementById('favorites-container');
+                            if (container && container.children.length === 0) {
+                                container.classList.add('hidden');
+                                document.getElementById('empty-state').classList.remove('hidden');
+                            }
+                        }, 300);
+                    }
+                    showToast('Eliminado de favoritos', 'success');
+                } else {
+                    showToast(response.message || 'Error al eliminar', 'error');
+                    removeBtn.disabled = false;
+                    removeBtn.innerHTML = `
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                    `;
+                }
+            } catch (error) {
+                showToast('Error al eliminar: ' + error.message, 'error');
+                removeBtn.disabled = false;
+                removeBtn.innerHTML = `
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                `;
+            }
+            return;
+        }
+    });
+
+    // Auth Modal Setup
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const formLogin = document.getElementById('form-login');
+    const formRegister = document.getElementById('form-register');
+
+    if (tabLogin && tabRegister && formLogin && formRegister) {
+        tabLogin.addEventListener('click', () => {
+            tabLogin.className = 'px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold';
+            tabRegister.className = 'px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold';
+            formLogin.classList.remove('hidden');
+            formRegister.classList.add('hidden');
+        });
+
+        tabRegister.addEventListener('click', () => {
+            tabRegister.className = 'px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold';
+            tabLogin.className = 'px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold';
+            formRegister.classList.remove('hidden');
+            formLogin.classList.add('hidden');
+        });
+
+        document.getElementById('auth-close').addEventListener('click', closeAuthModal);
+        document.getElementById('auth-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'auth-modal') closeAuthModal();
+        });
+
+        document.getElementById('form-login').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+            const errorElement = document.getElementById('login-error');
+            const submitBtn = document.getElementById('login-submit-btn');
+
+            if (!email || !password) {
+                errorElement.textContent = 'Por favor completa todos los campos';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Ingresando...';
+                errorElement.classList.add('hidden');
+
+                const response = await loginUser(email, password);
+
+                if (response.success) {
+                    formLogin.reset();
+                    submitBtn.textContent = 'Ingresar';
+                    submitBtn.disabled = false;
+                    closeAuthModal();
+                    showToast('¡Bienvenido! Ya puedes ver tus favoritos.', 'success');
+                    loadFavorites(); // Reload favorites after login
+                } else {
+                    errorElement.textContent = response.message || 'Error al ingresar';
+                    errorElement.classList.remove('hidden');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Ingresar';
+                }
+            } catch (error) {
+                errorElement.textContent = 'Credenciales inválidas o error de conexión';
+                errorElement.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Ingresar';
+            }
+        });
+
+        document.getElementById('form-register').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const firstName = document.getElementById('reg-firstName').value.trim();
+            const lastName = document.getElementById('reg-lastName').value.trim();
+            const document_val = document.getElementById('reg-document').value.trim();
+            const birthDate = document.getElementById('reg-birthDate').value.trim();
+            const phone = document.getElementById('reg-phone').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const street = document.getElementById('reg-street').value.trim();
+            const number = document.getElementById('reg-number').value.trim();
+            const apartment = document.getElementById('reg-apartment').value.trim();
+            const city = document.getElementById('reg-city').value.trim();
+            const postalCode = document.getElementById('reg-postalCode').value.trim();
+            const addressAdditionalInfo = document.getElementById('reg-addressAdditionalInfo').value.trim();
+            const paymentType = document.getElementById('reg-paymentType').value.trim();
+            const cardHolder = document.getElementById('reg-cardHolder').value.trim();
+            const cardNumber = document.getElementById('reg-cardNumber').value.trim();
+            const expirationDate = document.getElementById('reg-expirationDate').value.trim();
+            const password = document.getElementById('reg-password').value.trim();
+
+            const errorElement = document.getElementById('register-error');
+            const submitBtn = document.getElementById('register-submit-btn');
+
+            if (!firstName || !lastName || !document_val || !birthDate || !phone || !email || !street || !number || !city || !postalCode || !paymentType || !cardHolder || !cardNumber || !expirationDate || password.length < 8) {
+                errorElement.textContent = 'Por favor completa todos los campos requeridos';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            const userData = {
+                firstName: firstName,
+                lastName: lastName,
+                document: document_val,
+                birthDate: birthDate,
+                phone: phone,
+                email: email,
+                street: street,
+                number: number,
+                apartment: apartment,
+                city: city,
+                postalCode: postalCode,
+                addressAdditionalInfo: addressAdditionalInfo,
+                paymentType: paymentType,
+                cardNumber: cardNumber,
+                cardHolder: cardHolder,
+                expirationDate: expirationDate,
+                password: password,
+            };
+
+            try {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Creando cuenta...';
+                errorElement.classList.add('hidden');
+
+                const response = await registerClient(userData);
+
+                if (response.success) {
+                    formRegister.reset();
+                    submitBtn.textContent = 'Crear cuenta';
+                    submitBtn.disabled = false;
+                    closeAuthModal();
+                    showToast('¡Cuenta creada! Ya puedes ver tus favoritos.', 'success');
+                    loadFavorites(); // Reload favorites after registration
+                } else {
+                    errorElement.textContent = response.message || 'Error al crear cuenta';
+                    errorElement.classList.remove('hidden');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Crear cuenta';
+                }
+            } catch (error) {
+                errorElement.textContent = 'Error al crear cuenta: ' + error.message;
+                errorElement.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Crear cuenta';
+            }
+        });
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        if (window.feather) {
+            feather.replace();
+        }
+        loadFavorites();
+    });
+</script>
+</body>
+</html>
+
