@@ -55,6 +55,59 @@
                     Carrito
                     <span id="cart-badge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"></span>
                 </a>
+                <!-- User Profile Dropdown (only visible when logged in) -->
+                <div id="user-profile-menu" class="relative hidden">
+                    <button id="user-profile-btn" class="flex items-center text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium focus:outline-none transition-colors">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                        Mi Cuenta
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div id="user-profile-dropdown" class="hidden absolute right-0 mt-2 w-64 rounded-lg shadow-xl bg-white border-2 border-gray-100 z-50 overflow-hidden transition-all duration-200">
+                        <div class="py-2" role="menu">
+                            <!-- Client-only options -->
+                            <a href="orden.html" id="dropdown-orders" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                                <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                </svg>
+                                Mis Pedidos
+                            </a>
+                            <a href="favorites.html" id="dropdown-favorites" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                                <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                                Favoritos
+                            </a>
+                            <a href="account.html#addresses" id="dropdown-addresses" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                                <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                Editar Domicilios
+                            </a>
+                            <a href="account.html#payments" id="dropdown-payments" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                                <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                </svg>
+                                Editar Medios de Pago
+                            </a>
+                            <div id="dropdown-divider" class="border-t border-gray-200 my-1 hidden"></div>
+                            <button id="profile-logout-btn" class="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-primary transition-colors duration-150 group" role="menuitem">
+                                <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                </svg>
+                                Cerrar sesión
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button id="nav-auth-btn" class="bg-white text-primary px-4 py-2 rounded-full font-bold hover:bg-gray-100 transition duration-300">
+                    Ingresar
+                </button>
             </div>
             <div class="md:hidden flex items-center">
                 <button aria-controls="mobile-menu" class="text-white hover:text-gray-200 focus:outline-none">
@@ -808,7 +861,94 @@
         });
     }
 
+    function updateAuthButton() {
+        const authBtn = document.getElementById('nav-auth-btn');
+        const userProfileMenu = document.getElementById('user-profile-menu');
+        
+        if (isLoggedIn()) {
+            // Show user profile menu, hide auth button
+            if (userProfileMenu) userProfileMenu.classList.remove('hidden');
+            if (authBtn) authBtn.classList.add('hidden');
+        } else {
+            // Hide user profile menu, show auth button
+            if (userProfileMenu) userProfileMenu.classList.add('hidden');
+            if (authBtn) {
+                authBtn.classList.remove('hidden');
+                authBtn.textContent = 'Ingresar';
+            }
+        }
+    }
+
+    // Function to update dropdown based on user role
+    function updateDropdownForRole() {
+        const dropdownOrders = document.getElementById('dropdown-orders');
+        const dropdownFavorites = document.getElementById('dropdown-favorites');
+        const dropdownAddresses = document.getElementById('dropdown-addresses');
+        const dropdownPayments = document.getElementById('dropdown-payments');
+        const dropdownDivider = document.getElementById('dropdown-divider');
+        
+        if (!dropdownOrders || !dropdownFavorites || !dropdownAddresses || !dropdownPayments) return;
+        
+        const userIsAdmin = isLoggedIn() && typeof isAdmin === 'function' && isAdmin();
+        
+        if (userIsAdmin) {
+            // Admin: Hide all client options
+            dropdownOrders.classList.add('hidden');
+            dropdownFavorites.classList.add('hidden');
+            dropdownAddresses.classList.add('hidden');
+            dropdownPayments.classList.add('hidden');
+            if (dropdownDivider) dropdownDivider.classList.add('hidden');
+        } else {
+            // Client: Show all options
+            dropdownOrders.classList.remove('hidden');
+            dropdownFavorites.classList.remove('hidden');
+            dropdownAddresses.classList.remove('hidden');
+            dropdownPayments.classList.remove('hidden');
+            if (dropdownDivider) dropdownDivider.classList.remove('hidden');
+        }
+    }
+
+    // User profile dropdown toggle
+    const userProfileBtn = document.getElementById('user-profile-btn');
+    const userProfileDropdown = document.getElementById('user-profile-dropdown');
+    const profileLogoutBtn = document.getElementById('profile-logout-btn');
+    
+    if (userProfileBtn && userProfileDropdown) {
+        userProfileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            updateDropdownForRole(); // Update dropdown before showing
+            userProfileDropdown.classList.toggle('hidden');
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!userProfileBtn.contains(e.target) && !userProfileDropdown.contains(e.target)) {
+                userProfileDropdown.classList.add('hidden');
+            }
+        });
+    }
+    
+    if (profileLogoutBtn) {
+        profileLogoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            logoutUser();
+            updateAuthButton();
+            window.location.href = 'home.html';
+        });
+    }
+
+    document.getElementById('nav-auth-btn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (isLoggedIn()) {
+            logoutUser();
+            updateAuthButton();
+            window.location.href = 'home.html';
+        } else {
+            openAuthModal();
+        }
+    });
+
     loadComponents();
+    updateAuthButton();
     if (isLoggedIn()) {
         updateCartBadge();
     }

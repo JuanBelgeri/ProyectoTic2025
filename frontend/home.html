@@ -63,8 +63,7 @@
                 </div>
             </div>
             <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
-                <a href="builder.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Crea tu pedido</a>
-                <a href="favorites.html" id="favorites-link" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium hidden">Favoritos</a>
+                <a href="builder.html" id="builder-link" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Crea tu pedido</a>
                 <a href="checkout.html" id="cart-link" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium hidden relative">
                     <svg class="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -72,9 +71,59 @@
                     Carrito
                     <span id="cart-badge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"></span>
                 </a>
-                <button id="register-admin-btn" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium hidden bg-blue-600 hover:bg-blue-700">
-                    Registrar Admin
-                </button>
+                <a href="admin.html" id="admin-panel-link" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium hidden bg-blue-600 hover:bg-blue-700">
+                    Panel Admin
+                </a>
+                <!-- User Profile Dropdown (only visible when logged in) -->
+                <div id="user-profile-menu" class="relative hidden">
+                    <button id="user-profile-btn" class="flex items-center text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium focus:outline-none">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                        Mi Cuenta
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div id="user-profile-dropdown" class="hidden absolute right-0 mt-2 w-64 rounded-lg shadow-xl bg-white border-2 border-gray-100 z-50 overflow-hidden transition-all duration-200">
+                        <div class="py-2" role="menu">
+                            <!-- Client-only options -->
+                            <a href="orden.html" id="dropdown-orders" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                                <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                </svg>
+                                Mis Pedidos
+                            </a>
+                            <a href="favorites.html" id="dropdown-favorites" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                                <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                                Favoritos
+                            </a>
+                            <a href="account.html#addresses" id="dropdown-addresses" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                                <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                Editar Domicilios
+                            </a>
+                            <a href="account.html#payments" id="dropdown-payments" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                                <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                </svg>
+                                Editar Medios de Pago
+                            </a>
+                            <div id="dropdown-divider" class="border-t border-gray-200 my-1 hidden"></div>
+                            <button id="profile-logout-btn" class="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-primary transition-colors duration-150 group" role="menuitem">
+                                <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                </svg>
+                                Cerrar sesión
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <button id="nav-auth-btn" class="bg-white text-primary px-4 py-2 rounded-full font-bold hover:bg-gray-100 transition duration-300">
                     Ingresar
                 </button>
@@ -103,7 +152,7 @@
                     </p>
                     <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                         <div class="rounded-md shadow">
-                            <a href="builder.html" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-opacity-80 md:py-4 md:text-lg md:px-10">
+                            <a href="builder.html" id="hero-builder-link" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-opacity-80 md:py-4 md:text-lg md:px-10">
                                 Empieza a crear
                             </a>
                         </div>
@@ -188,7 +237,7 @@
         </h2>
         <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0">
             <div class="inline-flex rounded-md shadow">
-                <a href="builder.html" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white hover:bg-gray-100">
+                <a href="builder.html" id="section-builder-link" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white hover:bg-gray-100">
                     Empieza a Crear
                 </a>
             </div>
@@ -222,13 +271,10 @@
             <a href="home.html" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
                 Home
             </a>
-            <a href="builder.html" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
+            <a href="builder.html" id="mobile-builder-link" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md">
                 Crea tu pedido
             </a>
 
-            <a href="favorites.html" id="mobile-favorites-link" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md hidden">
-                Favoritos
-            </a>
             <a href="checkout.html" id="mobile-cart-link" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-md hidden">
                 Carrito
             </a>
@@ -359,83 +405,6 @@
     </div>
 </div>
 
-<!-- Register Admin Modal -->
-<div id="register-admin-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
-    <div class="relative max-w-2xl w-full max-h-[90vh] bg-white border-2 border-gray-100 rounded-lg shadow-xl overflow-y-auto">
-        <div class="flex items-center justify-between px-4 py-3 border-b">
-            <h3 class="text-lg font-bold text-gray-900">Registrar nuevo Administrador</h3>
-            <button id="admin-modal-close" class="text-gray-400 hover:text-gray-600">✕</button>
-        </div>
-        <div class="px-6 pt-4">
-            <form id="form-register-admin" class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Nombre</label>
-                        <input id="admin-firstName" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Nombre">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Apellido</label>
-                        <input id="admin-lastName" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Apellido">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Documento</label>
-                    <input id="admin-document" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="12345678">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
-                    <input id="admin-birthDate" type="date" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Teléfono</label>
-                    <input id="admin-phone" type="tel" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="+54 9 11 1234-5678">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
-                    <input id="admin-email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="admin@email.com">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Calle</label>
-                    <input id="admin-street" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Calle principal">
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Número</label>
-                        <input id="admin-number" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="123">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Apartamento</label>
-                        <input id="admin-apartment" type="text" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Opcional">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Ciudad</label>
-                        <input id="admin-city" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Ciudad">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Código postal</label>
-                        <input id="admin-postalCode" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="12345">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Información adicional (opcional)</label>
-                    <input id="admin-addressAdditionalInfo" type="text" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Ej: puerta azul">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Contraseña</label>
-                    <input id="admin-password" type="password" required minlength="8" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Mínimo 8 caracteres">
-                </div>
-                <button type="submit" id="register-admin-submit-btn" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md font-bold hover:bg-blue-700">Registrar Administrador</button>
-                <p id="register-admin-error" class="text-sm text-red-600 hidden"></p>
-                <p id="register-admin-success" class="text-sm text-green-600 hidden"></p>
-            </form>
-        </div>
-        <div class="px-6 py-4 border-t text-xs text-gray-500">Solo usuarios administradores activos pueden registrar nuevos administradores.</div>
-    </div>
-</div>
-
 <script src="api.js"></script>
 <script>
     function isLoggedIn() {
@@ -454,6 +423,11 @@
     async function updateCartBadge() {
         const cartLink = document.getElementById('cart-link');
         const cartBadge = document.getElementById('cart-badge');
+        
+        // Don't update cart badge for admins
+        if (typeof isAdmin === 'function' && isAdmin()) {
+            return;
+        }
         
         if (!isLoggedIn() || !cartLink) {
             if (cartLink) cartLink.classList.add('hidden');
@@ -481,47 +455,84 @@
     function updateNavButtons() {
         const navBtn = document.getElementById('nav-auth-btn');
         const mobileBtn = document.getElementById('mobile-auth-btn');
-        const favoritesLink = document.getElementById('favorites-link');
-        const mobileFavoritesLink = document.getElementById('mobile-favorites-link');
         const mobileCartLink = document.getElementById('mobile-cart-link');
-        const registerAdminBtn = document.getElementById('register-admin-btn');
+        const cartLink = document.getElementById('cart-link');
+        const builderLink = document.getElementById('builder-link');
+        const mobileBuilderLink = document.getElementById('mobile-builder-link');
+        const heroBuilderLink = document.getElementById('hero-builder-link');
+        const sectionBuilderLink = document.getElementById('section-builder-link');
+        const adminPanelLink = document.getElementById('admin-panel-link');
+        const userProfileMenu = document.getElementById('user-profile-menu');
+        const navAuthBtn = document.getElementById('nav-auth-btn');
 
         if (!navBtn || !mobileBtn) {
             console.error('Navigation buttons not found');
             return;
         }
 
-        if (isLoggedIn()) {
+        // Always hide admin panel link first, then show if needed
+        if (adminPanelLink) adminPanelLink.classList.add('hidden');
+
+        // Check if user is logged in
+        const loggedIn = isLoggedIn();
+        
+        // Check if user is admin (only if logged in)
+        let userIsAdmin = false;
+        if (loggedIn) {
+            try {
+                userIsAdmin = typeof isAdmin === 'function' && isAdmin();
+            } catch (e) {
+                console.error('Error checking admin status:', e);
+            }
+        }
+
+        if (loggedIn) {
             if (navBtn) navBtn.textContent = 'Cerrar sesión';
             if (mobileBtn) mobileBtn.textContent = 'Cerrar sesión';
-            if (favoritesLink) favoritesLink.classList.remove('hidden');
-            if (mobileFavoritesLink) mobileFavoritesLink.classList.remove('hidden');
-            if (mobileCartLink) mobileCartLink.classList.remove('hidden');
             
-            // Show register admin button only for admins
-            if (registerAdminBtn) {
-                try {
-                    if (typeof isAdmin === 'function' && isAdmin()) {
-                        registerAdminBtn.classList.remove('hidden');
-                    } else {
-                        registerAdminBtn.classList.add('hidden');
-                    }
-                } catch (e) {
-                    console.error('Error checking admin status:', e);
-                    registerAdminBtn.classList.add('hidden');
-                }
+            // Show user profile menu, hide auth button
+            if (userProfileMenu) userProfileMenu.classList.remove('hidden');
+            if (navAuthBtn) navAuthBtn.classList.add('hidden');
+            
+            if (userIsAdmin) {
+                // Admin: Hide client features, show admin features
+                if (mobileCartLink) mobileCartLink.classList.add('hidden');
+                if (cartLink) cartLink.classList.add('hidden');
+                if (builderLink) builderLink.classList.add('hidden');
+                if (mobileBuilderLink) mobileBuilderLink.classList.add('hidden');
+                if (heroBuilderLink) heroBuilderLink.classList.add('hidden');
+                if (sectionBuilderLink) sectionBuilderLink.classList.add('hidden');
+                
+                if (adminPanelLink) adminPanelLink.classList.remove('hidden');
+            } else {
+                // Client: Show client features, hide admin features
+                if (mobileCartLink) mobileCartLink.classList.remove('hidden');
+                if (cartLink) cartLink.classList.remove('hidden');
+                if (builderLink) builderLink.classList.remove('hidden');
+                if (mobileBuilderLink) mobileBuilderLink.classList.remove('hidden');
+                if (heroBuilderLink) heroBuilderLink.classList.remove('hidden');
+                if (sectionBuilderLink) sectionBuilderLink.classList.remove('hidden');
+                
+                // Admin panel link already hidden above
+                updateCartBadge();
             }
-            
-            updateCartBadge();
         } else {
+            // Not logged in: Hide everything except builder links
             if (navBtn) navBtn.textContent = 'Ingresar';
             if (mobileBtn) mobileBtn.textContent = 'Ingresar';
-            if (favoritesLink) favoritesLink.classList.add('hidden');
-            if (mobileFavoritesLink) mobileFavoritesLink.classList.add('hidden');
             if (mobileCartLink) mobileCartLink.classList.add('hidden');
-            if (registerAdminBtn) registerAdminBtn.classList.add('hidden');
-            const cartLink = document.getElementById('cart-link');
             if (cartLink) cartLink.classList.add('hidden');
+            // Admin panel link already hidden above
+            
+            // Hide user profile menu, show auth button
+            if (userProfileMenu) userProfileMenu.classList.add('hidden');
+            if (navAuthBtn) navAuthBtn.classList.remove('hidden');
+            
+            // Builder links should be visible when not logged in
+            if (builderLink) builderLink.classList.remove('hidden');
+            if (mobileBuilderLink) mobileBuilderLink.classList.remove('hidden');
+            if (heroBuilderLink) heroBuilderLink.classList.remove('hidden');
+            if (sectionBuilderLink) sectionBuilderLink.classList.remove('hidden');
         }
     }
 
@@ -535,7 +546,10 @@
                     e.preventDefault();
                     if (isLoggedIn()) {
                         logoutUser();
-                        updateNavButtons();
+                        // Force immediate update after logout
+                        setTimeout(() => {
+                            updateNavButtons();
+                        }, 0);
                     } else {
                         openAuthModal();
                     }
@@ -548,10 +562,73 @@
                     e.preventDefault();
                     if (isLoggedIn()) {
                         logoutUser();
-                        updateNavButtons();
+                        // Force immediate update after logout
+                        setTimeout(() => {
+                            updateNavButtons();
+                        }, 0);
                     } else {
                         openAuthModal();
                     }
+                });
+            }
+
+            // User profile dropdown toggle
+            const userProfileBtn = document.getElementById('user-profile-btn');
+            const userProfileDropdown = document.getElementById('user-profile-dropdown');
+            const profileLogoutBtn = document.getElementById('profile-logout-btn');
+            
+            // Function to update dropdown based on user role
+            function updateDropdownForRole() {
+                const dropdownOrders = document.getElementById('dropdown-orders');
+                const dropdownFavorites = document.getElementById('dropdown-favorites');
+                const dropdownAddresses = document.getElementById('dropdown-addresses');
+                const dropdownPayments = document.getElementById('dropdown-payments');
+                const dropdownDivider = document.getElementById('dropdown-divider');
+                
+                if (!dropdownOrders || !dropdownFavorites || !dropdownAddresses || !dropdownPayments) return;
+                
+                const userIsAdmin = isLoggedIn() && typeof isAdmin === 'function' && isAdmin();
+                
+                if (userIsAdmin) {
+                    // Admin: Hide all client options
+                    dropdownOrders.classList.add('hidden');
+                    dropdownFavorites.classList.add('hidden');
+                    dropdownAddresses.classList.add('hidden');
+                    dropdownPayments.classList.add('hidden');
+                    if (dropdownDivider) dropdownDivider.classList.add('hidden');
+                } else {
+                    // Client: Show all options
+                    dropdownOrders.classList.remove('hidden');
+                    dropdownFavorites.classList.remove('hidden');
+                    dropdownAddresses.classList.remove('hidden');
+                    dropdownPayments.classList.remove('hidden');
+                    if (dropdownDivider) dropdownDivider.classList.remove('hidden');
+                }
+            }
+            
+            if (userProfileBtn && userProfileDropdown) {
+                userProfileBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    updateDropdownForRole(); // Update dropdown before showing
+                    userProfileDropdown.classList.toggle('hidden');
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!userProfileBtn.contains(e.target) && !userProfileDropdown.contains(e.target)) {
+                        userProfileDropdown.classList.add('hidden');
+                    }
+                });
+            }
+            
+            if (profileLogoutBtn) {
+                profileLogoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    logoutUser();
+                    setTimeout(() => {
+                        updateNavButtons();
+                        window.location.href = 'home.html';
+                    }, 0);
                 });
             }
 
@@ -724,105 +801,6 @@
                     submitBtn.textContent = 'Crear cuenta';
                 }
             });
-
-            // Register Admin Modal functions
-            const openRegisterAdminModal = function() {
-                if (!isAdmin()) {
-                    alert('Solo administradores pueden registrar otros administradores');
-                    return;
-                }
-                document.getElementById('register-admin-modal').classList.remove('hidden');
-            };
-
-            const closeRegisterAdminModal = function() {
-                document.getElementById('register-admin-modal').classList.add('hidden');
-            };
-
-            document.getElementById('register-admin-btn')?.addEventListener('click', (e) => {
-                e.preventDefault();
-                openRegisterAdminModal();
-            });
-
-            document.getElementById('admin-modal-close')?.addEventListener('click', closeRegisterAdminModal);
-            document.getElementById('register-admin-modal')?.addEventListener('click', (e) => {
-                if (e.target.id === 'register-admin-modal') closeRegisterAdminModal();
-            });
-
-            document.getElementById('form-register-admin')?.addEventListener('submit', async (e) => {
-                e.preventDefault();
-
-                const firstName = document.getElementById('admin-firstName').value.trim();
-                const lastName = document.getElementById('admin-lastName').value.trim();
-                const document_val = document.getElementById('admin-document').value.trim();
-                const birthDate = document.getElementById('admin-birthDate').value.trim();
-                const phone = document.getElementById('admin-phone').value.trim();
-                const email = document.getElementById('admin-email').value.trim();
-                const street = document.getElementById('admin-street').value.trim();
-                const number = document.getElementById('admin-number').value.trim();
-                const apartment = document.getElementById('admin-apartment').value.trim();
-                const city = document.getElementById('admin-city').value.trim();
-                const postalCode = document.getElementById('admin-postalCode').value.trim();
-                const addressAdditionalInfo = document.getElementById('admin-addressAdditionalInfo').value.trim();
-                const password = document.getElementById('admin-password').value.trim();
-
-                const errorElement = document.getElementById('register-admin-error');
-                const successElement = document.getElementById('register-admin-success');
-                const submitBtn = document.getElementById('register-admin-submit-btn');
-
-                if (!firstName || !lastName || !document_val || !birthDate || !phone || !email || !street || !number || !city || !postalCode || password.length < 8) {
-                    errorElement.textContent = 'Por favor completa todos los campos requeridos';
-                    errorElement.classList.remove('hidden');
-                    successElement.classList.add('hidden');
-                    return;
-                }
-
-                const adminData = {
-                    firstName: firstName,
-                    lastName: lastName,
-                    document: document_val,
-                    birthDate: birthDate,
-                    phone: phone,
-                    email: email,
-                    street: street,
-                    number: number,
-                    apartment: apartment,
-                    city: city,
-                    postalCode: postalCode,
-                    addressAdditionalInfo: addressAdditionalInfo,
-                    password: password,
-                };
-
-                try {
-                    submitBtn.disabled = true;
-                    submitBtn.textContent = 'Registrando...';
-                    errorElement.classList.add('hidden');
-                    successElement.classList.add('hidden');
-
-                    const response = await registerAdmin(adminData);
-
-                    if (response.success) {
-                        document.getElementById('form-register-admin').reset();
-                        submitBtn.textContent = 'Registrar Administrador';
-                        submitBtn.disabled = false;
-                        successElement.textContent = 'Administrador registrado exitosamente';
-                        successElement.classList.remove('hidden');
-                        setTimeout(() => {
-                            closeRegisterAdminModal();
-                        }, 2000);
-                    } else {
-                        errorElement.textContent = response.message || 'Error al registrar administrador';
-                        errorElement.classList.remove('hidden');
-                        submitBtn.disabled = false;
-                        submitBtn.textContent = 'Registrar Administrador';
-                    }
-                } catch (error) {
-                    errorElement.textContent = 'Error al registrar administrador: ' + error.message;
-                    errorElement.classList.remove('hidden');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Registrar Administrador';
-                }
-            });
-
 
             document.getElementById('track-order-link')?.addEventListener('click', (e) => {
                 e.preventDefault();

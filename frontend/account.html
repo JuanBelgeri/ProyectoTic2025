@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Cuenta | PizzUM & BurgUM</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF0000',
+                        secondary: '#000000',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html, body { height: 100%; margin: 0; padding: 0; }
+        body { overflow-x: hidden; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #FF0000; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans custom-scrollbar">
+<!-- Navigation -->
+<nav class="bg-gradient-to-r from-primary to-secondary shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <span class="text-xl font-bold text-white">PizzUM & BurgUM</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="home.html" class="text-white hover:text-gray-200 text-sm font-medium">Inicio</a>
+                <a href="builder.html" class="text-white hover:text-gray-200 text-sm font-medium">Elegir Constructor</a>
+                <!-- User Profile Dropdown (only visible when logged in) -->
+                <div id="user-profile-menu" class="relative hidden">
+                    <button id="user-profile-btn" class="flex items-center text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium focus:outline-none transition-colors">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                        Mi Cuenta
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div id="user-profile-dropdown" class="hidden absolute right-0 mt-2 w-64 rounded-lg shadow-xl bg-white border-2 border-gray-100 z-50 overflow-hidden transition-all duration-200">
+                        <div class="py-2" role="menu">
+                            <!-- Client-only options -->
+                            <a href="orden.html" id="dropdown-orders" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                                <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                </svg>
+                                Mis Pedidos
+                            </a>
+                            <a href="favorites.html" id="dropdown-favorites" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                                <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                                Favoritos
+                            </a>
+                            <a href="account.html#addresses" id="dropdown-addresses" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                                <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                Editar Domicilios
+                            </a>
+                            <a href="account.html#payments" id="dropdown-payments" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                                <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                </svg>
+                                Editar Medios de Pago
+                            </a>
+                            <div id="dropdown-divider" class="border-t border-gray-200 my-1 hidden"></div>
+                            <button id="profile-logout-btn" class="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-primary transition-colors duration-150 group" role="menuitem">
+                                <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                </svg>
+                                Cerrar sesión
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button id="nav-auth-btn" class="hidden bg-white text-primary px-4 py-2 rounded-full font-bold hover:bg-gray-100 transition duration-300">
+                    Ingresar
+                </button>
+            </div>
+            <div class="md:hidden flex items-center">
+                <button class="text-white hover:text-gray-200" aria-controls="mobile-menu">☰</button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <h1 class="text-3xl font-extrabold text-gray-900 mb-8">Mi Cuenta</h1>
+    
+    <!-- Tabs -->
+    <div class="border-b border-gray-200 mb-6">
+        <nav class="-mb-px flex space-x-8">
+            <a href="#addresses" id="tab-addresses" class="tab-link border-b-2 border-primary text-primary py-4 px-1 text-sm font-medium">
+                Domicilios
+            </a>
+            <a href="#payments" id="tab-payments" class="tab-link border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-4 px-1 text-sm font-medium">
+                Medios de Pago
+            </a>
+        </nav>
+    </div>
+
+    <!-- Addresses Section -->
+    <section id="section-addresses" class="mb-12">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-2xl font-bold text-gray-800">Mis Domicilios</h2>
+            <button id="btn-add-address" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-opacity-90 font-medium">
+                + Agregar Dirección
+            </button>
+        </div>
+
+        <div id="addresses-list" class="space-y-4">
+            <p class="text-gray-500">Cargando direcciones...</p>
+        </div>
+
+        <!-- Add/Edit Address Modal -->
+        <div id="address-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 id="address-modal-title" class="text-xl font-bold text-gray-800">Agregar Dirección</h3>
+                        <button id="address-modal-close" class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <form id="address-form">
+                        <input type="hidden" id="address-id" value="">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Calle *</label>
+                                <input type="text" id="addr-street" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Número *</label>
+                                <input type="text" id="addr-number" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Apartamento</label>
+                                <input type="text" id="addr-apartment" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Ciudad *</label>
+                                <input type="text" id="addr-city" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Código Postal *</label>
+                                <input type="text" id="addr-postal" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Referencia Adicional</label>
+                                <input type="text" id="addr-info" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="addr-main" class="mr-2">
+                                <label for="addr-main" class="text-sm text-gray-700">Marcar como dirección principal</label>
+                            </div>
+                            <div class="flex gap-3 pt-4">
+                                <button type="submit" class="flex-1 px-4 py-2 bg-primary text-white rounded-md hover:bg-opacity-90 font-medium">
+                                    Guardar
+                                </button>
+                                <button type="button" id="address-modal-cancel" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 font-medium">
+                                    Cancelar
+                                </button>
+                            </div>
+                            <p id="address-error" class="text-sm text-red-600 hidden"></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payments Section -->
+    <section id="section-payments" class="mb-12 hidden">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-2xl font-bold text-gray-800">Mis Medios de Pago</h2>
+            <button id="btn-add-payment" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-opacity-90 font-medium">
+                + Agregar Método de Pago
+            </button>
+        </div>
+
+        <div id="payments-list" class="space-y-4">
+            <p class="text-gray-500">Cargando métodos de pago...</p>
+        </div>
+
+        <!-- Add/Edit Payment Modal -->
+        <div id="payment-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 id="payment-modal-title" class="text-xl font-bold text-gray-800">Agregar Método de Pago</h3>
+                        <button id="payment-modal-close" class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <form id="payment-form">
+                        <input type="hidden" id="payment-id" value="">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tipo *</label>
+                                <select id="payment-type" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+                                    <option value="CREDIT">Tarjeta de Crédito</option>
+                                    <option value="DEBIT">Tarjeta de Débito</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Número de Tarjeta *</label>
+                                <input type="text" id="payment-card" inputmode="numeric" maxlength="19" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+                                <p class="text-xs text-gray-500 mt-1">Solo necesario si estás cambiando el número</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del Titular *</label>
+                                <input type="text" id="payment-name" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de Vencimiento (MM/AA) *</label>
+                                <input type="text" id="payment-exp" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary">
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="payment-main" class="mr-2">
+                                <label for="payment-main" class="text-sm text-gray-700">Marcar como método principal</label>
+                            </div>
+                            <div class="flex gap-3 pt-4">
+                                <button type="submit" class="flex-1 px-4 py-2 bg-primary text-white rounded-md hover:bg-opacity-90 font-medium">
+                                    Guardar
+                                </button>
+                                <button type="button" id="payment-modal-cancel" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 font-medium">
+                                    Cancelar
+                                </button>
+                            </div>
+                            <p id="payment-error" class="text-sm text-red-600 hidden"></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="bg-gray-800">
+    <div class="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
+        <p class="text-center text-base text-gray-400">&copy; 2025 PizzUM & BurgUM. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<script src="api.js"></script>
+<script>
+    function isLoggedIn() {
+        return !!localStorage.getItem('authToken');
+    }
+
+    function openAuthModal() {
+        window.location.href = 'home.html';
+    }
+
+    let addresses = [];
+    let paymentMethods = [];
+    let editingAddressId = null;
+    let editingPaymentId = null;
+
+    // Tab switching
+    document.querySelectorAll('.tab-link').forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = tab.getAttribute('href').substring(1);
+            
+            // Update tab styles
+            document.querySelectorAll('.tab-link').forEach(t => {
+                t.classList.remove('border-primary', 'text-primary');
+                t.classList.add('border-transparent', 'text-gray-500');
+            });
+            tab.classList.add('border-primary', 'text-primary');
+            tab.classList.remove('border-transparent', 'text-gray-500');
+            
+            // Show/hide sections
+            document.getElementById('section-addresses').classList.toggle('hidden', target !== 'addresses');
+            document.getElementById('section-payments').classList.toggle('hidden', target !== 'payments');
+        });
+    });
+
+    // Check hash on load
+    window.addEventListener('load', () => {
+        const hash = window.location.hash.substring(1);
+        if (hash === 'payments') {
+            document.getElementById('tab-payments').click();
+        }
+    });
+
+    // Load addresses
+    async function loadAddresses() {
+        try {
+            const response = await getUserAddresses();
+            if (response && response.success && response.data) {
+                addresses = Array.isArray(response.data) ? response.data : [];
+            } else {
+                console.warn('Failed to load addresses:', response);
+                addresses = [];
+            }
+            renderAddresses();
+        } catch (error) {
+            console.error('Error loading addresses:', error);
+            addresses = [];
+            renderAddresses();
+        }
+    }
+
+    // Render addresses
+    function renderAddresses() {
+        const list = document.getElementById('addresses-list');
+        if (!list) return;
+
+        if (addresses.length === 0) {
+            list.innerHTML = '<p class="text-gray-500">No tienes direcciones guardadas.</p>';
+            return;
+        }
+
+        list.innerHTML = addresses.map(addr => {
+            const addressText = `${addr.street} ${addr.number}${addr.apartment ? ', ' + addr.apartment : ''}, ${addr.city}${addr.postalCode ? ' (' + addr.postalCode + ')' : ''}`;
+            return `
+                <div class="bg-white border-2 border-gray-100 rounded-lg shadow p-6">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <h3 class="text-lg font-semibold text-gray-800">${addressText}</h3>
+                                ${addr.isMain ? '<span class="px-2 py-1 text-xs font-semibold text-primary bg-primary bg-opacity-10 rounded">Principal</span>' : ''}
+                            </div>
+                            ${addr.additionalInfo ? `<p class="text-sm text-gray-600 mb-2">${addr.additionalInfo}</p>` : ''}
+                        </div>
+                        <div class="flex gap-2 ml-4">
+                            <button class="edit-address-btn px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200" data-id="${addr.id}">
+                                Editar
+                            </button>
+                            <button class="delete-address-btn px-3 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200" data-id="${addr.id}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Add event listeners
+        list.querySelectorAll('.edit-address-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = parseInt(btn.dataset.id);
+                openAddressModal(id);
+            });
+        });
+
+        list.querySelectorAll('.delete-address-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = parseInt(btn.dataset.id);
+                deleteAddressItem(id);
+            });
+        });
+    }
+
+    // Load payment methods
+    async function loadPaymentMethods() {
+        try {
+            const response = await getUserPaymentMethods();
+            if (response && response.success && response.data) {
+                paymentMethods = Array.isArray(response.data) ? response.data : [];
+            } else {
+                console.warn('Failed to load payment methods:', response);
+                paymentMethods = [];
+            }
+            renderPaymentMethods();
+        } catch (error) {
+            console.error('Error loading payment methods:', error);
+            paymentMethods = [];
+            renderPaymentMethods();
+        }
+    }
+
+    // Render payment methods
+    function renderPaymentMethods() {
+        const list = document.getElementById('payments-list');
+        if (!list) return;
+
+        if (paymentMethods.length === 0) {
+            list.innerHTML = '<p class="text-gray-500">No tienes métodos de pago guardados.</p>';
+            return;
+        }
+
+        list.innerHTML = paymentMethods.map(pm => {
+            const cardDisplay = pm.cardNumberEncrypted || '****';
+            const typeText = pm.type === 'CREDIT' ? 'Crédito' : 'Débito';
+            return `
+                <div class="bg-white border-2 border-gray-100 rounded-lg shadow p-6">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <h3 class="text-lg font-semibold text-gray-800">Tarjeta ${typeText} •••• ${cardDisplay.slice(-4)}</h3>
+                                ${pm.isMain ? '<span class="px-2 py-1 text-xs font-semibold text-primary bg-primary bg-opacity-10 rounded">Principal</span>' : ''}
+                            </div>
+                            <p class="text-sm text-gray-600">${pm.cardHolder}${pm.expirationDate ? ' • ' + pm.expirationDate : ''}</p>
+                        </div>
+                        <div class="flex gap-2 ml-4">
+                            <button class="edit-payment-btn px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200" data-id="${pm.id}">
+                                Editar
+                            </button>
+                            <button class="delete-payment-btn px-3 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200" data-id="${pm.id}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Add event listeners
+        list.querySelectorAll('.edit-payment-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = parseInt(btn.dataset.id);
+                openPaymentModal(id);
+            });
+        });
+
+        list.querySelectorAll('.delete-payment-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = parseInt(btn.dataset.id);
+                deletePaymentItem(id);
+            });
+        });
+    }
+
+    // Address modal functions
+    function openAddressModal(addressId = null) {
+        editingAddressId = addressId;
+        const modal = document.getElementById('address-modal');
+        const form = document.getElementById('address-form');
+        const title = document.getElementById('address-modal-title');
+        
+        if (addressId) {
+            const address = addresses.find(a => a.id === addressId);
+            if (address) {
+                title.textContent = 'Editar Dirección';
+                document.getElementById('address-id').value = addressId;
+                document.getElementById('addr-street').value = address.street || '';
+                document.getElementById('addr-number').value = address.number || '';
+                document.getElementById('addr-apartment').value = address.apartment || '';
+                document.getElementById('addr-city').value = address.city || '';
+                document.getElementById('addr-postal').value = address.postalCode || '';
+                document.getElementById('addr-info').value = address.additionalInfo || '';
+                document.getElementById('addr-main').checked = address.isMain || false;
+            }
+        } else {
+            title.textContent = 'Agregar Dirección';
+            form.reset();
+            document.getElementById('address-id').value = '';
+        }
+        
+        document.getElementById('address-error').classList.add('hidden');
+        modal.classList.remove('hidden');
+    }
+
+    function closeAddressModal() {
+        document.getElementById('address-modal').classList.add('hidden');
+        document.getElementById('address-form').reset();
+        editingAddressId = null;
+    }
+
+    // Payment modal functions
+    function openPaymentModal(paymentId = null) {
+        editingPaymentId = paymentId;
+        const modal = document.getElementById('payment-modal');
+        const form = document.getElementById('payment-form');
+        const title = document.getElementById('payment-modal-title');
+        
+        if (paymentId) {
+            const payment = paymentMethods.find(p => p.id === paymentId);
+            if (payment) {
+                title.textContent = 'Editar Método de Pago';
+                document.getElementById('payment-id').value = paymentId;
+                document.getElementById('payment-type').value = payment.type || 'CREDIT';
+                document.getElementById('payment-card').value = '';
+                document.getElementById('payment-card').required = false;
+                document.getElementById('payment-name').value = payment.cardHolder || '';
+                document.getElementById('payment-exp').value = payment.expirationDate || '';
+                document.getElementById('payment-main').checked = payment.isMain || false;
+            }
+        } else {
+            title.textContent = 'Agregar Método de Pago';
+            form.reset();
+            document.getElementById('payment-id').value = '';
+            document.getElementById('payment-card').required = true;
+        }
+        
+        document.getElementById('payment-error').classList.add('hidden');
+        modal.classList.remove('hidden');
+    }
+
+    function closePaymentModal() {
+        document.getElementById('payment-modal').classList.add('hidden');
+        document.getElementById('payment-form').reset();
+        editingPaymentId = null;
+    }
+
+    // Save address
+    async function saveAddress() {
+        const errorEl = document.getElementById('address-error');
+        errorEl.classList.add('hidden');
+
+        const street = document.getElementById('addr-street').value.trim();
+        const number = document.getElementById('addr-number').value.trim();
+        const apartment = document.getElementById('addr-apartment').value.trim();
+        const city = document.getElementById('addr-city').value.trim();
+        const postal = document.getElementById('addr-postal').value.trim();
+        const info = document.getElementById('addr-info').value.trim();
+        const isMain = document.getElementById('addr-main').checked;
+
+        if (!street || !number || !city || !postal) {
+            errorEl.textContent = 'Por favor completa todos los campos requeridos';
+            errorEl.classList.remove('hidden');
+            return;
+        }
+
+        try {
+            const addressData = {
+                street,
+                number,
+                apartment: apartment || null,
+                city,
+                postalCode: postal,
+                additionalInfo: info || null,
+                isMain: isMain || false
+            };
+
+            let response;
+            if (editingAddressId) {
+                response = await updateAddress(editingAddressId, addressData);
+            } else {
+                response = await createAddress(addressData);
+            }
+
+            if (response && response.success) {
+                closeAddressModal();
+                await loadAddresses();
+            } else {
+                const errorMsg = response?.message || response?.data?.message || 'Error al guardar dirección';
+                errorEl.textContent = errorMsg;
+                errorEl.classList.remove('hidden');
+                console.error('Error saving address:', response);
+            }
+        } catch (error) {
+            console.error('Exception saving address:', error);
+            errorEl.textContent = 'Error al guardar dirección: ' + (error.message || 'Error desconocido');
+            errorEl.classList.remove('hidden');
+        }
+    }
+
+    // Delete address
+    async function deleteAddressItem(addressId) {
+        if (!confirm('¿Estás seguro de que quieres eliminar esta dirección?')) {
+            return;
+        }
+
+        try {
+            const response = await deleteAddress(addressId);
+            if (response.success) {
+                await loadAddresses();
+            } else {
+                alert(response.message || 'Error al eliminar dirección');
+            }
+        } catch (error) {
+            alert('Error al eliminar dirección: ' + error.message);
+        }
+    }
+
+    // Save payment
+    async function savePayment() {
+        const errorEl = document.getElementById('payment-error');
+        errorEl.classList.add('hidden');
+
+        const type = document.getElementById('payment-type').value;
+        const card = document.getElementById('payment-card').value.trim().replace(/\s/g, '');
+        const name = document.getElementById('payment-name').value.trim();
+        const exp = document.getElementById('payment-exp').value.trim();
+        const isMain = document.getElementById('payment-main').checked;
+
+        if (!name || !exp) {
+            errorEl.textContent = 'Por favor completa todos los campos requeridos';
+            errorEl.classList.remove('hidden');
+            return;
+        }
+
+        // Card number is only required when creating new payment method
+        if (!editingPaymentId && !card) {
+            errorEl.textContent = 'El número de tarjeta es requerido';
+            errorEl.classList.remove('hidden');
+            return;
+        }
+
+        try {
+            const paymentData = {
+                type,
+                cardHolder: name,
+                expirationDate: exp,
+                isMain: isMain || false
+            };
+
+            // Only include card number if provided (for new or if updating)
+            if (card) {
+                paymentData.cardNumber = card;
+            }
+
+            let response;
+            if (editingPaymentId) {
+                response = await updatePaymentMethod(editingPaymentId, paymentData);
+            } else {
+                response = await addPaymentMethod(paymentData);
+            }
+
+            if (response && response.success) {
+                closePaymentModal();
+                await loadPaymentMethods();
+            } else {
+                const errorMsg = response?.message || response?.data?.message || 'Error al guardar método de pago';
+                errorEl.textContent = errorMsg;
+                errorEl.classList.remove('hidden');
+                console.error('Error saving payment method:', response);
+            }
+        } catch (error) {
+            console.error('Exception saving payment method:', error);
+            errorEl.textContent = 'Error al guardar método de pago: ' + (error.message || 'Error desconocido');
+            errorEl.classList.remove('hidden');
+        }
+    }
+
+    // Delete payment
+    async function deletePaymentItem(paymentId) {
+        if (!confirm('¿Estás seguro de que quieres eliminar este método de pago?')) {
+            return;
+        }
+
+        try {
+            const response = await deletePaymentMethod(paymentId);
+            if (response.success) {
+                await loadPaymentMethods();
+            } else {
+                alert(response.message || 'Error al eliminar método de pago');
+            }
+        } catch (error) {
+            alert('Error al eliminar método de pago: ' + error.message);
+        }
+    }
+
+    // Event listeners
+    document.getElementById('btn-add-address')?.addEventListener('click', () => openAddressModal());
+    document.getElementById('btn-add-payment')?.addEventListener('click', () => openPaymentModal());
+    document.getElementById('address-modal-close')?.addEventListener('click', closeAddressModal);
+    document.getElementById('address-modal-cancel')?.addEventListener('click', closeAddressModal);
+    document.getElementById('payment-modal-close')?.addEventListener('click', closePaymentModal);
+    document.getElementById('payment-modal-cancel')?.addEventListener('click', closePaymentModal);
+    document.getElementById('address-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        saveAddress();
+    });
+    document.getElementById('payment-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        savePayment();
+    });
+
+    // Function to update dropdown based on user role
+    function updateDropdownForRole() {
+        const dropdownOrders = document.getElementById('dropdown-orders');
+        const dropdownFavorites = document.getElementById('dropdown-favorites');
+        const dropdownAddresses = document.getElementById('dropdown-addresses');
+        const dropdownPayments = document.getElementById('dropdown-payments');
+        const dropdownDivider = document.getElementById('dropdown-divider');
+        
+        if (!dropdownOrders || !dropdownFavorites || !dropdownAddresses || !dropdownPayments) return;
+        
+        const userIsAdmin = isLoggedIn() && typeof isAdmin === 'function' && isAdmin();
+        
+        if (userIsAdmin) {
+            // Admin: Hide all client options
+            dropdownOrders.classList.add('hidden');
+            dropdownFavorites.classList.add('hidden');
+            dropdownAddresses.classList.add('hidden');
+            dropdownPayments.classList.add('hidden');
+            if (dropdownDivider) dropdownDivider.classList.add('hidden');
+        } else {
+            // Client: Show all options
+            dropdownOrders.classList.remove('hidden');
+            dropdownFavorites.classList.remove('hidden');
+            dropdownAddresses.classList.remove('hidden');
+            dropdownPayments.classList.remove('hidden');
+            if (dropdownDivider) dropdownDivider.classList.remove('hidden');
+        }
+    }
+
+    // Function to update auth button
+    function updateAuthButton() {
+        const authBtn = document.getElementById('nav-auth-btn');
+        const userProfileMenu = document.getElementById('user-profile-menu');
+        
+        if (isLoggedIn()) {
+            // Show user profile menu, hide auth button
+            if (userProfileMenu) userProfileMenu.classList.remove('hidden');
+            if (authBtn) authBtn.classList.add('hidden');
+        } else {
+            // Hide user profile menu, show auth button
+            if (userProfileMenu) userProfileMenu.classList.add('hidden');
+            if (authBtn) {
+                authBtn.classList.remove('hidden');
+                authBtn.textContent = 'Ingresar';
+            }
+        }
+    }
+
+    // User profile dropdown toggle
+    const userProfileBtn = document.getElementById('user-profile-btn');
+    const userProfileDropdown = document.getElementById('user-profile-dropdown');
+    const profileLogoutBtn = document.getElementById('profile-logout-btn');
+    
+    if (userProfileBtn && userProfileDropdown) {
+        userProfileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            updateDropdownForRole(); // Update dropdown before showing
+            userProfileDropdown.classList.toggle('hidden');
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!userProfileBtn.contains(e.target) && !userProfileDropdown.contains(e.target)) {
+                userProfileDropdown.classList.add('hidden');
+            }
+        });
+    }
+    
+    if (profileLogoutBtn) {
+        profileLogoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            logoutUser();
+            updateAuthButton();
+            window.location.href = 'home.html';
+        });
+    }
+
+    // Auth button handler
+    const navAuthBtn = document.getElementById('nav-auth-btn');
+    if (navAuthBtn) {
+        navAuthBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'home.html';
+        });
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!isLoggedIn()) {
+            window.location.href = 'home.html';
+            return;
+        }
+        
+        // Verify user email is available
+        const userEmail = getCurrentUserEmail();
+        if (!userEmail) {
+            console.error('User email not found in localStorage');
+            alert('Error: No se encontró el email del usuario. Por favor, inicia sesión nuevamente.');
+            logoutUser();
+            window.location.href = 'home.html';
+            return;
+        }
+        
+        // Update auth button and profile menu visibility
+        updateAuthButton();
+        
+        loadAddresses();
+        loadPaymentMethods();
+
+        // Check hash for section
+        const hash = window.location.hash.substring(1);
+        if (hash === 'payments') {
+            document.getElementById('tab-payments').click();
+        }
+    });
+</script>
+</body>
+</html>
+

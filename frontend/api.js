@@ -20,16 +20,32 @@ async function apiCall(endpoint, method = 'GET', data = null) {
 
         const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
 
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.message || `HTTP Error: ${response.status}`);
+        // Try to parse response as JSON
+        let responseData;
+        try {
+            responseData = await response.json();
+        } catch (e) {
+            // If response is not JSON, return a basic error response
+            responseData = {
+                success: false,
+                message: `HTTP Error: ${response.status} ${response.statusText}`
+            };
         }
 
-        return await response.json();
+        // If response is not OK, return the error response instead of throwing
+        if (!response.ok) {
+            return responseData;
+        }
+
+        return responseData;
 
     } catch (error) {
         console.error(`API Error on ${method} ${endpoint}:`, error);
-        throw error;
+        // Return error response instead of throwing
+        return {
+            success: false,
+            message: error.message || 'Error de conexión'
+        };
     }
 }
 
@@ -268,21 +284,42 @@ async function getAllComponents() {
     return response.success ? response.data : {};
 }
 
+// ==================== ADMIN: ORDERS ====================
+
 async function getAllOrders() {
-    return apiCall('/admin/orders', 'GET');
+    const response = await apiCall('/orders/admin/all', 'GET');
+    return response.success ? response.data : [];
 }
 
 async function getOrdersByStatus(status) {
-    return apiCall(`/admin/orders/status/${status}`, 'GET');
+    const response = await apiCall(`/orders/admin/status/${status}`, 'GET');
+    return response.success ? response.data : [];
 }
 
 async function getOrdersByDate(date) {
-    return apiCall(`/admin/orders/date/${date}`, 'GET');
+    const response = await apiCall(`/orders/admin/date/${date}`, 'GET');
+    return response.success ? response.data : [];
 }
 
 async function updateOrderStatus(orderId, status) {
-    return apiCall(`/admin/orders/${orderId}/status`, 'PUT', { status: status });
+    return apiCall(`/orders/admin/${orderId}/status`, 'PUT', { status: status });
 }
+
+// ==================== ADMIN: COMPONENTS ====================
+
+async function createComponent(componentType, componentData) {
+    return apiCall(`/admin/components/${componentType}`, 'POST', componentData);
+}
+
+async function updateComponent(componentType, componentId, updateData) {
+    return apiCall(`/admin/components/${componentType}/${componentId}`, 'PUT', updateData);
+}
+
+async function deleteComponent(componentType, componentId) {
+    return apiCall(`/admin/components/${componentType}/${componentId}`, 'DELETE');
+}
+
+// ==================== ADMIN: USERS (if needed) ====================
 
 async function getUserStats() {
     return apiCall('/admin/users/stats', 'GET');
@@ -296,18 +333,6 @@ async function setUserActive(userId, active) {
     return apiCall(`/admin/users/${userId}/active`, 'PUT', { active: active });
 }
 
-async function createComponent(componentType, componentData) {
-    return apiCall(`/admin/components/${componentType}`, 'POST', componentData);
-}
-
-async function updateComponentPrice(componentType, componentId, newPrice) {
-    return apiCall(`/admin/components/${componentType}/${componentId}`, 'PUT', { price: newPrice });
-}
-
-async function setComponentActive(componentType, componentId, active) {
-    return apiCall(`/admin/components/${componentType}/${componentId}/active`, 'PUT', { active: active });
-}
-
 async function addUserAddress(addressData) {
     const userEmail = getCurrentUserEmail();
     return apiCall(`/users/addresses?userEmail=${encodeURIComponent(userEmail)}`, 'POST', addressData);
@@ -318,8 +343,19 @@ async function getUserAddresses() {
     return apiCall(`/users/addresses?userEmail=${encodeURIComponent(userEmail)}`, 'GET');
 }
 
+async function createAddress(addressData) {
+    const userEmail = getCurrentUserEmail();
+    return apiCall(`/users/addresses?userEmail=${encodeURIComponent(userEmail)}`, 'POST', addressData);
+}
+
+async function updateAddress(addressId, addressData) {
+    const userEmail = getCurrentUserEmail();
+    return apiCall(`/users/addresses/${addressId}?userEmail=${encodeURIComponent(userEmail)}`, 'PUT', addressData);
+}
+
 async function deleteAddress(addressId) {
-    return apiCall(`/users/addresses/${addressId}`, 'DELETE');
+    const userEmail = getCurrentUserEmail();
+    return apiCall(`/users/addresses/${addressId}?userEmail=${encodeURIComponent(userEmail)}`, 'DELETE');
 }
 
 async function addPaymentMethod(paymentData) {
@@ -332,6 +368,12 @@ async function getUserPaymentMethods() {
     return apiCall(`/users/payments?userEmail=${encodeURIComponent(userEmail)}`, 'GET');
 }
 
+async function updatePaymentMethod(paymentMethodId, paymentData) {
+    const userEmail = getCurrentUserEmail();
+    return apiCall(`/users/payments/${paymentMethodId}?userEmail=${encodeURIComponent(userEmail)}`, 'PUT', paymentData);
+}
+
 async function deletePaymentMethod(paymentMethodId) {
-    return apiCall(`/users/payments/${paymentMethodId}`, 'DELETE');
+    const userEmail = getCurrentUserEmail();
+    return apiCall(`/users/payments/${paymentMethodId}?userEmail=${encodeURIComponent(userEmail)}`, 'DELETE');
 }
