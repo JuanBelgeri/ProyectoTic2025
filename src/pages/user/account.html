@@ -35,8 +35,8 @@
                 <span class="text-xl font-bold text-white">PizzUM & BurgUM</span>
             </div>
             <div class="hidden md:flex items-center space-x-8">
-                <a href="home.html" class="text-white hover:text-gray-200 text-sm font-medium">Inicio</a>
-                <a href="builder.html" class="text-white hover:text-gray-200 text-sm font-medium">Elegir Constructor</a>
+                <a href="../home.html" class="text-white hover:text-gray-200 text-sm font-medium">Inicio</a>
+                <a href="../builder/builder.html" class="text-white hover:text-gray-200 text-sm font-medium">Elegir Constructor</a>
                 <!-- User Profile Dropdown (only visible when logged in) -->
                 <div id="user-profile-menu" class="relative hidden">
                     <button id="user-profile-btn" class="flex items-center text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium focus:outline-none transition-colors">
@@ -52,7 +52,7 @@
                     <div id="user-profile-dropdown" class="hidden absolute right-0 mt-2 w-64 rounded-lg shadow-xl bg-white border-2 border-gray-100 z-50 overflow-hidden transition-all duration-200">
                         <div class="py-2" role="menu">
                             <!-- Client-only options -->
-                            <a href="orden.html" id="dropdown-orders" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                            <a href="orders.html" id="dropdown-orders" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
                                 <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                                 </svg>
@@ -261,11 +261,9 @@
     </div>
 </footer>
 
-<script src="api.js"></script>
+<script src="../../js/api.js"></script>
+<script src="../../js/ui.js"></script>
 <script>
-    function isLoggedIn() {
-        return !!localStorage.getItem('authToken');
-    }
 
     function openAuthModal() {
         window.location.href = 'home.html';
@@ -680,93 +678,12 @@
         savePayment();
     });
 
-    // Function to update dropdown based on user role
-    function updateDropdownForRole() {
-        const dropdownOrders = document.getElementById('dropdown-orders');
-        const dropdownFavorites = document.getElementById('dropdown-favorites');
-        const dropdownAddresses = document.getElementById('dropdown-addresses');
-        const dropdownPayments = document.getElementById('dropdown-payments');
-        const dropdownDivider = document.getElementById('dropdown-divider');
-        
-        if (!dropdownOrders || !dropdownFavorites || !dropdownAddresses || !dropdownPayments) return;
-        
-        const userIsAdmin = isLoggedIn() && typeof isAdmin === 'function' && isAdmin();
-        
-        if (userIsAdmin) {
-            // Admin: Hide all client options
-            dropdownOrders.classList.add('hidden');
-            dropdownFavorites.classList.add('hidden');
-            dropdownAddresses.classList.add('hidden');
-            dropdownPayments.classList.add('hidden');
-            if (dropdownDivider) dropdownDivider.classList.add('hidden');
-        } else {
-            // Client: Show all options
-            dropdownOrders.classList.remove('hidden');
-            dropdownFavorites.classList.remove('hidden');
-            dropdownAddresses.classList.remove('hidden');
-            dropdownPayments.classList.remove('hidden');
-            if (dropdownDivider) dropdownDivider.classList.remove('hidden');
-        }
-    }
-
-    // Function to update auth button
-    function updateAuthButton() {
-        const authBtn = document.getElementById('nav-auth-btn');
-        const userProfileMenu = document.getElementById('user-profile-menu');
-        
-        if (isLoggedIn()) {
-            // Show user profile menu, hide auth button
-            if (userProfileMenu) userProfileMenu.classList.remove('hidden');
-            if (authBtn) authBtn.classList.add('hidden');
-        } else {
-            // Hide user profile menu, show auth button
-            if (userProfileMenu) userProfileMenu.classList.add('hidden');
-            if (authBtn) {
-                authBtn.classList.remove('hidden');
-                authBtn.textContent = 'Ingresar';
-            }
-        }
-    }
-
-    // User profile dropdown toggle
-    const userProfileBtn = document.getElementById('user-profile-btn');
-    const userProfileDropdown = document.getElementById('user-profile-dropdown');
-    const profileLogoutBtn = document.getElementById('profile-logout-btn');
-    
-    if (userProfileBtn && userProfileDropdown) {
-        userProfileBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            updateDropdownForRole(); // Update dropdown before showing
-            userProfileDropdown.classList.toggle('hidden');
-        });
-        
-        document.addEventListener('click', (e) => {
-            if (!userProfileBtn.contains(e.target) && !userProfileDropdown.contains(e.target)) {
-                userProfileDropdown.classList.add('hidden');
-            }
-        });
-    }
-    
-    if (profileLogoutBtn) {
-        profileLogoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            logoutUser();
-            updateAuthButton();
-            window.location.href = 'home.html';
-        });
-    }
-
-    // Auth button handler
-    const navAuthBtn = document.getElementById('nav-auth-btn');
-    if (navAuthBtn) {
-        navAuthBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = 'home.html';
-        });
-    }
+    // Navigation is handled by ui.js initUI() and updateNavButtons()
 
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
+        // Initialize shared UI components (but keep custom openAuthModal)
+        initUI();
         if (!isLoggedIn()) {
             window.location.href = 'home.html';
             return;
@@ -783,7 +700,7 @@
         }
         
         // Update auth button and profile menu visibility
-        updateAuthButton();
+        updateNavButtons();
         
         loadAddresses();
         loadPaymentMethods();

@@ -95,6 +95,10 @@ function isAdmin() {
     return getCurrentUserRole() === 'ADMIN';
 }
 
+function isLoggedIn() {
+    return !!localStorage.getItem('authToken');
+}
+
 async function loginUser(email, password) {
     const response = await apiCall('/auth/login', 'POST', {
         email: email,
@@ -284,8 +288,6 @@ async function getAllComponents() {
     return response.success ? response.data : {};
 }
 
-// ==================== ADMIN: ORDERS ====================
-
 async function getAllOrders() {
     const response = await apiCall('/orders/admin/all', 'GET');
     return response.success ? response.data : [];
@@ -305,8 +307,6 @@ async function updateOrderStatus(orderId, status) {
     return apiCall(`/orders/admin/${orderId}/status`, 'PUT', { status: status });
 }
 
-// ==================== ADMIN: COMPONENTS ====================
-
 async function createComponent(componentType, componentData) {
     return apiCall(`/admin/components/${componentType}`, 'POST', componentData);
 }
@@ -318,8 +318,6 @@ async function updateComponent(componentType, componentId, updateData) {
 async function deleteComponent(componentType, componentId) {
     return apiCall(`/admin/components/${componentType}/${componentId}`, 'DELETE');
 }
-
-// ==================== ADMIN: USERS (if needed) ====================
 
 async function getUserStats() {
     return apiCall('/admin/users/stats', 'GET');

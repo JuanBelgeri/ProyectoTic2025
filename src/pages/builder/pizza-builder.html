@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Constructor de Hamburguesa | PizzUM & BurgUM</title>
+    <title>Constructor de Pizza | PizzUM & BurgUM</title>
     <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
@@ -12,7 +12,10 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: { primary: '#FF0000', secondary: '#000000' }
+                    colors: {
+                        primary: '#FF0000',
+                        secondary: '#000000',
+                    }
                 }
             }
         }
@@ -46,9 +49,9 @@
                 </div>
             </div>
             <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
-                <a href="home.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
-                <a href="builder.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Elegir Constructor</a>
-                <a href="checkout.html" id="cart-link" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium hidden relative">
+                <a href="../home.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
+                <a href="builder.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Crea tu pedido</a>
+                <a href="../user/checkout.html" id="cart-link" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium hidden relative">
                     <svg class="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                     </svg>
@@ -57,7 +60,7 @@
                 </a>
                 <!-- User Profile Dropdown (only visible when logged in) -->
                 <div id="user-profile-menu" class="relative hidden">
-                    <button id="user-profile-btn" class="flex items-center text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium focus:outline-none transition-colors">
+                    <button id="user-profile-btn" class="flex items-center text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium focus:outline-none">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                         </svg>
@@ -70,26 +73,26 @@
                     <div id="user-profile-dropdown" class="hidden absolute right-0 mt-2 w-64 rounded-lg shadow-xl bg-white border-2 border-gray-100 z-50 overflow-hidden transition-all duration-200">
                         <div class="py-2" role="menu">
                             <!-- Client-only options -->
-                            <a href="orden.html" id="dropdown-orders" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                            <a href="../user/orders.html" id="dropdown-orders" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
                                 <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                                 </svg>
                                 Mis Pedidos
                             </a>
-                            <a href="favorites.html" id="dropdown-favorites" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                            <a href="../user/favorites.html" id="dropdown-favorites" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
                                 <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                                 </svg>
                                 Favoritos
                             </a>
-                            <a href="account.html#addresses" id="dropdown-addresses" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                            <a href="../user/account.html#addresses" id="dropdown-addresses" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
                                 <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 </svg>
                                 Editar Domicilios
                             </a>
-                            <a href="account.html#payments" id="dropdown-payments" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                            <a href="../user/account.html#payments" id="dropdown-payments" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
                                 <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                                 </svg>
@@ -122,21 +125,29 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="lg:flex lg:space-x-10">
             <div class="lg:w-2/3">
-                <h1 class="text-3xl font-extrabold text-gray-900">Construye tu Hamburguesa</h1>
-                <p class="mt-2 text-gray-600">Elige pan, carne, queso, salsas y extras.</p>
+                <h1 class="text-3xl font-extrabold text-gray-900">Construye tu Pizza</h1>
+                <p class="mt-2 text-gray-600">Elige tamaño, masa, salsa, queso y toppings.</p>
 
-                <!-- Pan -->
+                <!-- Tamaño -->
                 <div class="mt-8">
-                    <h2 class="text-xl font-bold text-gray-800">Pan</h2>
-                    <div id="breads-container" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <h2 class="text-xl font-bold text-gray-800">Tamaño</h2>
+                    <div id="sizes-container" class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
                         <p class="text-gray-500">Cargando...</p>
                     </div>
                 </div>
 
-                <!-- Tipo de Carne -->
+                <!-- Masa -->
                 <div class="mt-8">
-                    <h2 class="text-xl font-bold text-gray-800">Tipo de Carne</h2>
-                    <div id="meats-container" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <h2 class="text-xl font-bold text-gray-800">Masa</h2>
+                    <div id="doughs-container" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <p class="text-gray-500">Cargando...</p>
+                    </div>
+                </div>
+
+                <!-- Salsa -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-bold text-gray-800">Salsa</h2>
+                    <div id="sauces-container" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <p class="text-gray-500">Cargando...</p>
                     </div>
                 </div>
@@ -149,18 +160,9 @@
                     </div>
                 </div>
 
-                <!-- Condimentos (salsas) -->
+                <!-- Toppings -->
                 <div class="mt-8">
-                    <h2 class="text-xl font-bold text-gray-800">Salsas</h2>
-                    <p class="text-sm text-gray-500">Elige tantas como quieras.</p>
-                    <div id="condiments-container" class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
-                        <p class="text-gray-500">Cargando...</p>
-                    </div>
-                </div>
-
-                <!-- Extras (toppings) -->
-                <div class="mt-8">
-                    <h2 class="text-xl font-bold text-gray-800">Extras</h2>
+                    <h2 class="text-xl font-bold text-gray-800">Toppings</h2>
                     <p class="text-sm text-gray-500">Elige tantos como quieras.</p>
                     <div id="toppings-container" class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
                         <p class="text-gray-500">Cargando...</p>
@@ -186,13 +188,13 @@
 
             <div class="lg:w-1/3 mt-10 lg:mt-0">
                 <div class="bg-white border-2 border-gray-100 rounded-lg shadow-lg p-6 sticky top-24">
-                    <h2 class="text-xl font-bold text-gray-800">Tu Hamburguesa</h2>
+                    <h2 class="text-xl font-bold text-gray-800">Tu Pizza</h2>
                     <ul class="mt-4 space-y-2 text-gray-700" id="summary-list">
-                        <li>Pan: <span id="summary-bread">-</span></li>
-                        <li>Carne: <span id="summary-meat">-</span></li>
+                        <li>Tamaño: <span id="summary-size">-</span></li>
+                        <li>Masa: <span id="summary-dough">-</span></li>
+                        <li>Salsa: <span id="summary-sauce">-</span></li>
                         <li>Queso: <span id="summary-cheese">-</span></li>
-                        <li>Salsas: <span id="summary-condiments">Ninguna</span></li>
-                        <li>Extras: <span id="summary-toppings">Ninguno</span></li>
+                        <li>Toppings: <span id="summary-toppings">Ninguno</span></li>
                     </ul>
                     <div class="mt-6 pt-6 border-t-2 border-gray-200">
                         <div class="flex justify-between items-center">
@@ -330,13 +332,14 @@
     </div>
 </div>
 
-<script src="api.js"></script>
+<script src="../../js/api.js"></script>
+<script src="../../js/ui.js"></script>
 <script>
     let componentsData = {
-        breads: [],
-        meats: [],
+        sizes: [],
+        doughs: [],
+        sauces: [],
         cheeses: [],
-        condiments: [],
         toppings: []
     };
 
@@ -345,10 +348,10 @@
             const response = await getAllComponents();
             
             if (response) {
-                componentsData.breads = response.breadTypes || [];
-                componentsData.meats = response.meatTypes || [];
+                componentsData.sizes = response.pizzaSizes || [];
+                componentsData.doughs = response.doughTypes || [];
+                componentsData.sauces = response.sauceTypes || [];
                 componentsData.cheeses = response.cheeseTypes || [];
-                componentsData.condiments = response.condiments || [];
                 componentsData.toppings = response.toppings || [];
             }
 
@@ -360,38 +363,53 @@
     }
 
     function renderComponents() {
-        renderBreads();
-        renderMeats();
+        renderSizes();
+        renderDoughs();
+        renderSauces();
         renderCheeses();
-        renderCondiments();
         renderToppings();
     }
 
-    function renderBreads() {
-        const container = document.getElementById('breads-container');
-        if (!componentsData.breads.length) {
-            container.innerHTML = '<p class="text-gray-500">No hay panes disponibles</p>';
+    function renderSizes() {
+        const container = document.getElementById('sizes-container');
+        if (!componentsData.sizes.length) {
+            container.innerHTML = '<p class="text-gray-500">No hay tamaños disponibles</p>';
             return;
         }
-        container.innerHTML = componentsData.breads.map((bread, idx) => `
+        container.innerHTML = componentsData.sizes.map((size, idx) => `
         <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-          <span>${bread.name} - $${bread.price}</span>
-          <input type="radio" name="bread" value="${bread.id}" data-name="${bread.name}" data-price="${bread.price}" class="form-radio text-primary" ${idx === 0 ? 'checked' : ''}>
+          <span>${size.name} - $${size.price}</span>
+          <input type="radio" name="size" value="${size.id}" data-name="${size.name}" data-price="${size.price}" class="form-radio text-primary" ${idx === 0 ? 'checked' : ''}>
         </label>
       `).join('');
         setupChangeListeners();
     }
 
-    function renderMeats() {
-        const container = document.getElementById('meats-container');
-        if (!componentsData.meats.length) {
-            container.innerHTML = '<p class="text-gray-500">No hay carnes disponibles</p>';
+    function renderDoughs() {
+        const container = document.getElementById('doughs-container');
+        if (!componentsData.doughs.length) {
+            container.innerHTML = '<p class="text-gray-500">No hay masas disponibles</p>';
             return;
         }
-        container.innerHTML = componentsData.meats.map((meat, idx) => `
+        container.innerHTML = componentsData.doughs.map((dough, idx) => `
         <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-          <span>${meat.name} - $${meat.price}</span>
-          <input type="radio" name="meat" value="${meat.id}" data-name="${meat.name}" data-price="${meat.price}" class="form-radio text-primary" ${idx === 0 ? 'checked' : ''}>
+          <span>${dough.name} - $${dough.price}</span>
+          <input type="radio" name="dough" value="${dough.id}" data-name="${dough.name}" data-price="${dough.price}" class="form-radio text-primary" ${idx === 0 ? 'checked' : ''}>
+        </label>
+      `).join('');
+        setupChangeListeners();
+    }
+
+    function renderSauces() {
+        const container = document.getElementById('sauces-container');
+        if (!componentsData.sauces.length) {
+            container.innerHTML = '<p class="text-gray-500">No hay salsas disponibles</p>';
+            return;
+        }
+        container.innerHTML = componentsData.sauces.map((sauce, idx) => `
+        <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
+          <span>${sauce.name} - $${sauce.price}</span>
+          <input type="radio" name="sauce" value="${sauce.id}" data-name="${sauce.name}" data-price="${sauce.price}" class="form-radio text-primary" ${idx === 0 ? 'checked' : ''}>
         </label>
       `).join('');
         setupChangeListeners();
@@ -412,25 +430,10 @@
         setupChangeListeners();
     }
 
-    function renderCondiments() {
-        const container = document.getElementById('condiments-container');
-        if (!componentsData.condiments.length) {
-            container.innerHTML = '<p class="text-gray-500">No hay salsas disponibles</p>';
-            return;
-        }
-        container.innerHTML = componentsData.condiments.map(condiment => `
-        <label class="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:border-primary">
-          <span>${condiment.name} - $${condiment.price}</span>
-          <input type="checkbox" name="condiment" value="${condiment.id}" data-name="${condiment.name}" data-price="${condiment.price}" class="form-checkbox text-primary">
-        </label>
-      `).join('');
-        setupChangeListeners();
-    }
-
     function renderToppings() {
         const container = document.getElementById('toppings-container');
         if (!componentsData.toppings.length) {
-            container.innerHTML = '<p class="text-gray-500">No hay extras disponibles</p>';
+            container.innerHTML = '<p class="text-gray-500">No hay toppings disponibles</p>';
             return;
         }
         container.innerHTML = componentsData.toppings.map(topping => `
@@ -443,49 +446,47 @@
     }
 
     function setupChangeListeners() {
-        document.querySelectorAll('input[name="bread"], input[name="meat"], input[name="cheese"], input[name="condiment"], input[name="topping"]').forEach(input => {
+        document.querySelectorAll('input[name="size"], input[name="dough"], input[name="sauce"], input[name="cheese"], input[name="topping"]').forEach(input => {
             input.removeEventListener('change', updateSummary);
             input.addEventListener('change', updateSummary);
         });
     }
 
     function updateSummary() {
-        const bread = document.querySelector('input[name="bread"]:checked');
-        const meat = document.querySelector('input[name="meat"]:checked');
+        const size = document.querySelector('input[name="size"]:checked');
+        const dough = document.querySelector('input[name="dough"]:checked');
+        const sauce = document.querySelector('input[name="sauce"]:checked');
         const cheeses = Array.from(document.querySelectorAll('input[name="cheese"]:checked'));
-        const condiments = Array.from(document.querySelectorAll('input[name="condiment"]:checked'));
         const toppings = Array.from(document.querySelectorAll('input[name="topping"]:checked'));
 
-        document.getElementById('summary-bread').textContent = bread ? bread.dataset.name : '-';
-        document.getElementById('summary-meat').textContent = meat ? meat.dataset.name : '-';
+        document.getElementById('summary-size').textContent = size ? size.dataset.name : '-';
+        document.getElementById('summary-dough').textContent = dough ? dough.dataset.name : '-';
+        document.getElementById('summary-sauce').textContent = sauce ? sauce.dataset.name : '-';
         document.getElementById('summary-cheese').textContent = cheeses.length ? cheeses.map(c => c.dataset.name).join(', ') : 'Sin queso';
-        document.getElementById('summary-condiments').textContent = condiments.length ? condiments.map(c => c.dataset.name).join(', ') : 'Ninguna';
         document.getElementById('summary-toppings').textContent = toppings.length ? toppings.map(t => t.dataset.name).join(', ') : 'Ninguno';
 
         calculatePrice();
         
-        // Reset burger ID and heart when components change
-        currentBurgerId = null;
+        // Reset pizza ID and heart when components change
+        currentPizzaId = null;
         updateHeartIcon(false);
     }
 
     function calculatePrice() {
         let total = 0;
 
-        const bread = document.querySelector('input[name="bread"]:checked');
-        if (bread) total += parseFloat(bread.dataset.price) || 0;
+        const size = document.querySelector('input[name="size"]:checked');
+        if (size) total += parseFloat(size.dataset.price) || 0;
 
-        const meat = document.querySelector('input[name="meat"]:checked');
-        if (meat) total += parseFloat(meat.dataset.price) || 0;
+        const dough = document.querySelector('input[name="dough"]:checked');
+        if (dough) total += parseFloat(dough.dataset.price) || 0;
+
+        const sauce = document.querySelector('input[name="sauce"]:checked');
+        if (sauce) total += parseFloat(sauce.dataset.price) || 0;
 
         const cheeses = Array.from(document.querySelectorAll('input[name="cheese"]:checked'));
         cheeses.forEach(cheese => {
             total += parseFloat(cheese.dataset.price) || 0;
-        });
-
-        const condiments = Array.from(document.querySelectorAll('input[name="condiment"]:checked'));
-        condiments.forEach(condiment => {
-            total += parseFloat(condiment.dataset.price) || 0;
         });
 
         const toppings = Array.from(document.querySelectorAll('input[name="topping"]:checked'));
@@ -496,22 +497,24 @@
         document.getElementById('total-price').textContent = total.toFixed(2);
     }
 
-    function getSelectedBurger() {
-        const bread = document.querySelector('input[name="bread"]:checked');
-        const meat = document.querySelector('input[name="meat"]:checked');
+    function getSelectedPizza() {
+        const size = document.querySelector('input[name="size"]:checked');
+        const dough = document.querySelector('input[name="dough"]:checked');
+        const sauce = document.querySelector('input[name="sauce"]:checked');
         const cheeses = Array.from(document.querySelectorAll('input[name="cheese"]:checked'));
-        const condiments = Array.from(document.querySelectorAll('input[name="condiment"]:checked'));
         const toppings = Array.from(document.querySelectorAll('input[name="topping"]:checked'));
 
-        // CreateHamburgerRequest expects: name, breadId, meatId, cheeseId (optional), toppingIds (array), condimentIds (array)
-        return {
-            name: `Hamburguesa Personalizada`,
-            breadId: parseInt(bread?.value),
-            meatId: parseInt(meat?.value),
+        // CreatePizzaRequest expects: name, sizeId, doughId, sauceId (optional), cheeseId (optional), toppingIds (array)
+        const pizzaData = {
+            name: `Pizza Personalizada`,
+            sizeId: parseInt(size?.value),
+            doughId: parseInt(dough?.value),
+            sauceId: sauce ? parseInt(sauce.value) : null,
             cheeseId: cheeses.length > 0 ? parseInt(cheeses[0].value) : null,  // Primary cheese
-            toppingIds: toppings.map(t => parseInt(t.value)),
-            condimentIds: condiments.map(c => parseInt(c.value))
+            toppingIds: toppings.map(t => parseInt(t.value))
         };
+
+        return pizzaData;
     }
 
     function showToast(message, type = 'success') {
@@ -525,11 +528,8 @@
         }, 2000);
     }
 
-    function isLoggedIn() {
-        return !!localStorage.getItem('authToken');
-    }
 
-    let currentBurgerId = null;
+    let currentPizzaId = null;
 
     function updateHeartIcon(isFavorite) {
         const heartIcon = document.getElementById('heart-icon');
@@ -547,13 +547,13 @@
     }
 
     async function checkAndUpdateHeart() {
-        if (!isLoggedIn() || !currentBurgerId) {
+        if (!isLoggedIn() || !currentPizzaId) {
             updateHeartIcon(false);
             return;
         }
 
         try {
-            const isFavorite = await checkFavorite('HAMBURGER', currentBurgerId);
+            const isFavorite = await checkFavorite('PIZZA', currentPizzaId);
             updateHeartIcon(isFavorite);
         } catch (error) {
             console.error('Error checking favorite:', error);
@@ -561,34 +561,27 @@
         }
     }
 
-    async function ensureBurgerCreated() {
-        if (currentBurgerId) {
-            return currentBurgerId;
+    async function ensurePizzaCreated() {
+        if (currentPizzaId) {
+            return currentPizzaId;
         }
 
-        const burger = getSelectedBurger();
-        const createResponse = await createHamburger(burger);
+        const pizza = getSelectedPizza();
+        const createResponse = await createPizza(pizza);
 
         if (!createResponse.success) {
-            throw new Error(createResponse.message || 'Error al crear hamburguesa');
+            throw new Error(createResponse.message || 'Error al crear pizza');
         }
 
-        const burgerId = createResponse.data?.id;
-        if (!burgerId) {
-            throw new Error('Error: No se obtuvo ID de hamburguesa');
+        const pizzaId = createResponse.data?.id;
+        if (!pizzaId) {
+            throw new Error('Error: No se obtuvo ID de pizza');
         }
 
-        currentBurgerId = burgerId;
-        return burgerId;
+        currentPizzaId = pizzaId;
+        return pizzaId;
     }
 
-    function openAuthModal() {
-        document.getElementById('auth-modal').classList.remove('hidden');
-    }
-
-    function closeAuthModal() {
-        document.getElementById('auth-modal').classList.add('hidden');
-    }
 
     document.getElementById('add-to-favorites').addEventListener('click', async () => {
         if (!isLoggedIn()) {
@@ -601,15 +594,15 @@
         btn.disabled = true;
 
         try {
-            // Ensure burger is created first
-            const burgerId = await ensureBurgerCreated();
+            // Ensure pizza is created first
+            const pizzaId = await ensurePizzaCreated();
 
             // Check if already in favorites
-            const isFavorite = await checkFavorite('HAMBURGER', burgerId);
+            const isFavorite = await checkFavorite('PIZZA', pizzaId);
 
             if (isFavorite) {
                 // Remove from favorites
-                const removeResponse = await removeFavoriteByItem('HAMBURGER', burgerId);
+                const removeResponse = await removeFavoriteByItem('PIZZA', pizzaId);
                 
                 if (removeResponse.success) {
                     showToast('Eliminado de favoritos');
@@ -619,7 +612,7 @@
                 }
             } else {
                 // Add to favorites - ask for custom name
-                const customName = prompt('¿Cómo quieres llamar a esta hamburguesa?', 'Mi Hamburguesa Personalizada');
+                const customName = prompt('¿Cómo quieres llamar a esta pizza?', 'Mi Pizza Personalizada');
                 
                 if (!customName || customName.trim() === '') {
                     showToast('Debes ingresar un nombre para guardar en favoritos', 'error');
@@ -628,8 +621,8 @@
                 }
 
                 const response = await addToFavorites({
-                    itemType: 'HAMBURGER',
-                    itemId: burgerId,
+                    itemType: 'PIZZA',
+                    itemId: pizzaId,
                     customName: customName.trim()
                 });
 
@@ -660,13 +653,13 @@
         btn.textContent = 'Agregando...';
 
         try {
-            // Ensure burger is created (reuse if already created)
-            const burgerId = await ensureBurgerCreated();
+            // Ensure pizza is created (reuse if already created)
+            const pizzaId = await ensurePizzaCreated();
 
-            // Add to cart using the created burger ID
+            // Add to cart using the created pizza ID
             const cartResponse = await addToCart({
-                itemType: 'HAMBURGER',
-                itemId: burgerId,
+                itemType: 'PIZZA',
+                itemId: pizzaId,
                 quantity: 1
             });
 
@@ -675,7 +668,7 @@
                 // Check favorite status after adding to cart
                 checkAndUpdateHeart();
                 setTimeout(() => {
-                    window.location.href = 'checkout.html';
+                    window.location.href = '../user/checkout.html';
                 }, 1000);
             } else {
                 showToast(cartResponse.message || 'Error al agregar', 'error');
@@ -690,97 +683,6 @@
         }
     });
 
-    // Update cart badge on page load
-    async function updateCartBadge() {
-        if (!isLoggedIn()) return;
-        
-        try {
-            const cartData = await getCart();
-            const cartBadge = document.getElementById('cart-badge');
-            const cartLink = document.getElementById('cart-link');
-            
-            if (cartData && cartData.totalItems > 0) {
-                if (cartLink) cartLink.classList.remove('hidden');
-                if (cartBadge) {
-                    cartBadge.textContent = cartData.totalItems > 9 ? '9+' : cartData.totalItems;
-                    cartBadge.classList.remove('hidden');
-                }
-            } else {
-                if (cartLink) cartLink.classList.remove('hidden');
-                if (cartBadge) cartBadge.classList.add('hidden');
-            }
-        } catch (error) {
-            console.error('Error updating cart badge:', error);
-        }
-    }
-
-    // Auth Modal Setup
-    const tabLogin = document.getElementById('tab-login');
-    const tabRegister = document.getElementById('tab-register');
-    const formLogin = document.getElementById('form-login');
-    const formRegister = document.getElementById('form-register');
-
-    if (tabLogin && tabRegister && formLogin && formRegister) {
-        tabLogin.addEventListener('click', () => {
-            tabLogin.className = 'px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold';
-            tabRegister.className = 'px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold';
-            formLogin.classList.remove('hidden');
-            formRegister.classList.add('hidden');
-        });
-
-        tabRegister.addEventListener('click', () => {
-            tabRegister.className = 'px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold';
-            tabLogin.className = 'px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold';
-            formRegister.classList.remove('hidden');
-            formLogin.classList.add('hidden');
-        });
-
-        document.getElementById('auth-close').addEventListener('click', closeAuthModal);
-        document.getElementById('auth-modal').addEventListener('click', (e) => {
-            if (e.target.id === 'auth-modal') closeAuthModal();
-        });
-
-        document.getElementById('form-login').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value.trim();
-            const errorElement = document.getElementById('login-error');
-            const submitBtn = document.getElementById('login-submit-btn');
-
-            if (!email || !password) {
-                errorElement.textContent = 'Por favor completa todos los campos';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-
-            try {
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Ingresando...';
-                errorElement.classList.add('hidden');
-
-                const response = await loginUser(email, password);
-
-                if (response.success) {
-                    formLogin.reset();
-                    submitBtn.textContent = 'Ingresar';
-                    submitBtn.disabled = false;
-                    closeAuthModal();
-                    updateCartBadge();
-                    showToast('¡Bienvenido! Ya puedes agregar a favoritos o al carrito.', 'success');
-                } else {
-                    errorElement.textContent = response.message || 'Error al ingresar';
-                    errorElement.classList.remove('hidden');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Ingresar';
-                }
-            } catch (error) {
-                errorElement.textContent = 'Credenciales inválidas o error de conexión';
-                errorElement.classList.remove('hidden');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Ingresar';
-            }
-        });
 
         document.getElementById('form-register').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -859,99 +761,18 @@
                 submitBtn.textContent = 'Crear cuenta';
             }
         });
-    }
-
-    function updateAuthButton() {
-        const authBtn = document.getElementById('nav-auth-btn');
-        const userProfileMenu = document.getElementById('user-profile-menu');
-        
-        if (isLoggedIn()) {
-            // Show user profile menu, hide auth button
-            if (userProfileMenu) userProfileMenu.classList.remove('hidden');
-            if (authBtn) authBtn.classList.add('hidden');
-        } else {
-            // Hide user profile menu, show auth button
-            if (userProfileMenu) userProfileMenu.classList.add('hidden');
-            if (authBtn) {
-                authBtn.classList.remove('hidden');
-                authBtn.textContent = 'Ingresar';
-            }
-        }
-    }
-
-    // Function to update dropdown based on user role
-    function updateDropdownForRole() {
-        const dropdownOrders = document.getElementById('dropdown-orders');
-        const dropdownFavorites = document.getElementById('dropdown-favorites');
-        const dropdownAddresses = document.getElementById('dropdown-addresses');
-        const dropdownPayments = document.getElementById('dropdown-payments');
-        const dropdownDivider = document.getElementById('dropdown-divider');
-        
-        if (!dropdownOrders || !dropdownFavorites || !dropdownAddresses || !dropdownPayments) return;
-        
-        const userIsAdmin = isLoggedIn() && typeof isAdmin === 'function' && isAdmin();
-        
-        if (userIsAdmin) {
-            // Admin: Hide all client options
-            dropdownOrders.classList.add('hidden');
-            dropdownFavorites.classList.add('hidden');
-            dropdownAddresses.classList.add('hidden');
-            dropdownPayments.classList.add('hidden');
-            if (dropdownDivider) dropdownDivider.classList.add('hidden');
-        } else {
-            // Client: Show all options
-            dropdownOrders.classList.remove('hidden');
-            dropdownFavorites.classList.remove('hidden');
-            dropdownAddresses.classList.remove('hidden');
-            dropdownPayments.classList.remove('hidden');
-            if (dropdownDivider) dropdownDivider.classList.remove('hidden');
-        }
-    }
-
-    // User profile dropdown toggle
-    const userProfileBtn = document.getElementById('user-profile-btn');
-    const userProfileDropdown = document.getElementById('user-profile-dropdown');
-    const profileLogoutBtn = document.getElementById('profile-logout-btn');
     
-    if (userProfileBtn && userProfileDropdown) {
-        userProfileBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            updateDropdownForRole(); // Update dropdown before showing
-            userProfileDropdown.classList.toggle('hidden');
-        });
+    // Load components after scripts are loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize shared UI components
+        initUI();
         
-        document.addEventListener('click', (e) => {
-            if (!userProfileBtn.contains(e.target) && !userProfileDropdown.contains(e.target)) {
-                userProfileDropdown.classList.add('hidden');
-            }
-        });
-    }
-    
-    if (profileLogoutBtn) {
-        profileLogoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            logoutUser();
-            updateAuthButton();
-            window.location.href = 'home.html';
-        });
-    }
-
-    document.getElementById('nav-auth-btn')?.addEventListener('click', (e) => {
-        e.preventDefault();
+        // Load components after UI is initialized
+        loadComponents();
         if (isLoggedIn()) {
-            logoutUser();
-            updateAuthButton();
-            window.location.href = 'home.html';
-        } else {
-            openAuthModal();
+            updateCartBadge();
         }
     });
-
-    loadComponents();
-    updateAuthButton();
-    if (isLoggedIn()) {
-        updateCartBadge();
-    }
 </script>
 </body>
 </html>

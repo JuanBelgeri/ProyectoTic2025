@@ -74,7 +74,7 @@
                     </div>
                 </div>
                 <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
-                    <a href="home.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
+                    <a href="../home.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
                     <!-- User Profile Dropdown (only visible when logged in) -->
                     <div id="user-profile-menu" class="relative">
                         <button id="user-profile-btn" class="flex items-center text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium focus:outline-none transition-colors">
@@ -457,53 +457,24 @@
         </div>
     </div>
 
-    <script src="api.js"></script>
-    <script src="auth.js"></script>
+    <script src="../../js/api.js"></script>
+    <script src="../../js/ui.js"></script>
     <script>
         // Wait for scripts to load
         document.addEventListener('DOMContentLoaded', function() {
             // Check if user is admin
             if (!isAdmin() || !isLoggedIn()) {
-                window.location.href = 'home.html';
+                window.location.href = '../home.html';
                 return;
             }
 
-        // Initialize feather icons
-        if (window.feather) {
-            feather.replace();
-        }
+            // Initialize shared UI components (navigation, dropdown, etc.)
+            initUI();
 
-        // Navigation
-        // User profile dropdown toggle
-        const userProfileBtn = document.getElementById('user-profile-btn');
-        const userProfileDropdown = document.getElementById('user-profile-dropdown');
-        const profileLogoutBtn = document.getElementById('profile-logout-btn');
-        
-        if (userProfileBtn && userProfileDropdown) {
-            userProfileBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                userProfileDropdown.classList.toggle('hidden');
-            });
-            
-            document.addEventListener('click', (e) => {
-                if (!userProfileBtn.contains(e.target) && !userProfileDropdown.contains(e.target)) {
-                    userProfileDropdown.classList.add('hidden');
-                }
-            });
-        }
-        
-        if (profileLogoutBtn) {
-            profileLogoutBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                logoutUser();
-                window.location.href = 'home.html';
-            });
-        }
-
-        document.getElementById('nav-auth-btn')?.addEventListener('click', () => {
-            logoutUser();
-            window.location.href = 'home.html';
-        });
+            // Initialize feather icons
+            if (window.feather) {
+                feather.replace();
+            }
 
         // Sidebar navigation
         document.querySelectorAll('.sidebar-link').forEach(link => {

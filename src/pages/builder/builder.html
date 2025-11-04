@@ -64,8 +64,8 @@
                 </div>
             </div>
             <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
-                <a href="home.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
-                <a href="checkout.html" id="cart-link" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium hidden relative">
+                <a href="../home.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
+                <a href="../user/checkout.html" id="cart-link" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium hidden relative">
                     <svg class="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                     </svg>
@@ -87,26 +87,26 @@
                     <div id="user-profile-dropdown" class="hidden absolute right-0 mt-2 w-64 rounded-lg shadow-xl bg-white border-2 border-gray-100 z-50 overflow-hidden transition-all duration-200">
                         <div class="py-2" role="menu">
                             <!-- Client-only options -->
-                            <a href="orden.html" id="dropdown-orders" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                            <a href="../user/orders.html" id="dropdown-orders" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
                                 <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                                 </svg>
                                 Mis Pedidos
                             </a>
-                            <a href="favorites.html" id="dropdown-favorites" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                            <a href="../user/favorites.html" id="dropdown-favorites" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
                                 <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                                 </svg>
                                 Favoritos
                             </a>
-                            <a href="account.html#addresses" id="dropdown-addresses" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                            <a href="../user/account.html#addresses" id="dropdown-addresses" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
                                 <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 </svg>
                                 Editar Domicilios
                             </a>
-                            <a href="account.html#payments" id="dropdown-payments" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                            <a href="../user/account.html#payments" id="dropdown-payments" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
                                 <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                                 </svg>
@@ -152,7 +152,7 @@
             <!-- Tarjeta: Constructor de Pizza -->
             <a href="pizza-builder.html" class="group relative bg-white border-2 border-gray-100 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-xl">
                 <div class="relative h-64 w-full overflow-hidden">
-                    <img class="w-full h-full object-cover" src="imagenes/pizza-card.png" alt="Construir Pizza">
+                    <img class="w-full h-full object-cover" src="../../../public/assets/images/pizza-card.png" alt="Construir Pizza">
                     <div class="absolute inset-0 bg-gradient-to-t from-black opacity-60"></div>
                     <div class="absolute bottom-0 left-0 p-6">
                         <h3 class="text-2xl font-bold text-white">Construir Pizza</h3>
@@ -168,7 +168,7 @@
             <!-- Tarjeta: Constructor de Hamburguesa -->
             <a href="burger-builder.html" class="group relative bg-white border-2 border-gray-100 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-xl">
                 <div class="relative h-64 w-full overflow-hidden">
-                    <img class="w-full h-full object-cover" src="imagenes/burger-card.png" alt="Construir Hamburguesa">
+                    <img class="w-full h-full object-cover" src="../../../public/assets/images/burger-card.png" alt="Construir Hamburguesa">
                     <div class="absolute inset-0 bg-gradient-to-t from-black opacity-60"></div>
                     <div class="absolute bottom-0 left-0 p-6">
                         <h3 class="text-2xl font-bold text-white">Construir Hamburguesa</h3>
@@ -184,7 +184,7 @@
 
         <!-- Botón para volver a la página principal -->
         <div class="mt-10 text-center">
-            <a href="home.html" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
+            <a href="../home.html" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white border-primary hover:bg-gray-50">
                 <i data-feather="arrow-left" class="mr-2"></i>
                 Volver al Inicio
             </a>
@@ -270,273 +270,32 @@
     </div>
 </div>
 
-<script src="api.js"></script>
+<script src="../../js/api.js"></script>
+<script src="../../js/ui.js"></script>
 <script>
-    // Auth helpers
-    function isLoggedIn() {
-        return !!localStorage.getItem('authToken');
-    }
-
-    function openAuthModal() {
-        document.getElementById('auth-modal').classList.remove('hidden');
-    }
-
-    function closeAuthModal() {
-        document.getElementById('auth-modal').classList.add('hidden');
-    }
-
-    async function updateCartBadge() {
-        const cartLink = document.getElementById('cart-link');
-        const cartBadge = document.getElementById('cart-badge');
-        
-        if (!isLoggedIn() || !cartLink) {
-            if (cartLink) cartLink.classList.add('hidden');
-            return;
-        }
-
+    // Initialize when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
         try {
-            const cartData = await getCart();
-            if (cartData && cartData.totalItems > 0) {
-                cartLink.classList.remove('hidden');
-                if (cartBadge) {
-                    cartBadge.textContent = cartData.totalItems > 9 ? '9+' : cartData.totalItems;
-                    cartBadge.classList.remove('hidden');
+            // Initialize shared UI components
+            initUI();
+
+            // Page-specific: Track order link handler
+            document.getElementById('track-order-link')?.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (!isLoggedIn()) {
+                    openAuthModal();
+                    return;
                 }
-            } else {
-                cartLink.classList.remove('hidden');
-                if (cartBadge) cartBadge.classList.add('hidden');
-            }
+                window.location.href = '../user/orders.html';
+            });
+
+            // Update button on page load and when storage changes
+            updateNavButtons();
+            window.addEventListener('storage', updateNavButtons);
         } catch (error) {
-            cartLink.classList.remove('hidden');
-            if (cartBadge) cartBadge.classList.add('hidden');
-        }
-    }
-
-    function updateLoginButton() {
-        const btn = document.getElementById('nav-auth-btn');
-        const userProfileMenu = document.getElementById('user-profile-menu');
-        
-        if (!btn) return;
-
-        if (isLoggedIn()) {
-            // Show user profile menu, hide auth button
-            if (userProfileMenu) userProfileMenu.classList.remove('hidden');
-            btn.classList.add('hidden');
-            updateCartBadge();
-        } else {
-            // Hide user profile menu, show auth button
-            if (userProfileMenu) userProfileMenu.classList.add('hidden');
-            btn.classList.remove('hidden');
-            btn.textContent = 'Ingresar';
-            const cartLink = document.getElementById('cart-link');
-            if (cartLink) cartLink.classList.add('hidden');
-        }
-    }
-
-    // Function to update dropdown based on user role
-    function updateDropdownForRole() {
-        const dropdownOrders = document.getElementById('dropdown-orders');
-        const dropdownFavorites = document.getElementById('dropdown-favorites');
-        const dropdownAddresses = document.getElementById('dropdown-addresses');
-        const dropdownPayments = document.getElementById('dropdown-payments');
-        const dropdownDivider = document.getElementById('dropdown-divider');
-        
-        if (!dropdownOrders || !dropdownFavorites || !dropdownAddresses || !dropdownPayments) return;
-        
-        const userIsAdmin = isLoggedIn() && typeof isAdmin === 'function' && isAdmin();
-        
-        if (userIsAdmin) {
-            // Admin: Hide all client options
-            dropdownOrders.classList.add('hidden');
-            dropdownFavorites.classList.add('hidden');
-            dropdownAddresses.classList.add('hidden');
-            dropdownPayments.classList.add('hidden');
-            if (dropdownDivider) dropdownDivider.classList.add('hidden');
-        } else {
-            // Client: Show all options
-            dropdownOrders.classList.remove('hidden');
-            dropdownFavorites.classList.remove('hidden');
-            dropdownAddresses.classList.remove('hidden');
-            dropdownPayments.classList.remove('hidden');
-            if (dropdownDivider) dropdownDivider.classList.remove('hidden');
-        }
-    }
-
-    // User profile dropdown toggle
-    const userProfileBtn = document.getElementById('user-profile-btn');
-    const userProfileDropdown = document.getElementById('user-profile-dropdown');
-    const profileLogoutBtn = document.getElementById('profile-logout-btn');
-    
-    if (userProfileBtn && userProfileDropdown) {
-        userProfileBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            updateDropdownForRole(); // Update dropdown before showing
-            userProfileDropdown.classList.toggle('hidden');
-        });
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!userProfileBtn.contains(e.target) && !userProfileDropdown.contains(e.target)) {
-                userProfileDropdown.classList.add('hidden');
-            }
-        });
-    }
-    
-    if (profileLogoutBtn) {
-        profileLogoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            logoutUser();
-            updateLoginButton();
-            window.location.href = 'home.html';
-        });
-    }
-
-
-    // Tabs modal
-    const tabLogin = document.getElementById('tab-login');
-    const tabRegister = document.getElementById('tab-register');
-    const formLogin = document.getElementById('form-login');
-    const formRegister = document.getElementById('form-register');
-
-    tabLogin?.addEventListener('click', () => {
-        tabLogin.className = 'px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold';
-        tabRegister.className = 'px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold';
-        formLogin.classList.remove('hidden');
-        formRegister.classList.add('hidden');
-    });
-
-    tabRegister?.addEventListener('click', () => {
-        tabRegister.className = 'px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold';
-        tabLogin.className = 'px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold';
-        formRegister.classList.remove('hidden');
-        formLogin.classList.add('hidden');
-    });
-
-    document.getElementById('auth-close')?.addEventListener('click', closeAuthModal);
-    document.getElementById('auth-modal')?.addEventListener('click', (e) => {
-        if (e.target.id === 'auth-modal') closeAuthModal();
-    });
-
-    // Submit login
-    formLogin?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('login-email').value.trim();
-        const password = document.getElementById('login-password').value.trim();
-
-        if (!email || !password) {
-            document.getElementById('login-error').textContent = 'Por favor completa todos los campos';
-            document.getElementById('login-error').classList.remove('hidden');
-            return;
-        }
-
-        try {
-            const response = await loginUser(email, password);
-            if (response.success) {
-                closeAuthModal();
-                updateLoginButton();
-                formLogin.reset();
-                document.getElementById('login-error').classList.add('hidden');
-            } else {
-                document.getElementById('login-error').textContent = response.message || 'Credenciales inválidas';
-                document.getElementById('login-error').classList.remove('hidden');
-            }
-        } catch (error) {
-            document.getElementById('login-error').textContent = 'Error de conexión: ' + error.message;
-            document.getElementById('login-error').classList.remove('hidden');
+            console.error('Error initializing page:', error);
         }
     });
-
-    // Submit register
-    formRegister?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const firstName = document.getElementById('reg-name').value.trim();
-        const lastName = document.getElementById('reg-lastname').value.trim();
-        const documentId = document.getElementById('reg-document').value.trim();
-        const birthDate = document.getElementById('reg-birthdate').value.trim();
-        const phone = document.getElementById('reg-phone').value.trim();
-        const email = document.getElementById('reg-email').value.trim();
-        const addressStr = document.getElementById('reg-address').value.trim();
-        const cardData = document.getElementById('reg-card').value.trim();
-        const password = document.getElementById('reg-password').value.trim();
-
-        if (!firstName || !lastName || !documentId || !birthDate || !phone || !email || !addressStr || !cardData || password.length < 8) {
-            alert('Por favor completa todos los campos requeridos');
-            return;
-        }
-
-        try {
-            // Parse address - format "street, city"
-            const addressParts = addressStr.split(',').map(s => s.trim());
-            const streetAndNumber = addressParts[0] || '';
-            const streetParts = streetAndNumber.split(/\s+/);
-            const number = streetParts.pop() || '0';
-            const street = streetParts.join(' ') || streetAndNumber;
-            const city = addressParts[1] || '';
-
-            // Parse card - format "number MM/YY" or similar
-            const cardParts = cardData.split(/\s+/);
-            const cardNumber = cardParts[0] || cardData.replace(/\s+/g, '');
-            const expirationDate = cardParts[1] || '12/26';
-
-            const userData = {
-                firstName,
-                lastName,
-                document: documentId,
-                birthDate,
-                phone,
-                email,
-                street: street || '',
-                number: number || '0',
-                apartment: '',
-                city: city || '',
-                postalCode: '00000',
-                addressAdditionalInfo: '',
-                paymentType: 'CREDIT',
-                cardNumber,
-                cardHolder: firstName + ' ' + lastName,
-                expirationDate,
-                password
-            };
-
-            const response = await registerClient(userData);
-            if (response.success) {
-                closeAuthModal();
-                updateLoginButton();
-                formRegister.reset();
-                alert('¡Cuenta creada exitosamente!');
-            } else {
-                alert(response.message || 'Error al registrarse');
-            }
-        } catch (error) {
-            alert('Error al registrarse: ' + error.message);
-        }
-    });
-
-    document.getElementById('track-order-link')?.addEventListener('click', function (e) {
-        e.preventDefault();
-        if (!isLoggedIn()) {
-            openAuthModal();
-            return;
-        }
-        window.location.href = 'orden.html';
-    });
-
-    // Login button handler
-    document.getElementById('nav-auth-btn')?.addEventListener('click', async (e) => {
-        e.preventDefault();
-
-        if (isLoggedIn()) {
-            logoutUser();
-            updateLoginButton();
-            window.location.href = 'home.html';
-        } else {
-            openAuthModal();
-        }
-    });
-
-    // Update button on page load and when storage changes
-    updateLoginButton();
-    window.addEventListener('storage', updateLoginButton);
 </script>
 </body>
 </html>

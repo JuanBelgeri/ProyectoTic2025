@@ -50,8 +50,15 @@
                 </div>
             </div>
             <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
-                <a href="home.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
-                <a href="builder.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Crea tu pedido</a>
+                <a href="../home.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
+                <a href="../builder/builder.html" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Crea tu pedido</a>
+                <a href="checkout.html" id="cart-link" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium hidden relative">
+                    <svg class="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    Carrito
+                    <span id="cart-badge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"></span>
+                </a>
                 <!-- User Profile Dropdown (only visible when logged in) -->
                 <div id="user-profile-menu" class="relative hidden">
                     <button id="user-profile-btn" class="flex items-center text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium focus:outline-none transition-colors">
@@ -67,7 +74,7 @@
                     <div id="user-profile-dropdown" class="hidden absolute right-0 mt-2 w-64 rounded-lg shadow-xl bg-white border-2 border-gray-100 z-50 overflow-hidden transition-all duration-200">
                         <div class="py-2" role="menu">
                             <!-- Client-only options -->
-                            <a href="orden.html" id="dropdown-orders" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
+                            <a href="orders.html" id="dropdown-orders" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-primary hover:text-white transition-colors duration-150 group hidden" role="menuitem">
                                 <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                                 </svg>
@@ -134,7 +141,7 @@
         </div>
         <h2 class="text-2xl font-bold text-gray-900 mb-2">No tienes favoritos aún</h2>
         <p class="text-gray-600 mb-6">Guarda tus creaciones favoritas mientras construyes pizzas o hamburguesas.</p>
-        <a href="builder.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-opacity-90">
+        <a href="../builder/builder.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-opacity-90">
             Crear una pizza o hamburguesa
         </a>
     </div>
@@ -270,19 +277,9 @@
     </div>
 </div>
 
-<script src="api.js"></script>
+<script src="../../js/api.js"></script>
+<script src="../../js/ui.js"></script>
 <script>
-    function isLoggedIn() {
-        return !!localStorage.getItem('authToken');
-    }
-
-    function openAuthModal() {
-        document.getElementById('auth-modal').classList.remove('hidden');
-    }
-
-    function closeAuthModal() {
-        document.getElementById('auth-modal').classList.add('hidden');
-    }
 
     function formatDate(dateString) {
         if (!dateString) return 'Fecha desconocida';
@@ -596,250 +593,180 @@
         }
     });
 
-    // Auth Modal Setup
-    const tabLogin = document.getElementById('tab-login');
-    const tabRegister = document.getElementById('tab-register');
-    const formLogin = document.getElementById('form-login');
-    const formRegister = document.getElementById('form-register');
-
-    if (tabLogin && tabRegister && formLogin && formRegister) {
-        tabLogin.addEventListener('click', () => {
-            tabLogin.className = 'px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold';
-            tabRegister.className = 'px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold';
-            formLogin.classList.remove('hidden');
-            formRegister.classList.add('hidden');
-        });
-
-        tabRegister.addEventListener('click', () => {
-            tabRegister.className = 'px-3 py-1 rounded-md bg-primary text-white text-sm font-semibold';
-            tabLogin.className = 'px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-sm font-semibold';
-            formRegister.classList.remove('hidden');
-            formLogin.classList.add('hidden');
-        });
-
-        document.getElementById('auth-close').addEventListener('click', closeAuthModal);
-        document.getElementById('auth-modal').addEventListener('click', (e) => {
-            if (e.target.id === 'auth-modal') closeAuthModal();
-        });
-
-        document.getElementById('form-login').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value.trim();
-            const errorElement = document.getElementById('login-error');
-            const submitBtn = document.getElementById('login-submit-btn');
-
-            if (!email || !password) {
-                errorElement.textContent = 'Por favor completa todos los campos';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-
-            try {
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Ingresando...';
-                errorElement.classList.add('hidden');
-
-                const response = await loginUser(email, password);
-
-                if (response.success) {
-                    formLogin.reset();
-                    submitBtn.textContent = 'Ingresar';
-                    submitBtn.disabled = false;
-                    closeAuthModal();
-                    showToast('¡Bienvenido! Ya puedes ver tus favoritos.', 'success');
-                    loadFavorites(); // Reload favorites after login
-                } else {
-                    errorElement.textContent = response.message || 'Error al ingresar';
-                    errorElement.classList.remove('hidden');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Ingresar';
-                }
-            } catch (error) {
-                errorElement.textContent = 'Credenciales inválidas o error de conexión';
-                errorElement.classList.remove('hidden');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Ingresar';
-            }
-        });
-
-        document.getElementById('form-register').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const firstName = document.getElementById('reg-firstName').value.trim();
-            const lastName = document.getElementById('reg-lastName').value.trim();
-            const document_val = document.getElementById('reg-document').value.trim();
-            const birthDate = document.getElementById('reg-birthDate').value.trim();
-            const phone = document.getElementById('reg-phone').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-            const street = document.getElementById('reg-street').value.trim();
-            const number = document.getElementById('reg-number').value.trim();
-            const apartment = document.getElementById('reg-apartment').value.trim();
-            const city = document.getElementById('reg-city').value.trim();
-            const postalCode = document.getElementById('reg-postalCode').value.trim();
-            const addressAdditionalInfo = document.getElementById('reg-addressAdditionalInfo').value.trim();
-            const paymentType = document.getElementById('reg-paymentType').value.trim();
-            const cardHolder = document.getElementById('reg-cardHolder').value.trim();
-            const cardNumber = document.getElementById('reg-cardNumber').value.trim();
-            const expirationDate = document.getElementById('reg-expirationDate').value.trim();
-            const password = document.getElementById('reg-password').value.trim();
-
-            const errorElement = document.getElementById('register-error');
-            const submitBtn = document.getElementById('register-submit-btn');
-
-            if (!firstName || !lastName || !document_val || !birthDate || !phone || !email || !street || !number || !city || !postalCode || !paymentType || !cardHolder || !cardNumber || !expirationDate || password.length < 8) {
-                errorElement.textContent = 'Por favor completa todos los campos requeridos';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-
-            const userData = {
-                firstName: firstName,
-                lastName: lastName,
-                document: document_val,
-                birthDate: birthDate,
-                phone: phone,
-                email: email,
-                street: street,
-                number: number,
-                apartment: apartment,
-                city: city,
-                postalCode: postalCode,
-                addressAdditionalInfo: addressAdditionalInfo,
-                paymentType: paymentType,
-                cardNumber: cardNumber,
-                cardHolder: cardHolder,
-                expirationDate: expirationDate,
-                password: password,
-            };
-
-            try {
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Creando cuenta...';
-                errorElement.classList.add('hidden');
-
-                const response = await registerClient(userData);
-
-                if (response.success) {
-                    formRegister.reset();
-                    submitBtn.textContent = 'Crear cuenta';
-                    submitBtn.disabled = false;
-                    closeAuthModal();
-                    showToast('¡Cuenta creada! Ya puedes ver tus favoritos.', 'success');
-                    loadFavorites(); // Reload favorites after registration
-                } else {
-                    errorElement.textContent = response.message || 'Error al crear cuenta';
-                    errorElement.classList.remove('hidden');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Crear cuenta';
-                }
-            } catch (error) {
-                errorElement.textContent = 'Error al crear cuenta: ' + error.message;
-                errorElement.classList.remove('hidden');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Crear cuenta';
-            }
-        });
-    }
-
-    function updateAuthButton() {
-        const authBtn = document.getElementById('nav-auth-btn');
-        const userProfileMenu = document.getElementById('user-profile-menu');
+    // Initialize shared UI components
+    document.addEventListener('DOMContentLoaded', function() {
+        initUI();
         
-        if (isLoggedIn()) {
-            // Show user profile menu, hide auth button
-            if (userProfileMenu) userProfileMenu.classList.remove('hidden');
-            if (authBtn) authBtn.classList.add('hidden');
-        } else {
-            // Hide user profile menu, show auth button
-            if (userProfileMenu) userProfileMenu.classList.add('hidden');
-            if (authBtn) {
-                authBtn.classList.remove('hidden');
-                authBtn.textContent = 'Ingresar';
-            }
-        }
-    }
-
-    // Function to update dropdown based on user role
-    function updateDropdownForRole() {
-        const dropdownOrders = document.getElementById('dropdown-orders');
-        const dropdownFavorites = document.getElementById('dropdown-favorites');
-        const dropdownAddresses = document.getElementById('dropdown-addresses');
-        const dropdownPayments = document.getElementById('dropdown-payments');
-        const dropdownDivider = document.getElementById('dropdown-divider');
-        
-        if (!dropdownOrders || !dropdownFavorites || !dropdownAddresses || !dropdownPayments) return;
-        
-        const userIsAdmin = isLoggedIn() && typeof isAdmin === 'function' && isAdmin();
-        
-        if (userIsAdmin) {
-            // Admin: Hide all client options
-            dropdownOrders.classList.add('hidden');
-            dropdownFavorites.classList.add('hidden');
-            dropdownAddresses.classList.add('hidden');
-            dropdownPayments.classList.add('hidden');
-            if (dropdownDivider) dropdownDivider.classList.add('hidden');
-        } else {
-            // Client: Show all options
-            dropdownOrders.classList.remove('hidden');
-            dropdownFavorites.classList.remove('hidden');
-            dropdownAddresses.classList.remove('hidden');
-            dropdownPayments.classList.remove('hidden');
-            if (dropdownDivider) dropdownDivider.classList.remove('hidden');
-        }
-    }
-
-    // User profile dropdown toggle
-    function setupProfileDropdown() {
-        const userProfileBtn = document.getElementById('user-profile-btn');
-        const userProfileDropdown = document.getElementById('user-profile-dropdown');
-        const profileLogoutBtn = document.getElementById('profile-logout-btn');
-        
-        if (userProfileBtn && userProfileDropdown) {
-            userProfileBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                updateDropdownForRole(); // Update dropdown before showing
-                userProfileDropdown.classList.toggle('hidden');
-            });
+        // Override login success to reload favorites
+        const formLogin = document.getElementById('form-login');
+        if (formLogin) {
+            // Remove the default handler and add custom one
+            const newForm = formLogin.cloneNode(true);
+            formLogin.parentNode.replaceChild(newForm, formLogin);
             
-            document.addEventListener('click', (e) => {
-                if (!userProfileBtn.contains(e.target) && !userProfileDropdown.contains(e.target)) {
-                    userProfileDropdown.classList.add('hidden');
+            newForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value.trim();
+                const password = document.getElementById('login-password').value.trim();
+                const errorElement = document.getElementById('login-error');
+                const submitBtn = document.getElementById('login-submit-btn');
+
+                if (!email || !password) {
+                    if (errorElement) {
+                        errorElement.textContent = 'Por favor completa todos los campos';
+                        errorElement.classList.remove('hidden');
+                    }
+                    return;
+                }
+
+                try {
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.textContent = 'Ingresando...';
+                    }
+                    if (errorElement) errorElement.classList.add('hidden');
+
+                    const response = await loginUser(email, password);
+
+                    if (response.success) {
+                        if (newForm) newForm.reset();
+                        if (submitBtn) {
+                            submitBtn.textContent = 'Ingresar';
+                            submitBtn.disabled = false;
+                        }
+                        closeAuthModal();
+                        updateNavButtons();
+                        showToast('¡Bienvenido! Ya puedes ver tus favoritos.', 'success');
+                        loadFavorites(); // Reload favorites after login
+                    } else {
+                        if (errorElement) {
+                            errorElement.textContent = response.message || 'Error al ingresar';
+                            errorElement.classList.remove('hidden');
+                        }
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Ingresar';
+                        }
+                    }
+                } catch (error) {
+                    if (errorElement) {
+                        errorElement.textContent = 'Credenciales inválidas o error de conexión';
+                        errorElement.classList.remove('hidden');
+                    }
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Ingresar';
+                    }
                 }
             });
         }
         
-        if (profileLogoutBtn) {
-            profileLogoutBtn.addEventListener('click', (e) => {
+        // Register form handler
+        const formRegister = document.getElementById('form-register');
+        if (formRegister) {
+            formRegister.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                logoutUser();
-                updateAuthButton();
-                window.location.href = 'home.html';
+
+                const firstName = document.getElementById('reg-firstName').value.trim();
+                const lastName = document.getElementById('reg-lastName').value.trim();
+                const document_val = document.getElementById('reg-document').value.trim();
+                const birthDate = document.getElementById('reg-birthDate').value.trim();
+                const phone = document.getElementById('reg-phone').value.trim();
+                const email = document.getElementById('reg-email').value.trim();
+                const street = document.getElementById('reg-street').value.trim();
+                const number = document.getElementById('reg-number').value.trim();
+                const apartment = document.getElementById('reg-apartment').value.trim();
+                const city = document.getElementById('reg-city').value.trim();
+                const postalCode = document.getElementById('reg-postalCode').value.trim();
+                const addressAdditionalInfo = document.getElementById('reg-addressAdditionalInfo').value.trim();
+                const paymentType = document.getElementById('reg-paymentType').value.trim();
+                const cardHolder = document.getElementById('reg-cardHolder').value.trim();
+                const cardNumber = document.getElementById('reg-cardNumber').value.trim();
+                const expirationDate = document.getElementById('reg-expirationDate').value.trim();
+                const password = document.getElementById('reg-password').value.trim();
+
+                const errorElement = document.getElementById('register-error');
+                const submitBtn = document.getElementById('register-submit-btn');
+
+                if (!firstName || !lastName || !document_val || !birthDate || !phone || !email || !street || !number || !city || !postalCode || !paymentType || !cardHolder || !cardNumber || !expirationDate || password.length < 8) {
+                    if (errorElement) {
+                        errorElement.textContent = 'Por favor completa todos los campos requeridos';
+                        errorElement.classList.remove('hidden');
+                    }
+                    return;
+                }
+
+                const userData = {
+                    firstName: firstName,
+                    lastName: lastName,
+                    document: document_val,
+                    birthDate: birthDate,
+                    phone: phone,
+                    email: email,
+                    street: street,
+                    number: number,
+                    apartment: apartment,
+                    city: city,
+                    postalCode: postalCode,
+                    addressAdditionalInfo: addressAdditionalInfo,
+                    paymentType: paymentType,
+                    cardNumber: cardNumber,
+                    cardHolder: cardHolder,
+                    expirationDate: expirationDate,
+                    password: password,
+                };
+
+                try {
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.textContent = 'Creando cuenta...';
+                    }
+                    if (errorElement) errorElement.classList.add('hidden');
+
+                    const response = await registerClient(userData);
+
+                    if (response.success) {
+                        if (formRegister) formRegister.reset();
+                        if (submitBtn) {
+                            submitBtn.textContent = 'Crear cuenta';
+                            submitBtn.disabled = false;
+                        }
+                        closeAuthModal();
+                        updateNavButtons();
+                        showToast('¡Cuenta creada! Ya puedes ver tus favoritos.', 'success');
+                        loadFavorites(); // Reload favorites after registration
+                    } else {
+                        if (errorElement) {
+                            errorElement.textContent = response.message || 'Error al crear cuenta';
+                            errorElement.classList.remove('hidden');
+                        }
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Crear cuenta';
+                        }
+                    }
+                } catch (error) {
+                    if (errorElement) {
+                        errorElement.textContent = 'Error al crear cuenta: ' + error.message;
+                        errorElement.classList.remove('hidden');
+                    }
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Crear cuenta';
+                    }
+                }
             });
         }
-    }
-
-    document.getElementById('nav-auth-btn')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (isLoggedIn()) {
-            logoutUser();
-            updateAuthButton();
-            window.location.href = 'home.html';
-        } else {
-            openAuthModal();
-        }
-    });
-
-    setupProfileDropdown();
-
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
+        
+        // Initialize feather icons
         if (window.feather) {
             feather.replace();
         }
-        updateAuthButton();
-        loadFavorites();
+        
+        // Load favorites after UI is initialized
+        setTimeout(() => {
+            loadFavorites();
+        }, 100);
     });
 </script>
 </body>
