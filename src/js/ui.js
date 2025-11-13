@@ -367,12 +367,113 @@ function initAuthLoginForm() {
     }
 }
 
+function initAuthRegisterForm() {
+    const formRegister = document.getElementById('form-register');
+    if (formRegister) {
+        formRegister.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const firstName = document.getElementById('reg-firstName')?.value.trim();
+            const lastName = document.getElementById('reg-lastName')?.value.trim();
+            const document_val = document.getElementById('reg-document')?.value.trim();
+            const birthDate = document.getElementById('reg-birthDate')?.value.trim();
+            const phone = document.getElementById('reg-phone')?.value.trim();
+            const email = document.getElementById('reg-email')?.value.trim();
+            const street = document.getElementById('reg-street')?.value.trim();
+            const number = document.getElementById('reg-number')?.value.trim();
+            const apartment = document.getElementById('reg-apartment')?.value.trim() || '';
+            const city = document.getElementById('reg-city')?.value.trim();
+            const postalCode = document.getElementById('reg-postalCode')?.value.trim();
+            const addressAdditionalInfo = document.getElementById('reg-addressAdditionalInfo')?.value.trim() || '';
+            const paymentType = document.getElementById('reg-paymentType')?.value.trim();
+            const cardHolder = document.getElementById('reg-cardHolder')?.value.trim();
+            const cardNumber = document.getElementById('reg-cardNumber')?.value.trim();
+            const expirationDate = document.getElementById('reg-expirationDate')?.value.trim();
+            const password = document.getElementById('reg-password')?.value.trim();
+
+            const errorElement = document.getElementById('register-error');
+            const submitBtn = document.getElementById('register-submit-btn');
+
+            if (!firstName || !lastName || !document_val || !birthDate || !phone || !email || !street || !number || !city || !postalCode || !paymentType || !cardHolder || !cardNumber || !expirationDate || password.length < 8) {
+                if (errorElement) {
+                    errorElement.textContent = 'Por favor completa todos los campos requeridos';
+                    errorElement.classList.remove('hidden');
+                }
+                return;
+            }
+
+            const userData = {
+                firstName: firstName,
+                lastName: lastName,
+                document: document_val,
+                birthDate: birthDate,
+                phone: phone,
+                email: email,
+                street: street,
+                number: number,
+                apartment: apartment,
+                city: city,
+                postalCode: postalCode,
+                addressAdditionalInfo: addressAdditionalInfo,
+                paymentType: paymentType,
+                cardNumber: cardNumber,
+                cardHolder: cardHolder,
+                expirationDate: expirationDate,
+                password: password,
+            };
+
+            try {
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Creando cuenta...';
+                }
+                if (errorElement) errorElement.classList.add('hidden');
+
+                const response = await registerClient(userData);
+
+                if (response.success) {
+                    if (formRegister) formRegister.reset();
+                    if (submitBtn) {
+                        submitBtn.textContent = 'Crear cuenta';
+                        submitBtn.disabled = false;
+                    }
+                    closeAuthModal();
+                    updateNavButtons();
+                    if (typeof showToast === 'function') {
+                        showToast('¡Cuenta creada exitosamente!', 'success');
+                    } else {
+                        alert('¡Cuenta creada exitosamente!');
+                    }
+                } else {
+                    if (errorElement) {
+                        errorElement.textContent = response.message || 'Error al crear cuenta';
+                        errorElement.classList.remove('hidden');
+                    }
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Crear cuenta';
+                    }
+                }
+            } catch (error) {
+                if (errorElement) {
+                    errorElement.textContent = 'Error al crear cuenta: ' + (error.message || 'Error de conexión');
+                    errorElement.classList.remove('hidden');
+                }
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Crear cuenta';
+                }
+            }
+        });
+    }
+}
 
 function initUI() {
     initNavigation();
     initAuthModal();
     initAuthLoginForm();
-    
+    initAuthRegisterForm();
+
     // Update navigation state after a brief delay to ensure api.js is loaded
     setTimeout(() => {
         updateNavButtons();
