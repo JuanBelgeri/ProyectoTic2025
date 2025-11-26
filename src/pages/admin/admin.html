@@ -511,7 +511,7 @@
             }
         }
 
-        // ==================== ORDERS MANAGEMENT ====================
+        // ORDERS MANAGEMENT
         
         const ORDER_STATUSES = [
             { value: 'EN_COLA', label: 'En cola', color: 'red', index: 0 },
@@ -567,7 +567,7 @@
             tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-8 text-center text-gray-500">Cargando pedidos...</td></tr>';
 
             try {
-                // Backend handles filtering - getAllOrders() excludes cancelled orders
+                // Backend handles filtering
                 const orders = await getAllOrders();
                 
                 if (!orders || orders.length === 0) {
@@ -874,7 +874,7 @@
             }
         };
 
-        // ==================== SALES MANAGEMENT ====================
+        // SALES MANAGEMENT
 
         document.getElementById('search-sales-btn')?.addEventListener('click', async () => {
             const dateInput = document.getElementById('sales-date-input');
@@ -952,7 +952,7 @@
             }
         }
 
-        // ==================== REGISTER ADMIN ====================
+        // REGISTER ADMIN
 
         document.getElementById('form-register-admin')?.addEventListener('submit', async (e) => {
             e.preventDefault();

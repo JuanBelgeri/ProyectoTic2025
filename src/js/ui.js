@@ -19,9 +19,7 @@ async function updateCartBadge() {
     const cartLink = document.getElementById('cart-link');
     const mobileCartLink = document.getElementById('mobile-cart-link');
     const cartBadge = document.getElementById('cart-badge');
-    
-    // Note: Admins only access home.html and admin.html, so this function
-    // is only called for client pages where admins never log in
+
     
     if (!isLoggedIn()) {
         if (cartLink) cartLink.classList.add('hidden');
@@ -53,11 +51,6 @@ async function updateCartBadge() {
 }
 
 
-/**
- * Updates the user profile dropdown menu based on user role.
- * For admins on home.html: Hide all client options, show only logout.
- * For clients on all pages: Show all client options.
- */
 function updateDropdownForRole() {
     const dropdownOrders = document.getElementById('dropdown-orders');
     const dropdownFavorites = document.getElementById('dropdown-favorites');
@@ -88,11 +81,6 @@ function updateDropdownForRole() {
 }
 
 
-/**
- * Updates navigation buttons based on login status.
- * Note: Admin logic is only needed for home.html (the only page admins access besides admin.html).
- * For all other pages, admins never log in, so client logic is always shown.
- */
 function updateNavButtons() {
     const navBtn = document.getElementById('nav-auth-btn');
     const mobileBtn = document.getElementById('mobile-auth-btn');
@@ -106,9 +94,7 @@ function updateNavButtons() {
     const userProfileMenu = document.getElementById('user-profile-menu');
     const navAuthBtn = document.getElementById('nav-auth-btn');
 
-    // If no navigation buttons, just update login button state (simpler pages)
     if (!navBtn && !mobileBtn) {
-        // Fallback: update login button if it exists
         const btn = document.getElementById('nav-auth-btn');
         if (btn && userProfileMenu) {
             if (isLoggedIn()) {
@@ -125,7 +111,6 @@ function updateNavButtons() {
         return;
     }
 
-    // Always hide admin panel link first, then show if needed (only for home.html)
     if (adminPanelLink) adminPanelLink.classList.add('hidden');
 
     // Check if user is logged in
